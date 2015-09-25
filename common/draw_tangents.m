@@ -1,11 +1,9 @@
-function [] = draw_tangents(R, C, color)
+function [] = draw_tangents(c1, c2, r1, r2, color)
 
-r1 = R(1);
-r2 = R(2);
-a1 = C(1, 1);
-b1 = C(1, 2);
-a2 = C(2, 1);
-b2 = C(2, 2);
+a1 = c1(1);
+b1 = c1(2);
+a2 = c2(1);
+b2 = c2(2);
 
 a21 = a2-a1;
 b21 = b2-b1;

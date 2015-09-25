@@ -3,7 +3,7 @@ close all; clear;
 p = 1;
 
 %% Set the topological structure
-path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HandModel\_data\silhouettes_2D\'];
+path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\silhouettes_2D\'];
 name = 'convsegment';
 switch name
     case 'dolphin'

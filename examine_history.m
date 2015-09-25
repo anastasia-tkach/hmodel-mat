@@ -18,7 +18,7 @@ for iter = 1:last_iter
         if settings.energy1
             if iter == last_iter
                 if D == 3
-                    history{iter}.poses{p} = display_result_convtriangles(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, true); drawnow
+                    history{iter}.poses{p} = display_result_convtriangles(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, false); drawnow
                 else
                     display_result_2D(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, true); drawnow;
                 end

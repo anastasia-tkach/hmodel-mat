@@ -46,7 +46,7 @@ end
 %% Display data
 
 if (display_data)
-    skip = 1;
+    skip = 5;
     if isfield(pose, 'indices');
         k = 0;
         P = zeros(length(pose.points), 3);
@@ -64,9 +64,9 @@ if (display_data)
         end
         if (k > 0)
             P = P(1:k, :); Q = Q(1:k, :); L = L(1:3*k, :);
-            scatter3(Q(:, 1), Q(:, 2), Q(:, 3), 10, [0.1, 0.8, 0.8], 'filled', 'o');
+            %scatter3(Q(:, 1), Q(:, 2), Q(:, 3), 10, [0.1, 0.8, 0.8], 'filled', 'o');
             scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
-            line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', [0.1, 0.8, 0.8]);
+            %line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', [0.1, 0.8, 0.8]);
         end        
     else
         k = 0;

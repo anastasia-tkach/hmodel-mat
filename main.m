@@ -4,13 +4,14 @@ clear;
 close all;
 set_path;
 absolute_path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\'];
-%data_path = [absolute_path, '_data\silhouettes_2D\convsegment\'];
+data_path = [absolute_path, '_data\silhouettes_2D\'];
 %data_path = [absolute_path, '_data\fingers\'];
-data_path = [absolute_path, '_data\convtriangles\negative_radius\'];
+%data_path = [absolute_path, '_data\convtriangles\negative_radius\'];
+%data_path = [absolute_path, '_data\robert_wang\'];
 load([data_path, 'radii']);
 load([data_path, 'blocks']);
 
-D = 3;
+D = 2;
 num_poses = 1;
 num_centers = length(radii);
 num_links = sum(cellfun('length', blocks));
@@ -39,11 +40,11 @@ settings.W = 640/downscaling_factor;
 settings.D = D;
 settings.energy1 = true; 
 settings.energy2 = false; 
-settings.energy3x = true; 
-settings.energy3y = true; 
-settings.energy3z = true;
+settings.energy3x = false; 
+settings.energy3y = false; 
+settings.energy3z = false;
 
-num_iters = 7;
+num_iters = 5;
 history = cell(num_iters + 1, 1);
 poses = compute_closing_radius(poses, radii, settings);
 settings.sparse_data = false;
@@ -70,8 +71,8 @@ for iter = 1:num_iters
         
         %% Silhouette energy
         %disp('          energy 3');
-        %poses{p} = compute_energy3(poses{p}, blocks, radii, settings, true);
-        poses{p} = compute_energy3_3D_all_axis(poses{p}, blocks, radii, settings, true);
+        poses{p} = compute_energy3(poses{p}, blocks, radii, settings, true);
+        %poses{p} = compute_energy3_3D_all_axis(poses{p}, blocks, radii, settings, true);
         
     end
     
@@ -148,4 +149,5 @@ end
 
 save([absolute_path, 'rendering\history'], 'history');
 %examine_history(settings, history);
+%display_hand_sketch(poses, radii, blocks);
 
