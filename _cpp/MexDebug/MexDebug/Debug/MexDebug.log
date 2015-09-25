@@ -1,0 +1,26 @@
+﻿Build started 09.09.2015 10:38:31.
+     1>Project "C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\MexDebug\MexDebug.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\tkach\OneDrive\EPFL\Code\External\eigen_dir /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
+         Source.cpp
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(51): warning C4244: 'argument' : conversion from 'double' to '__w64 int', possible loss of data
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(133): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(145): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(375): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(377): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(382): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(416): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(119): warning C4018: '<' : signed/unsigned mismatch
+                 c:\users\tkach\onedrive\epfl\code\handmodel\_cpp\mexdebug\mexdebug\source.cpp(412) : see reference to function template instantiation 'std::vector<std::vector<int,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> parse_blocks<int>(double *,int)' being compiled
+                 with
+                 [
+                     _Ty=int
+                 ]
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\Debug\MexDebug.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\Debug\MexDebug.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\Debug\MexDebug.lib" /MACHINE:X86 Debug\Source.obj
+         MexDebug.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\Debug\MexDebug.exe
+     1>Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\MexDebug\MexDebug\MexDebug.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.67
