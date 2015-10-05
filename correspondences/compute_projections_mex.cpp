@@ -249,13 +249,14 @@ void projection_convtriangle(const Vector3d & p, const Vector3d & c1, const Vect
 	Vector3d v1, Vector3d v2, Vector3d v3, Vector3d u1, Vector3d u2, Vector3d u3, int index1, int index2, int index3,
 	vector<int> & index, Vector3d & q, Vector3d & s, bool & is_inside) {
 
-	Vector3d q1, q2; vector<int> indexa, indexb;
+	Vector3d q1, q2; vector<int> indexa, indexb, indexc;
 	closest_point_in_triangle(v1, v2, v3, p, index1, index2, index3, q1, indexa);
 	closest_point_in_triangle(u1, u2, u3, p, -index1, -index2, -index3, q2, indexb);
-	Vector3d n = (c1 - c2).cross(c1 - c3);
-	n = n / n.norm();
-	double distance = (p - c1).dot(n);
-	s = p - n * distance;
+    closest_point_in_triangle(c1, c2, c3, p, index1, index2, index3, s, indexb);
+	//Vector3d n = (c1 - c2).cross(c1 - c3);
+	//n = n / n.norm();
+	//double distance = (p - c1).dot(n);  
+	//s = p - n * distance;
 
 	vector<vector<int>> I;
 	I.push_back(indexa); I.push_back(indexb);
@@ -383,12 +384,14 @@ void compute_projection(const Vector3d & p, const vector<vector<int>> & blocks, 
 		vector<int> index; Vector3d q; Vector3d s; bool is_inside;
 		projection(p, blocks[j], tangent_points[j], radii, centers, index, q, s, is_inside);
 		all_projections.push_back(q);
-		all_distances.push_back((p - q).norm());
+        double distance = (p - q).norm();
+        if (is_inside) distance = - distance;
+		all_distances.push_back(distance);
 		all_indices.push_back(index);
 		all_block_indices.push_back(j);
 
-		if ((p - q).norm() < min_distance) {
-			min_distance = (p - q).norm();
+		if (distance < min_distance) {
+			min_distance = distance;
 			indices = index;
 			closest_projection = q;
 			block_index = j;

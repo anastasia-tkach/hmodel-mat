@@ -11,31 +11,29 @@ end
 last_iter = last_iter - 1;
 for iter = 1:last_iter
     if isempty(history{iter}) break; end;
-    Energy = 0; Energy1 = 0; Energy2 = 0; Energy3 = 0;
+    
     for p = 1:length(history{1}.poses)
+        disp([' Pose ', num2str(p)]);
+        
+        if iter == last_iter
+            if D == 3
+                history{iter}.poses{p} = display_result_convtriangles(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, false); drawnow
+            else
+                display_result_2D(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, true); drawnow;
+            end
+        end
         
         %% Energy 1
         if settings.energy1
-            if iter == last_iter
-                if D == 3
-                    history{iter}.poses{p} = display_result_convtriangles(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, false); drawnow
-                else
-                    display_result_2D(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, true); drawnow;
-                end
-            end
-            Energy1 = 0;
-            for i = 1:length(history{iter}.poses{p}.points)
-                if ~isempty(history{iter}.poses{p}.indices{i})
-                    Energy1 = Energy1 + norm(history{iter}.poses{p}.points{i} - history{iter}.poses{p}.projections{i});
-                end
-            end
-            %disp(['   Energy 1 = ', num2str(settings.w1 * Energy1)]);
+            Energy1 = settings.w1 * history{iter}.poses{p}.f1' * history{iter}.poses{p}.f1;
+            disp(['   Energy 1 = ', num2str(Energy1)]);
         end
         
         %% Energy 2
-        Energy2 = 0;
-        blocks = history{iter}.blocks;
-        if (p > 2)
+        %% Energy 2
+        if settings.energy2 && p > 1
+            Energy2 = 0;
+            blocks = history{iter}.blocks;            
             for b = 1:length(blocks)
                 if (length(blocks{b}) == 2)
                     index1 = blocks{b}(1);
@@ -52,15 +50,11 @@ for iter = 1:last_iter
                         - norm(history{iter}.poses{p}.centers{i} - history{iter}.poses{p}.centers{j}));
                 end
             end
-            %disp(['            Energy 2 = ', num2str(settings.w2 * Energy2)]);
+            disp(['   Energy 2 = ', num2str(settings.w2 * Energy2)]);            
         end
         
         %% Energy 3
-        if settings.energy3x ||  settings.energy3y || settings.energy3z
-            %display_energy3_3D(history{iter}.poses{p}, history{iter}.blocks, history{iter}.radii, settings);
-        end
         
-        Energy3x = 0; Energy3y = 0; Energy3z = 0;
         if settings.energy3x
             Energy3x = history{iter}.poses{p}.f3x' * history{iter}.poses{p}.f3x;
         end
@@ -72,6 +66,19 @@ for iter = 1:last_iter
         end
         %disp(['               Energy 3 = ', num2str(settings.w3 * Energy3x), ',            ', ...
         %num2str(settings.w3 * Energy3y), ',            ', num2str(settings.w3 * Energy3z)]);
+        
+        %% Energy 4
+        if settings.energy4
+            Energy4 = settings.w4 * history{iter}.poses{p}.f4' * history{iter}.poses{p}.f4;
+            disp(['   Energy 4 = ', num2str(Energy4)]);
+        end
+        
+        %% Energy 5
+        if settings.energy5
+            Energy5 = settings.w5 * history{iter}.poses{p}.f5' * history{iter}.poses{p}.f5;
+            disp(['   Energy 5 = ', num2str(Energy5)]);
+        end
+        
     end
     
     %% Total energy

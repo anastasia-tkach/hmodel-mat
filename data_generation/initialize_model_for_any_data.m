@@ -3,7 +3,7 @@ num_blocks = 5;
 
 %% Read the data
 
-path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HandModel\_data\full_models\'];
+path = '_data/full_models/';
 name = 'venus_big.obj';
 filename = [path, name];
 
@@ -11,11 +11,12 @@ if (strcmp(name(end-2:end), 'ply'))
     [V, F] = readPLY(filename);
 end
 if (strcmp(name(end-2:end), 'obj'))
-    [V, F] = readOBJ(filename);
+    [V, F, UV, TF, N, NF] = readOBJ(filename);
 end
 %figure; hold on; plot_mesh(V', F');
 V = [V(:, 3), V(:, 1), V(:, 2)];
 mesh.vertices = V;
+mesh.normals = N;
 mesh.triangles = F;
 bb = bounding_box(mesh.vertices);
 min_x = min(bb(:, 1)); max_x = max(bb(:, 1));
@@ -86,12 +87,15 @@ end
 
 %% Save the results
 points = cell(size(mesh.vertices, 1), 1);
+normals = cell(size(mesh.normals, 1), 1);
 for i = 1:size(mesh.vertices, 1)
     points{i} = mesh.vertices(i, :)';
+    normals{i} = mesh.normals(i, :)';
 end
 
-save([path, 'points.mat'], 'points');
-save([path, 'centers.mat'], 'centers');
+save([path, '1_points.mat'], 'points');
+save([path, '1_centers.mat'], 'centers');
+save([path, '1_normals.mat'], 'normals');
 save([path, 'radii.mat'], 'radii');
 save([path, 'blocks.mat'], 'blocks');
 

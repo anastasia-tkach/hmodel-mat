@@ -3,7 +3,7 @@ function [pose] = display_result_convtriangles(pose, blocks, radii, display_data
 centers = pose.centers;
 
 %% Generating the volumetric domain data:
-n = 60; color = [0.2, 0.8, 0.8];
+n = 70; color = double([234; 189; 157]./255);
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);
@@ -18,6 +18,8 @@ figure; hold on;
 %figure('units','normalized','outerposition',[0 0 1 1]); hold on;
 
 tangent_points = blocks_tangent_points(pose.centers, blocks, radii);
+RAND_MAX = 32767;
+min_distances = RAND_MAX * ones(N, 1);
 
 for i = 1:length(blocks)
     if length(blocks{i}) == 3
@@ -33,51 +35,29 @@ for i = 1:length(blocks)
         r1 = radii{blocks{i}(1)}; r2 = radii{blocks{i}(2)};
         distances = distance_to_model_convsegment(c1, c2, r1, r2, points');
     end
-    
-    distances = reshape(distances, size(x));
-    
-    %% Making the 3D graph of the 0-level surface of the 4D function "fun":
-    h = patch(isosurface(x, y, z, distances,0));
-    isonormals(x, y, z, distances, h);
-    set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 1);
-    grid off; view([1,1,1]); axis equal; camlight; lighting gouraud; axis off;
+    min_distances = min(min_distances, distances);
 end
+
+%% Making the 3D graph of the 0-level surface of the 4D function "fun":
+min_distances = reshape(min_distances, size(x));
+h = patch(isosurface(x, y, z, min_distances,0));
+isonormals(x, y, z, min_distances, h);
+set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 1);
+grid off; view([-1, -1, -1]); axis equal; camlight; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]);
 
 %% Display data
 
+
 if (display_data)
-    skip = 5;
-    if isfield(pose, 'indices');
-        k = 0;
-        P = zeros(length(pose.points), 3);
-        Q = zeros(length(pose.points), 3);
-        L = zeros(length(pose.points)*3, 3);
-        for i = 1:skip:length(pose.points)
-            if ~isempty(pose.indices{i})
-                k = k + 1;
-                P(k, :) =  pose.points{i}';
-                Q(k, :) = pose.projections{i}';
-                L(3 * (k - 1) + 1, :) = pose.points{i}';
-                L(3 * (k - 1) + 2, :) = pose.projections{i}';
-                L(3 * (k - 1) + 3, :) = [NaN, NaN, NaN];
-            end
-        end
-        if (k > 0)
-            P = P(1:k, :); Q = Q(1:k, :); L = L(1:3*k, :);
-            %scatter3(Q(:, 1), Q(:, 2), Q(:, 3), 10, [0.1, 0.8, 0.8], 'filled', 'o');
-            scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
-            %line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', [0.1, 0.8, 0.8]);
-        end        
-    else
-        k = 0;
-        P = zeros(length(pose.points), 3);
-        for i = 1:skip:length(pose.points)
-            k = k + 1;
-            P(k, :) =  pose.points{i}';
-        end
-        P = P(1:k, :);
-        scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
+    mypoints(pose.points, 'm');
+    pose.back_projections = cell(size(pose.projections));
+    for i = 1:length(pose.projections)
+         if ~isempty(pose.projections{i}), pose.back_projections{i} = pose.projections{i} - (pose.points{i} - pose.projections{i}); end
     end
+    mypoints(pose.projections, [0.1, 0.8, 0.8]);
+    mypoints(pose.back_projections, [0.6, 0.6, 0.6]);
+    mylines(pose.points, pose.projections, [0.1, 0.8, 0.8]);  
+    mylines(pose.back_projections, pose.projections, [0.6, 0.6, 0.6]);   
 end
 
 %% Set the axis limits
@@ -86,4 +66,37 @@ if (~isfield(pose, 'limits'))
 else
     xlim(pose.limits.xlim); ylim(pose.limits.ylim); zlim(pose.limits.zlim);
 end
+set(gcf,'color','w');
 
+%% Old Display Data
+% if isfield(pose, 'indices');
+%     k = 0;
+%     P = zeros(length(pose.points), 3);
+%     Q = zeros(length(pose.points), 3);
+%     L = zeros(length(pose.points)*3, 3);
+%     for i = 1:skip:length(pose.points)
+%         if ~isempty(pose.indices{i})
+%             k = k + 1;
+%             P(k, :) =  pose.points{i}';
+%             Q(k, :) = pose.projections{i}';
+%             L(3 * (k - 1) + 1, :) = pose.points{i}';
+%             L(3 * (k - 1) + 2, :) = pose.projections{i}';
+%             L(3 * (k - 1) + 3, :) = [NaN, NaN, NaN];
+%         end
+%     end
+%     if (k > 0)
+%         P = P(1:k, :); Q = Q(1:k, :); L = L(1:3*k, :);
+%         scatter3(Q(:, 1), Q(:, 2), Q(:, 3), 10, [0.1, 0.8, 0.8], 'filled', 'o');
+%         scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
+%         line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', [0.1, 0.8, 0.8]);
+%     end
+% else
+%     k = 0;
+%     P = zeros(length(pose.points), 3);
+%     for i = 1:skip:length(pose.points)
+%         k = k + 1;
+%         P(k, :) =  pose.points{i}';
+%     end
+%     P = P(1:k, :);
+%     scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
+% end

@@ -1,5 +1,5 @@
 function [indices, projections, block_indices] = compute_projections_matlab(points, centers, blocks, radii)
-
+RAND_MAX = 32767;
 num_points = length(points);
 
 indices = cell(num_points, 1);
@@ -10,22 +10,26 @@ projections = cell(num_points, 1);
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 
 for i = 1:num_points
+    if (i == 2463)
+        disp(' ');
+    end
     p = points{i};
     
     all_projections = cell(length(blocks), 1);
-    all_distances = zeros(length(blocks), 1);
+    all_distances = -RAND_MAX * ones(length(blocks), 1);
     all_indices = cell(length(blocks), 1);
     all_block_indices = zeros(length(blocks), 1);
     
     for j = 1:length(blocks)
-        [index, q, ~, ~] = projection(p, blocks{j}, radii, centers, tangent_points{j});
+        [index, q, ~, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
         all_projections{j} = q;
         all_distances(j) = norm(p - q);
+        if is_inside == 1, all_distances(j) = - norm(p - q); end
         all_indices{j} = index;
         all_block_indices(j) = j;
         
-        if norm(p - q) < min_distance(i)
-            min_distance(i) = norm(p - q);
+        if all_distances(j) < min_distance(i)
+            min_distance(i) = all_distances(j);
             indices{i} = index;
             projections{i} = q;
             block_indices{i} = j;

@@ -25,8 +25,8 @@ function [index, q, s, is_inside] = projection_convtriangle(p, c1, c2, c3, r1, r
 %% Compute projection to a convtriangle
 [q1, indexa] = closest_point_in_triangle_mex(v1, v2, v3, p, index1, index2, index3);
 [q2, indexb] = closest_point_in_triangle_mex(u1, u2, u3, p, -index1, -index2, -index3);
-%[s, ~] = closest_point_in_triangle_mex(c1, c2, c3, p, 0, 0, 0);
-n = cross(c1 - c2, c1 - c3); n = n / norm(n); distance = (p - c1)' * n; s = p - n * distance;
+[s, ~] = closest_point_in_triangle_mex(c1, c2, c3, p, 0, 0, 0);
+%n = cross(c1 - c2, c1 - c3); n = n / norm(n); distance = (p - c1)' * n; s = p - n * distance;
 
 I{1} = indexa; I{2} = indexb;
 [~, k] = min([norm(q1 - p), norm(q2 - p)]);

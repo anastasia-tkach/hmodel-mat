@@ -42,11 +42,13 @@ for i = 1:length(valid_indices)
     valid_points{i} = points(valid_indices(i), :)';
 end
 
-figure; hold on; axis equal;
-P = zeros(length(valid_points), 3);
-for i = 1:length(valid_points)
-    P(i, :) = valid_points{i}';    
-end
-scatter3(P(:, 1), P(:, 2), P(:, 3), 30, [0, 0.7, 0.6], 'filled', 'm');
+% figure; hold on; axis equal;
+% P = zeros(length(valid_points), 3);
+% for i = 1:length(valid_points)
+%     P(i, :) = valid_points{i}';    
+% end
+% scatter3(P(:, 1), P(:, 2), P(:, 3), 30, [0, 0.7, 0.6], 'filled', 'm');
 points = valid_points;
+
+
 
