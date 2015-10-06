@@ -30,7 +30,7 @@ for i = 1:length(pose.model_points)
     index = knnsearch(pose.kdtree, p', 'K', 1);
     q = pose.points{index}; n = pose.normals{index};
     pose.closest_data_points{i} = p + (q - p)' * n * n;
-    %pose.closest_data_points{i} = pose.points{index};
+    %pose.closest_data_points{i} = q;
 end
 
 
@@ -57,8 +57,8 @@ if (display)
     %mypoints(pose.points, [1, 0.5, 0]);
     %myvectors(pose.points, pose.normals, 1, 'r');
     mypoints(pose.closest_data_points, 'm');
-    mypoints(pose.model_points, 'b');
-    mylines(pose.closest_data_points, pose.model_points, 'g');
+    %mypoints(pose.model_points, 'b');
+    mylines(pose.closest_data_points, pose.model_points, [0.1, 0.8, 0.8]);
     drawnow;
 end
 

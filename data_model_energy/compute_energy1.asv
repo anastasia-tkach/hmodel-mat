@@ -1,4 +1,4 @@
-function [pose] = compute_energy1(pose, radii, blocks, settings, display)
+function [pose] = compute_energy1(pose, radii, blocks, settings,  display)
 
 if settings.energy1 == false, return; end;
 
@@ -17,7 +17,7 @@ switch settings.mode
         [f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
         pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
     case 'tracking'
-        [f, Jc] = jacobian_tracking(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
+        [f, Jc] = jacobian_tracking(centers, radii, blocks, model_points, model_indices, data_points, f_previous, settings.D);
         pose.f1 = f; pose.Jc1 = Jc;
 end
 

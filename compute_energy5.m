@@ -4,7 +4,6 @@ centers = pose.centers;
 if (settings.energy5 == false), return; end
 D = settings.D;
 
-variables = {'c1', 'c2', 'r1', 'r2'};
 factor = 1.3;
 
 num_constaints = 2;
@@ -28,12 +27,19 @@ for b = 1:length(blocks)
             continue;
         end
         %disp(['energy 5 for block ', num2str(b) ' tangent cone']);
-        [f, df] = jacobian_tangent_cone_existence(c1, c2, r1, r2, factor, variables);
-        F(count) = f;
+        
+        switch settings.mode
+            case 'fitting'
+                [f, df] = jacobian_tangent_cone_existence(c1, c2, r1, r2, factor, {'c1', 'c2', 'r1', 'r2'});
+                Jr(count, i1) = df.dr1;
+                Jr(count, i2) = df.dr2;
+            case 'tracking'
+                [f, df] = jacobian_tangent_cone_existence(c1, c2, r1, r2, factor, {'c1', 'c2'});
+        end
+        
         Jc(count, D * i1 - D + 1:D * i1) = df.dc1;
         Jc(count, D * i2 - D + 1:D * i2) = df.dc2;
-        Jr(count, i1) = df.dr1;
-        Jr(count, i2) = df.dr2;
+        F(count) = f;
         count = count + 1;
     end
     
@@ -56,19 +62,26 @@ for b = 1:length(blocks)
             delta_r = norm(c2 - t) * (r1 - r2) / norm(c2 - c1);
             if (t - c1)' * (c2 - c1) > 0 && norm(t - c1) > norm(c2 - c1), delta_r = -delta_r; end
             r_tilde = delta_r + r2; beta = asin((r1 - r2) / norm(c2 - c1));
-            r = r_tilde/cos(beta); eta = r3 + norm(c3 - t); f = eta - factor * r;           
+            r = r_tilde/cos(beta); eta = r3 + norm(c3 - t); f = eta - factor * r;
             if f > 0, continue; end
             
             %% Compute gradient
             %disp(['energy 5 for block ', num2str(b), ' tangent plane']);
-            [f, df] = jacobian_tangent_plane_existence(c1, c2, c3, r1, r2, r3, factor, {'c1', 'c2', 'c3', 'r1', 'r2', 'r3'});
-            F(count) = f;
+            
+            switch settings.mode
+                case 'fitting'
+                    [f, df] = jacobian_tangent_plane_existence(c1, c2, c3, r1, r2, r3, factor, {'c1', 'c2', 'c3', 'r1', 'r2', 'r3'});
+                    Jr(count, i1) = df.dr1;
+                    Jr(count, i2) = df.dr2;
+                    Jr(count, i3) = df.dr3;    
+                case 'tracking'
+                    [f, df] = jacobian_tangent_plane_existence(c1, c2, c3, r1, r2, r3, factor, {'c1', 'c2', 'c3'});
+            end
+            
             Jc(count, D * i1 - D + 1:D * i1) = df.dc1;
             Jc(count, D * i2 - D + 1:D * i2) = df.dc2;
             Jc(count, D * i3 - D + 1:D * i3) = df.dc3;
-            Jr(count, i1) = df.dr1;
-            Jr(count, i2) = df.dr2;
-            Jr(count, i3) = df.dr3;
+            F(count) = f;
             count = count + 1;
         end
     end

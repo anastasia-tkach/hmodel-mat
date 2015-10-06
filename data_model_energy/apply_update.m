@@ -96,7 +96,7 @@ while (valid_update == false && count < 1)
                 end
             end
         end
-        if ~isempty(invalid_blocks), display_hand_sketch(poses(p:p), new_radii, blocks, invalid_blocks); end
+        %if ~isempty(invalid_blocks), display_hand_sketch(poses(p:p), new_radii, blocks, invalid_blocks); end
         
     end
     

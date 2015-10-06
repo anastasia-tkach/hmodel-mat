@@ -1,13 +1,13 @@
 
 close all; clear;
-path = '_data/implicit_skinning/';
+data_path = '_data/implicit_skinning/';
 p = 3;
 
 %% Set the topological structure
 num_blocks = 29; num_centers = 30;
 blocks = cell(num_blocks, 1);
 if (p == 1), radii = cell(num_centers, 1);
-else load([path, 'radii.mat']);end
+else load([data_path, 'radii.mat']);end
 
 blocks{1} = [1, 2]; blocks{2} = [2, 3];
 blocks{3} = [3, 4]; blocks{4} = [5, 6];
@@ -60,7 +60,7 @@ solids{8} = [45, 46, 47, 48];
 
 
 name = [num2str(p), '.obj'];
-filename = [path, name];
+filename = [data_path, name];
 
 if (strcmp(name(end-2:end), 'ply'))
     [V, F] = readPLY(filename);
@@ -83,24 +83,24 @@ min_z = min(bb(:, 3)); max_z = max(bb(:, 3));
 % figure; scatter(mesh.vertices(:, 1), mesh.vertices(:, 2), 5, [0, 0, 0], 'filled')
 % hold on; axis equal; xlim([min_x, max_x]); ylim([min_y, max_y]); axis off; 
 % set(gca,'position',[0 0 1 1],'units','normalized');
-% print([path, 'frontal.png'],'-dpng'); close;
+% print([data_path, 'frontal.png'],'-dpng'); close;
 % 
 % figure; scatter(mesh.vertices(:, 3), mesh.vertices(:, 2),  5, [0, 0, 0], 'filled')
 % hold on; axis equal; xlim([min_z, max_z]); ylim([min_y, max_y]); axis off; 
 % set(gca,'position',[0 0 1 1],'units','normalized');
-% print([path, 'vertical.png'],'-dpng'); close;
+% print([data_path, 'vertical.png'],'-dpng'); close;
 % return;
 
 %% To draw the initial blocks on the image with a sketch, comment the previous part
 
-frontal = imread([path, num2str(p), '_frontal.png']);
+frontal = imread([data_path, num2str(p), '_frontal.png']);
 frontal = 255 - rgb2gray(frontal);
 frontal_column_indices = sum(frontal, 1) > 0;
 frontal_row_indices = sum(frontal, 2) > 0;
 frontal = frontal(frontal_row_indices, frontal_column_indices);
 frontal = 255 - frontal;
 
-vertical = imread([path, num2str(p), '_vertical.png']);
+vertical = imread([data_path, num2str(p), '_vertical.png']);
 vertical = 255 - vertical(:, :, 2);
 vertical_column_indices = sum(vertical, 1) > 0;
 vertical_row_indices = sum(vertical, 2) > 0;
@@ -149,13 +149,13 @@ for i = 1:size(mesh.vertices, 1)
     normals{i} = mesh.normals(i, :)';
 end
 
-save([path, num2str(p), '_points.mat'], 'points');
-save([path, num2str(p), '_centers.mat'], 'centers');
-save([path, num2str(p), '_normals.mat'], 'normals');
+save([data_path, num2str(p), '_points.mat'], 'points');
+save([data_path, num2str(p), '_centers.mat'], 'centers');
+save([data_path, num2str(p), '_normals.mat'], 'normals');
 if (p == 1)
-    save([path, 'radii.mat'], 'radii');
-	save([path, 'blocks.mat'], 'blocks');
-    save([path, 'solids.mat'], 'solids');
+    save([data_path, 'radii.mat'], 'radii');
+	save([data_path, 'blocks.mat'], 'blocks');
+    save([data_path, 'solids.mat'], 'solids');
 end
 
 

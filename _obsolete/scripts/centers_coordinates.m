@@ -1,58 +1,3 @@
-clc;
-clear;
-close all;
-
-set_path;
-data_path = '_data/implicit_skinning/new/';
-D = 3;
-
-%% Settings
-settings.mode = 'fitting';
-settings.r_min = 0.5;
-settings.sparse_data = false;
-settings.closing_radius = 25;
-settings.fov = 15;
-downscaling_factor = 8;
-settings.H = 480/downscaling_factor;
-settings.W = 640/downscaling_factor;
-settings.D = D;
-settings.RAND_MAX = 32767;
-
-settings.energy1 = true; 
-settings.energy2 = true; 
-settings.energy3x = false; 
-settings.energy3y = false; 
-settings.energy3z = false;
-settings.energy4 = true;
-settings.energy5 = true;
-
-settings.linear_search = true;
-
-%% Set up optimization
-num_poses = 3; 
-num_iters = 20;
-
-%% Compute weights
-w1 = 1; w2 = 10000; w3 = 1; w4 = ; wr = 1000000; w5 = 1; w6 = 1;
-settings.w1 = w1; settings.w2 = w2; 
-settings.w4 = w4; settings.w5 = w5; settings.w6 = w6;
-
-%% Optimize
-success_iter =  0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 %% Pose 1
 poses{1}.centers{1} = [-2.801; -1.052; 0.419]; radii{1} = 0.5;
@@ -162,7 +107,4 @@ blocks{49} = [17, 18, 19, 20];
 blocks{50} = [22, 23, 24, 25];
 blocks{51} = [24, 25, 26, 27];
 blocks{52} = [29, 30, 31, 32];
-blocks{53} = [31, 32, 33, 34];
-
-
-
+blocks{53} = [31, 32, 33, 34];s

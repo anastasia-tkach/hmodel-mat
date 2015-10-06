@@ -26,16 +26,21 @@ settings_default;
 
 
 %% Load input
-load([data_path, 'radii.mat']); load([data_path, 'blocks.mat']);
+load([data_path, 'radii.mat']); load([data_path, 'blocks.mat']); [blocks] = reindex(radii, blocks);
 load([data_path, 'solids.mat']); solids = [blocks; solids];
 num_centers = length(radii);
 num_links = sum(cellfun('length', blocks));
 num_parameters = D * num_centers * num_poses + num_centers;
 poses = cell(num_poses, 1);
-for p = 1:num_poses
-    load([data_path, num2str(p), '_points.mat']); poses{p}.points = points;
-    load([data_path, num2str(p), '_centers.mat']); poses{p}.centers = centers;
-    load([data_path, num2str(p), '_normals.mat']); poses{p}.normals = normals;
+
+for k = start_pose:start_pose + num_poses - 1
+    p = k - start_pose + 1;
+    switch settings.mode
+        case 'fitting', load([data_path, num2str(k), '_centers.mat']); poses{p}.centers = centers;
+        case 'tracking', load([data_path, 'centers.mat']); poses{p}.centers = centers;
+    end
+    load([data_path, num2str(k), '_points.mat']); poses{p}.points = points;
+    load([data_path, num2str(k), '_normals.mat']); poses{p}.normals = normals;
     poses{p}.data_bounding_box = compute_data_bounding_box(poses{p}.points);
     if settings.D == 3
         P = zeros(length(poses{p}.points), settings.D);
@@ -48,6 +53,16 @@ end
 poses = compute_closing_radius(poses, radii, settings);
 history = cell(num_iters + 1, 1);
 
+%% Reduce data
+blocks = blocks(1:4);
+solids = {}; solids{1} = [3, 4, 5, 6];
+poses{1}.points = poses{1}.points(1000:1000);
+poses{1}.normals = poses{1}.normals(1000:1000);
+display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(poses{1}.points, 'm'); drawnow;
+P = zeros(length(poses{p}.points), settings.D);
+for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
+poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
+
 %% Optimizaion
 for iter = 1:num_iters
     settings.iter = iter; disp(['ITER ', num2str(success_iter + 1)]);
@@ -59,13 +74,14 @@ for iter = 1:num_iters
     end
     
     for p = 1:num_poses
-        disp(['pose ', num2str(p)]);
+        %disp(['pose ', num2str(p)]);
         
         %% Data fitting energy
-        poses{p} = compute_energy1(poses{p}, radii, blocks, settings, false);
+        %if success_iter >= 1, f_previous = history{success_iter}.poses{p}.f1; else f_previous = 0; end
+        poses{p} = compute_energy1(poses{p}, radii, blocks, settings, true);
         
         %% Silhouette energy
-        poses{p} = compute_energy4(poses{p}, blocks, radii, settings, false);
+        poses{p} = compute_energy4(poses{p}, blocks, radii, settings, true);
         
         %% Building blocks existence energy
         poses{p} = compute_energy5(poses{p}, radii, blocks, settings);
@@ -86,8 +102,10 @@ for iter = 1:num_iters
     
     %% Save history
     success_iter = success_iter + 1;
-    history{success_iter}.f1 = f1; history{success_iter}.f2 = f2; history{success_iter}.f3x = f3x; history{success_iter}.f3y = f3y; history{success_iter}.f3z = f3z; history{success_iter}.f4 = f4;
-    history{success_iter}.J1 = J1; history{success_iter}.J2 = J2; history{success_iter}.J3x = J3x; history{success_iter}.J3y = J3y; history{success_iter}.J3z = J3z; history{success_iter}.J4 = J4;
+    history{success_iter}.f1 = f1; history{success_iter}.f2 = f2; history{success_iter}.f3x = f3x; history{success_iter}.f3y = f3y; history{success_iter}.f3z = f3z;
+    history{success_iter}.f4 = f4; history{success_iter}.f5 = f5;
+    history{success_iter}.J1 = J1; history{success_iter}.J2 = J2; history{success_iter}.J3x = J3x; history{success_iter}.J3y = J3y; history{success_iter}.J3z = J3z;
+    history{success_iter}.J4 = J4; history{success_iter}.J5 = J5;
     history{success_iter}.energy = w1 * (f1' * f1) + w2 * (f2' * f2) + w3 * (f3x' * f3x + f3y' * f3y + f3z' * f3z) + w4 * (f4' * f4) +  w5 * (f5' * f5);
     if history{success_iter}.energy == 0, break; end
     history{success_iter}.poses = poses; history{success_iter}.radii = radii; history{success_iter}.blocks = blocks;
@@ -100,15 +118,14 @@ for iter = 1:num_iters
         else
             damping = damping * 10;
             radii = history{success_iter - 1}.radii; blocks = history{success_iter - 1}.blocks; poses = history{success_iter - 1}.poses;
-            f1 = history{success_iter - 1}.f1; f2 = history{success_iter - 1}.f2; f3x = history{success_iter - 1}.f3x; ...
-                f3y = history{success_iter - 1}.f3y; f3z = history{success_iter - 1}.f3z; f4 = history{success_iter - 1}.f4;
-            J1 = history{success_iter - 1}.J1; J2 = history{success_iter - 1}.J2; J3x = history{success_iter - 1}.J3x; ...
-                J3y = history{success_iter - 1}.J3y; J3z = history{success_iter - 1}.J3z; J4 = history{success_iter - 1}.J4;
+            f1 = history{success_iter - 1}.f1; f2 = history{success_iter - 1}.f2; f3x = history{success_iter - 1}.f3x; f3y = history{success_iter - 1}.f3y; f3z = history{success_iter - 1}.f3z;
+            f4 = history{success_iter - 1}.f4; f5 = history{success_iter - 1}.f5;
+            J1 = history{success_iter - 1}.J1; J2 = history{success_iter - 1}.J2; J3x = history{success_iter - 1}.J3x; J3y = history{success_iter - 1}.J3y; J3z = history{success_iter - 1}.J3z;
+            J4 = history{success_iter - 1}.J4; J5 = history{success_iter - 1}.J5;
             success_iter = success_iter - 1;
             disp('    ONE ITERATION IS REJECTED');
             disp(['    damping = ', num2str(damping)]);
-            close(findobj('type','figure','name', ['energy 1, iter ', num2str(settings.iter)]));
-            close(findobj('type','figure','name', ['energy 3, iter ', num2str(settings.iter)]));
+            %close(findobj('type','figure','name', ['energy 1, iter ', num2str(settings.iter)]));
         end
     end
     
@@ -124,7 +141,7 @@ for iter = 1:num_iters
     while true
         LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w4 * (J4' * J4) +  w5 * (J5' * J5);
         rhs = w1 * J1' * f1 + w2 * J2' * f2 + w4 * J4' * f4 + w5 * J5' * f5;
-        delta = -  LHS \ rhs;            
+        delta = -  LHS \ rhs;
         
         [valid_update, new_poses, new_radii, change_indices] = apply_update(poses, blocks, radii, delta, D);
         if (valid_update), break; end
@@ -139,6 +156,7 @@ for iter = 1:num_iters
 end
 
 save([absolute_path, 'rendering\history'], 'history');
-examine_history(settings, history);
+%examine_history(settings, history);
 %display_hand_sketch(poses, radii, blocks);
+%display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(pose.points, 'm'); drawnow;
 

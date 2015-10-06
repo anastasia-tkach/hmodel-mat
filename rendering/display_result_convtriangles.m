@@ -54,10 +54,10 @@ if (display_data)
     for i = 1:length(pose.projections)
          if ~isempty(pose.projections{i}), pose.back_projections{i} = pose.projections{i} - (pose.points{i} - pose.projections{i}); end
     end
-    mypoints(pose.projections, [0.1, 0.8, 0.8]);
-    mypoints(pose.back_projections, [0.6, 0.6, 0.6]);
-    mylines(pose.points, pose.projections, [0.1, 0.8, 0.8]);  
-    mylines(pose.back_projections, pose.projections, [0.6, 0.6, 0.6]);   
+    mypoints(pose.projections, [0.1, 0.8, 0.8]);    
+    mylines(pose.points, pose.projections, [0.1, 0.8, 0.8]); 
+    %mypoints(pose.back_projections, [0.6, 0.6, 0.6]);
+    %mylines(pose.back_projections, pose.projections, [0.6, 0.6, 0.6]);   
 end
 
 %% Set the axis limits
