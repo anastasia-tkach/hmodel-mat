@@ -27,6 +27,9 @@ blocks{24} = [22, 24, 25]; blocks{25} = [24, 25, 27];
 blocks{26} = [24, 26, 27]; blocks{27} = [4, 8, 28];
 blocks{28} = [8, 12, 29]; blocks{29} = [12, 16, 30];
 
+solids = cell(3, 1); solids{1} = [4, 8, 22, 23];
+solids{2} = [12, 16, 20, 22]; solids{3} = [24, 25, 26, 27];
+
 %% New topology
 num_blocks = 38; num_centers = 49; num_solids = 8;
 blocks = cell(num_blocks, 1);

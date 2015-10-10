@@ -54,14 +54,14 @@ poses = compute_closing_radius(poses, radii, settings);
 history = cell(num_iters + 1, 1);
 
 %% Reduce data
-blocks = blocks(1:4);
-solids = {}; solids{1} = [3, 4, 5, 6];
-poses{1}.points = poses{1}.points(1000:1000);
-poses{1}.normals = poses{1}.normals(1000:1000);
-display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(poses{1}.points, 'm'); drawnow;
-P = zeros(length(poses{p}.points), settings.D);
-for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
-poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
+% blocks = blocks(1:4);
+% solids = {}; solids{1} = [3, 4, 5, 6];
+% poses{1}.points = poses{1}.points(1000:1000);
+% poses{1}.normals = poses{1}.normals(1000:1000);
+% display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(poses{1}.points, 'm'); drawnow;
+% P = zeros(length(poses{p}.points), settings.D);
+% for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
+% poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
 
 %% Optimizaion
 for iter = 1:num_iters
@@ -77,7 +77,6 @@ for iter = 1:num_iters
         %disp(['pose ', num2str(p)]);
         
         %% Data fitting energy
-        %if success_iter >= 1, f_previous = history{success_iter}.poses{p}.f1; else f_previous = 0; end
         poses{p} = compute_energy1(poses{p}, radii, blocks, settings, true);
         
         %% Silhouette energy
