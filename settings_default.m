@@ -43,14 +43,15 @@ settings.w4 = w4; settings.w5 = w5;
 success_iter =  0;
 
 %% Tracking
-% damping = 1;
-% w2 = 1e10;
-% settings.w2 = w2; 
-% settings.damping = damping;
-% settings.mode = 'tracking';
-% data_path = '_data/implicit_skinning/tracking/';
-% num_poses = 1;
-% start_pose = 4;
+damping = 1;
+w2 = 1e10;
+settings.w2 = w2; 
+settings.damping = damping;
+settings.mode = 'tracking';
+settings.energy4 = false;
+data_path = '_data/implicit_skinning/tracking/';
+num_poses = 1;
+start_pose = 4;
 
 
 

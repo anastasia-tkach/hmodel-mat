@@ -42,7 +42,7 @@ end
 min_distances = reshape(min_distances, size(x));
 h = patch(isosurface(x, y, z, min_distances,0));
 isonormals(x, y, z, min_distances, h);
-set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 1);
+set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 0.7);
 grid off; view([1, 1, 1]); axis equal; camlight; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]);
 
 %% Display data

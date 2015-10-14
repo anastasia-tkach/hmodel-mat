@@ -3,7 +3,7 @@ D = 2;
 centers = pose.centers;
 
 %% Generating the volumetric domain data:
-n = 150; color = [0.2, 0.8, 0.8];
+n = 50; color = [0.2, 0.8, 0.8];
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);
