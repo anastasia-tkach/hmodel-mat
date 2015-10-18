@@ -1,4 +1,5 @@
 function [tangent_gradients] = jacobian_tangent_planes(centers, blocks, radii, variables)
+if length(centers{1}) == 2, return; end
 
 tangent_gradients = cell(length(blocks), 1);
 

@@ -48,7 +48,10 @@ end
 
 %% Assemble overall linear system
 F = zeros(total_num_points, 1);
-J = zeros(total_num_points, num_parameters);
+switch settings.mode
+    case 'fitting', J = zeros(total_num_points, num_parameters);
+    case 'tracking', J =  zeros(total_num_points, num_centers * settings.D);
+end
 num_poses = length(poses);
 for p = 1:length(poses)
     J(cumsum_num_points(p) + 1:cumsum_num_points(p + 1), D * num_centers * (p - 1) + 1:D * num_centers * p) = poses{p}.Jc;

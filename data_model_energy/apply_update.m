@@ -127,6 +127,10 @@ for p = 1:num_poses
 end
 
 new_radii = cell(size(radii));
+if length(delta) == D * num_poses * num_centers, 
+    new_radii = radii;
+    return; 
+end
 for o = 1:num_centers
     new_radii{o} = radii{o} + delta(D * num_poses * num_centers + o);
 end

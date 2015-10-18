@@ -42,22 +42,24 @@ end
 min_distances = reshape(min_distances, size(x));
 h = patch(isosurface(x, y, z, min_distances,0));
 isonormals(x, y, z, min_distances, h);
-set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 0.7);
-grid off; view([1, 1, 1]); axis equal; camlight; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]);
+set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 1);
+grid off; view([-1, -1, -1]); axis equal; camlight; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]);
 
 %% Display data
 
 
 if (display_data)
     mypoints(pose.points, 'm');
-    pose.back_projections = cell(size(pose.projections));
-    for i = 1:length(pose.projections)
-         if ~isempty(pose.projections{i}), pose.back_projections{i} = pose.projections{i} - (pose.points{i} - pose.projections{i}); end
+    if isfield(pose, 'projections')
+        pose.back_projections = cell(size(pose.projections));
+        for i = 1:length(pose.projections)
+            if ~isempty(pose.projections{i}), pose.back_projections{i} = pose.projections{i} - (pose.points{i} - pose.projections{i}); end
+        end
+        mypoints(pose.projections, [0.1, 0.8, 0.8]);
+        mylines(pose.points, pose.projections, [0.1, 0.8, 0.8]);
+        %mypoints(pose.back_projections, [0.6, 0.6, 0.6]);
+        %mylines(pose.back_projections, pose.projections, [0.6, 0.6, 0.6]);
     end
-    mypoints(pose.projections, [0.1, 0.8, 0.8]);    
-    mylines(pose.points, pose.projections, [0.1, 0.8, 0.8]); 
-    %mypoints(pose.back_projections, [0.6, 0.6, 0.6]);
-    %mylines(pose.back_projections, pose.projections, [0.6, 0.6, 0.6]);   
 end
 
 %% Set the axis limits

@@ -10,9 +10,6 @@ projections = cell(num_points, 1);
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 
 for i = 1:num_points
-    if (i == 2463)
-        disp(' ');
-    end
     p = points{i};
     
     all_projections = cell(length(blocks), 1);
