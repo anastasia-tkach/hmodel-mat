@@ -1,16 +1,15 @@
-function [T] = pose(T, translation, rotation, settings)
-thetas(1:settings.num_translations)  = translation;
-thetas(settings.num_translations + 1: settings.num_translations + settings.num_rotations) = rotation;
+function [T] = pose(T, i, settings)
 
-if settings.D == 2, thetas(settings.D + 1) = 0; end
-thetas(settings.num_parameters) = 0; 
-
-T.thetas = thetas; 
-frame = makehgtform('translate', T.thetas(1:settings.num_translations)); % root translation
-
-for i = settings.num_translations + 1:settings.num_parameters
-    T.global_translation(i,:) = frame(1:settings.num_translations, end);
-    frame = frame * makehgtform('axisrotate', T.axis(i,:), T.thetas(i));
-    frame = frame * makehgtform('translate',  T.local_translation(i,:));
+if T.parent_id(i) ~= 0
+    T.frames{i} = T.frames{T.parent_id(i)};    
+else
+    T.frames{i} = makehgtform('translate', T.thetas(1:settings.num_translations));   
 end
+T.frames{i} = T.frames{i} * makehgtform('axisrotate', T.axis(i - 1,:), T.thetas(i - 1));
+T.frames{i} = T.frames{i} * makehgtform('translate',  T.local_translation(i,:));
+T.global_translation(i,:) = T.frames{i}(1:settings.num_translations, end);    
+
+for c = T.children_ids{i}
+    T = pose(T, c, settings);
 end
+

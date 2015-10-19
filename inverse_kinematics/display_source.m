@@ -9,12 +9,6 @@ h_corresp = edge2(model_points, T.points(closest_data_indices, :), settings, 'co
 %% Display model
 if ~isempty(h_src), delete(h_src); end;
 if ~isempty(h_src_p), delete(h_src_p); end;
-h_src = draw(S, settings, 'color', S.color, 'linewidth', 5);
+h_src = draw(S, settings,  S.color, 'color', S.color, 'linewidth', 5);
 
-if settings.D == 2
-    h_src_p = plot(S.global_translation(:,1), S.global_translation(:,2),'.','markersize',50,'color',S.color);
-end
-if settings.D == 3
-    h_src_p = plot3(S.global_translation(:,1), S.global_translation(:,2), S.global_translation(:,3), '.','markersize',50,'color',S.color);
-end
 
