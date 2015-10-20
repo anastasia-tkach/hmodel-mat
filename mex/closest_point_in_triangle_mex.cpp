@@ -6,6 +6,7 @@
 using namespace std;
 using Eigen::MatrixXd;
 using Eigen::Vector3d;
+
 using Eigen::VectorXd;
 using Eigen::RowVector3d;
 using Eigen::Map;
@@ -83,7 +84,7 @@ void closest_point_in_triangle(Vector3d v1, Vector3d v2, Vector3d v3, Vector3d p
 
 	vector<Vector3d> T;
 	T.push_back(t12); T.push_back(t13); T.push_back(t23);
-	vector<vector<int>> indices;
+	vector<vector<int> > indices;
 	indices.push_back(index12); indices.push_back(index13); indices.push_back(index23);
 	Vector3d d;
 	d << d12, d13, d23;

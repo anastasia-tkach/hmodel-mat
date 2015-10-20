@@ -12,7 +12,7 @@ if (length(points{1}) == 3)
         end
     end
     P = P(1:k, :);
-    scatter3(P(:, 1), P(:, 2), P(:, 3), 10, color, 'o', 'filled');
+    scatter3(P(:, 1), P(:, 2), P(:, 3), 50, color, 'o', 'filled');
 end
 if (length(points{1}) == 2)
     P = zeros(length(points), 2);
@@ -24,5 +24,5 @@ if (length(points{1}) == 2)
         end
     end
     P = P(1:k, :);
-    scatter(P(:, 1), P(:, 2), 10, color, 'o', 'filled');
+    scatter(P(:, 1), P(:, 2), 50, color, 'o', 'filled');
 end

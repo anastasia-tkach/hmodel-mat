@@ -59,12 +59,16 @@ for iter = 1:num_iters
     if skeleton
         [data_model_indices, projections, ~] = compute_skeleton_projections(points, centers, blocks);
     else
-        [data_model_indices, projections, ~] = compute_projections(points, centers, blocks, radii);
+        [data_model_indices, projections, ~] = compute_projections_matlab(points, centers, blocks, radii);
+        % comment the line above and uncomment the line below to run faster
+        % (it might crash)
+        %[data_model_indices, projections, block_indices] = compute_projections(points, centers, blocks, radii);
+    
     end
     
     %% Display
     if skeleton
-        figure; axis equal; axis off; hold on;
+        figure; axis equal; axis off; hold on; set(gcf,'color','white'); 
         mylines(projections, points, [0, 0.8, 0.8]);
         for i = 1:length(blocks), myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k'); end
         mypoints(points, 'm'); mypoints(centers, 'k'); view(90, 0); drawnow;

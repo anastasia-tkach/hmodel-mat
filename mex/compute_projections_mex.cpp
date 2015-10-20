@@ -24,8 +24,8 @@ template <typename T> int sign(T val) {
 }
 
 template <class T>
-vector<vector<T>> parse_blocks(double * B, int N) {
-	vector<vector<T>> blocks;
+vector<vector<T> > parse_blocks(double * B, int N) {
+	vector<vector<T> > blocks;
 	for (int i = 0; i < N; i++) {
 		vector<T> block;
 		for (int j = 0; j < D; j++) {  
@@ -164,7 +164,7 @@ void closest_point_in_triangle(const Vector3d & v1, const Vector3d & v2, const V
 
 	vector<Vector3d> T;
 	T.push_back(t12); T.push_back(t13); T.push_back(t23);
-	vector<vector<int>> indices;
+	vector<vector<int> > indices;
 	indices.push_back(index12); indices.push_back(index13); indices.push_back(index23);
 	Vector3d d;
 	d << d12, d13, d23;
@@ -172,7 +172,7 @@ void closest_point_in_triangle(const Vector3d & v1, const Vector3d & v2, const V
 	t = T[i]; index = indices[i];
 }
 
-vector<int> get_intersecting_blocks(const Vector3d & p, const vector<int> & indices, const vector<vector<int>> & blocks, const vector<Vector3d> & centers, const VectorXd & radii) {
+vector<int> get_intersecting_blocks(const Vector3d & p, const vector<int> & indices, const vector<vector<int> > & blocks, const vector<Vector3d> & centers, const VectorXd & radii) {
 	vector<int> intersecting_blocks_indices; int index;
 	if (indices.size() > 1) {
 		VectorXd distances = VectorXd::Zero(indices.size());
@@ -264,7 +264,7 @@ void projection_convtriangle(const Vector3d & p, const Vector3d & c1, const Vect
         mexPrintf("%d ", indexb[i]);
     mexPrintf("\n");*/
 
-	vector<vector<int>> I;
+	vector<vector<int> > I;
 	I.push_back(indexa); I.push_back(indexb);
 	vector<Vector3d> Q, S;
 	Q.push_back(q1); Q.push_back(q2);
@@ -377,13 +377,13 @@ void projection(const Vector3d & p, const vector<int> & block, const six & tange
 	}
 }
 
-void compute_projection(const Vector3d & p, const vector<vector<int>> & blocks, const vector<six> & tangent_points, const VectorXd & radii, const vector<Vector3d> & centers,
+void compute_projection(const Vector3d & p, const vector<vector<int> > & blocks, const vector<six> & tangent_points, const VectorXd & radii, const vector<Vector3d> & centers,
 	vector<int> & indices, Vector3d & closest_projection, int & block_index) {
 
 	double min_distance = std::numeric_limits<double>::max();
 	vector<Vector3d> all_projections;
 	vector<double> all_distances;
-	vector<vector<int>> all_indices;
+	vector<vector<int> > all_indices;
 	vector<int> all_block_indices;
 
 	for (int j = 0; j < blocks.size(); j++) {
@@ -445,7 +445,7 @@ void compute_projection(const Vector3d & p, const vector<vector<int>> & blocks, 
 	block_index = all_block_indices[min_index];
 }
 
-void compute_projections(const vector<Vector3d> & points, const vector<Vector3d> & centers, const vector<vector<int>> & blocks, const VectorXd & radii, const vector<six> & tangent_points,
+void compute_projections(const vector<Vector3d> & points, const vector<Vector3d> & centers, const vector<vector<int> > & blocks, const VectorXd & radii, const vector<six> & tangent_points,
 	double * indices, double * projections, double * block_indices) {
 	
 	vector<int> index;
@@ -493,7 +493,7 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     double * T = mxGetPr(prhs[4]);    
    
 	vector<Vector3d> points = parse_points(P, P_rows);
-	vector<vector<int>> blocks = parse_blocks<int>(B, B_rows);
+	vector<vector<int> > blocks = parse_blocks<int>(B, B_rows);
 	vector<Vector3d> centers = parse_points(C, C_rows);	
 	vector<six> tangent_points = parse_tangent_points(T, T_rows);
 	VectorXd radii = VectorXd::Zero(R_rows);
