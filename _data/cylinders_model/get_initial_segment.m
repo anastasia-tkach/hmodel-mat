@@ -80,6 +80,8 @@ Capsule = Capsule(:, u:end - u + 1);
  
 Vertices = Capsule;
 
+Vertices = [Vertices, [0; 0; 0], [0; 0; d]];
+
 
 
         

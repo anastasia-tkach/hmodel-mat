@@ -10,6 +10,7 @@ projections = cell(num_points, 1);
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 
 for i = 1:num_points
+    
     p = points{i};
     
     all_projections = cell(length(blocks), 1);
@@ -18,6 +19,9 @@ for i = 1:num_points
     all_block_indices = zeros(length(blocks), 1);
     
     for j = 1:length(blocks)
+        if (j == 16)
+            disp('')
+        end
         [index, q, ~, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
         all_projections{j} = q;
         all_distances(j) = norm(p - q);
@@ -30,11 +34,8 @@ for i = 1:num_points
             indices{i} = index;
             projections{i} = q;
             block_indices{i} = j;
-        end
-        
-    end
-    
-    
+        end          
+    end    
     %% Compute insideness matrix
     [intersecting_blocks_indices] = get_intersecting_blocks(points{i}, indices{i}, blocks, centers, radii);
     insideness_matrix = zeros(length(intersecting_blocks_indices), length(intersecting_blocks_indices));

@@ -2,15 +2,15 @@
 %% Make picture
 clear; clc; close all; rng(0);
 figure(1); hold on;
-clf; cla; axis equal; 
+clf; cla; axis equal;
 set(gcf, 'Position', [100, 100, 1024, 768]);
-set(gcf,'color','white'); axis off; 
+set(gcf,'color','white'); axis off;
 h_src = []; h_src_p = []; h_corresp = [];
-settings.D = 3;
+settings.D = 2;
 
 %% Parameters
 noise_jlength = 1;
-noise_sigma = 0.001;
+noise_sigma = 0.025;
 lambda = 1;
 samples_per_branch = 30;
 settings.num_translations = 3;
@@ -68,14 +68,13 @@ T.color = [0.9 0.2 0.7];
 
 %% Display Target
 scatter2(T.points, settings, 20, T.color, 'fill');
-%edge2(T.points, T.points + 0.3 * T.normals, settings, 'color', [1, 0.3, 1]);
 
 %% Display source
-hold on; axis equal; axis off; 
+hold on; axis equal; axis off;
 [h_src, h_src_p, h_corresp] = display_source(h_src, h_src_p, h_corresp, S, T, settings);
 
 %% Run
-for i = 1:20
+for i = 1:10
     %% Create model-data correspondences
     [model_points, block_indices] = sample(S, settings);
     closest_data_indices = T.kdtree.knnsearch(model_points); %< ICP like search
@@ -97,16 +96,22 @@ for i = 1:20
     %end
     
     %% Solve IK & apply
-    thetas = solve(S, model_points, block_indices, T.points, data_normals, lambda, settings);
+    [F, J] = jacobian_ik(S, model_points, block_indices, T.points, data_normals, settings);
     
-    %disp(thetas);
-    if settings.D == 2, thetas(settings.D + 1) = 0; end
-    S.thetas = thetas;
+    %% Solve for IK
+    I = eye(settings.num_parameters, settings.num_parameters);
+    LHS = J' * J + lambda^2 * I;
+    RHS = J' * F;
+    delta_theta = LHS \ RHS;
+    disp(F' * F);
+    
+    S.thetas = S.thetas + delta_theta;
+    if settings.D == 2, S.thetas(settings.D + 1) = 0; end
     S = pose(S, settings.num_translations + 1, settings);
     
     %% Visualize the new source
     [h_src, h_src_p, h_corresp] = display_source(h_src, h_src_p, h_corresp, S, T, settings); view([0; 0; 1]);
-    waitforbuttonpress;
+    %waitforbuttonpress;
 end
 
 %% Verify

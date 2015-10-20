@@ -1,34 +1,46 @@
-% clear; clc; close all;
-% settings.D = 3;
-% D = settings.D;
-% c1 = 7 * rand(D, 1);
-% c2 = 7 * rand(D, 1);
-% c3 = 7 * rand(D, 1);
-% c4 = 7 * rand(D, 1);
-% p = 7 * rand(D, 1);
-% r1 = rand(1,  1);
-% r2 = rand(1, 1);
-% r3 = rand(1, 1);
-% r4 = rand(1, 1);
-% r5 = rand(1, 1);
-% 
-% num_points = 7;
-% for i = 1:num_points
-%     points{i} = 7 * rand(D, 1);
-% end
-c5 = c3 + c4 - c2;
-%% Set up data structures
+clear; clc; close all;
+settings.D = 3;
+D = settings.D;
+c1 = 7 * rand(D, 1);
+c2 = 7 * rand(D, 1);
+c3 = 7 * rand(D, 1);
+c4 = 7 * rand(D, 1);
+p = 7 * rand(D, 1);
+r1 = rand(1,  1);
+r2 = rand(1, 1);
+r3 = rand(1, 1);
+r4 = rand(1, 1);
+r5 = rand(1, 1);
 
+num_points = 3;
+for i = 1:num_points
+    points{i} = 7 * rand(D, 1);
+end
+points{1} = c1;
+points{2} = c4;
+c5 = c3 + c4 - c2;
+% Set up data structures
+ 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 
 settings.skeleton = true;
 blocks{1} = [1, 2];
-blocks{2} = [2, 3, 4];
-blocks{3} = [3, 4, 5];
+% blocks{2} = [2, 3, 4];
+% blocks{3} = [3, 4, 5];
+blocks{2} = [2, 3];
+blocks{3} = [3, 4];
 centers = {c1; c2; c3; c4; c5};
 radii = {r1; r2; r3; r4; r5};
 solid_blocks = {1, [2, 3]};
 [blocks] = reindex(radii, blocks);
+
+data_path = '_data/convtriangles/';
+save([data_path, 'points.mat'], 'points');
+save([data_path, 'solid_blocks.mat'], 'solid_blocks');
+save([data_path, 'centers.mat'], 'centers');
+save([data_path, 'radii.mat'], 'radii');
+save([data_path, 'blocks.mat'], 'blocks');
+
 
 %% Set up data structures
 edge_indices = cell(length(blocks), 1);
@@ -65,14 +77,13 @@ while true
     
     if iter == num_iter, break; end
     iter = iter + 1;
-    pose.centers = centers; pose.points = points;
     
-    [f1, J1, f2, J2] = compute_energy_arap(pose, radii, blocks, solid_blocks, restpose_edges, edge_indices, settings, false);
+    [f1, J1, f2, J2] = compute_energy_arap(centers, points, radii, blocks, solid_blocks, restpose_edges, edge_indices, settings, false);
     
     %% Solve
-    I = 0.1 * eye(D * length(centers), D * length(centers));
-    w1 = 1; w2 = 10;
-    LHS = w1 * (J1' * J1) + w2 * (J2' * J2) + I;
+    I = eye(D * length(centers), D * length(centers));
+    w1 = 1; w2 = 10; damping = 0.1;
+    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);
     RHS = w1 * (J1' * f1) + w2 * (J2' * f2);
     delta = - LHS \ RHS;
     

@@ -252,11 +252,17 @@ void projection_convtriangle(const Vector3d & p, const Vector3d & c1, const Vect
 	Vector3d q1, q2; vector<int> indexa, indexb, indexc;
 	closest_point_in_triangle(v1, v2, v3, p, index1, index2, index3, q1, indexa);
 	closest_point_in_triangle(u1, u2, u3, p, -index1, -index2, -index3, q2, indexb);
-    closest_point_in_triangle(c1, c2, c3, p, index1, index2, index3, s, indexb);
+    closest_point_in_triangle(c1, c2, c3, p, index1, index2, index3, s, indexc);
 	//Vector3d n = (c1 - c2).cross(c1 - c3);
 	//n = n / n.norm();
 	//double distance = (p - c1).dot(n);  
 	//s = p - n * distance;
+    /*for(int i = 0; i<indexa.size(); i++)
+        mexPrintf("%d ", indexa[i]);
+    mexPrintf("\n");
+    for(int i = 0; i<indexb.size(); i++)
+        mexPrintf("%d ", indexb[i]);
+    mexPrintf("\n");*/
 
 	vector<vector<int>> I;
 	I.push_back(indexa); I.push_back(indexb);
@@ -381,6 +387,7 @@ void compute_projection(const Vector3d & p, const vector<vector<int>> & blocks, 
 	vector<int> all_block_indices;
 
 	for (int j = 0; j < blocks.size(); j++) {
+        //mexPrintf("->%d\n", j);
 		vector<int> index; Vector3d q; Vector3d s; bool is_inside;
 		projection(p, blocks[j], tangent_points[j], radii, centers, index, q, s, is_inside);
 		all_projections.push_back(q);
@@ -396,7 +403,7 @@ void compute_projection(const Vector3d & p, const vector<vector<int>> & blocks, 
 			closest_projection = q;
 			block_index = j;
 		}
-	}
+	}   
 
 	// Compute insideness matrix
 	vector<int> intersecting_blocks_indices = get_intersecting_blocks(p, indices, blocks, centers, radii);
@@ -446,6 +453,7 @@ void compute_projections(const vector<Vector3d> & points, const vector<Vector3d>
 	int block_index;
 	for (int i = 0; i < points.size(); i++) {
 		compute_projection(points[i], blocks, tangent_points, radii, centers, index, projection, block_index);
+
         int index_sign  = 1;
         if (index.size() == 3){
             for (int j = 0; j < index.size(); j++) {
