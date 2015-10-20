@@ -1,7 +1,7 @@
 
 close all; clear;
 
-num_blocks = 1;
+num_blocks = 2;
 
 n = 70;
 min_x = 0; max_x = 1; min_y = 0; max_y = 1; min_z = 0; max_z = 1;
@@ -55,12 +55,10 @@ end
 
 %% Show 3D model
 [blocks] = reindex(radii, blocks);
-pose.centers = centers;
-pose.num_centers = length(centers);
-display_result_convtriangles(pose, blocks, radii, false);
+display_result_convtriangles(centers, [], [], blocks, radii, false);
 
 %% Compute projections
-[xy_distances, yz_distances] = silhouette_convtriangles(pose, blocks, radii, n);
+[xy_distances, yz_distances] = silhouette_convtriangles(centers, blocks, radii, n);
 model_bounding_box = compute_model_bounding_box(centers, radii);
 
 
@@ -84,15 +82,18 @@ colormap([0 0.6 0.7; 1, 1, 1]); caxis([-1 1]); axis off;
 hold on; axis equal; xlim([model_bounding_box.min_z, model_bounding_box.max_z]);
 ylim([model_bounding_box.min_y, model_bounding_box.max_y]);
 
-[centers, blocks, radii] = draw_convtriangles_model(num_blocks, model_bounding_box.min_z, model_bounding_box.max_z);
+[centers, blocks] = draw_tracking_model(num_blocks, radii, model_bounding_box.min_z, model_bounding_box.max_z);
+%[centers, blocks, radii] = draw_convtriangles_model(num_blocks, model_bounding_box.min_z, model_bounding_box.max_z);
 
 %% Save the results
 
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_points.mat'], 'points');
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_normals.mat'], 'normals');
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_centers.mat'], 'centers');
+solid_blocks = {[1], [2]};
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\points.mat'], 'points');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\normals.mat'], 'normals');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\centers.mat'], 'centers');
 save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\radii.mat'], 'radii');
 save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\blocks.mat'], 'blocks');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\solid_blocks.mat'], 'solid_blocks');
 
 
 

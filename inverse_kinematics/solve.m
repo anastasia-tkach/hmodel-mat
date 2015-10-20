@@ -22,7 +22,7 @@ for k = 1:num_model_points
             p = S.global_translation(i, :)';            
             j(:, i) = cross(v, m - p)';
         else
-            j(:, i) = v;
+            %j(:, i) = v;
         end
     end
     

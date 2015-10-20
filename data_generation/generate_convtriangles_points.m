@@ -2,7 +2,9 @@ function [points] = generate_convtriangles_points(centers, blocks, radii)
 
 pose.centers = centers;
 
-N = 40000;
+N = 500000; % finger
+%N = 5000000; % hand
+%N = 40000; % synthetic
 model_bounding_box = compute_model_bounding_box(centers, radii);
 x = model_bounding_box.min_x + (model_bounding_box.max_x - model_bounding_box.min_x) * rand(N, 1);
 y = model_bounding_box.min_y + (model_bounding_box.max_y - model_bounding_box.min_y) * rand(N, 1);
@@ -35,7 +37,7 @@ end
 
 distances = min_distances;
 
-valid_indices = abs(distances) < 0.003;
+valid_indices = abs(distances) < 0.01;
 valid_indices = find(valid_indices);
 valid_points = cell(length(valid_indices), 1);
 for i = 1:length(valid_indices)

@@ -53,7 +53,7 @@ end
 
 %% Display
 if (display)
-    display_result_convtriangles(pose, blocks, radii, false);
+    display_result_convtriangles(pose.centers, pose.points, pose.projections, blocks, radii, false);
     %mypoints(pose.points, [1, 0.5, 0]);
     %myvectors(pose.points, pose.normals, 1, 'r');
     mypoints(pose.closest_data_points, 'm');

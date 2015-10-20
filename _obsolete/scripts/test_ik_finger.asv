@@ -1,0 +1,67 @@
+close all; clear; clc;
+settings_default;
+
+mode = 'finger';
+switch mode
+    case 'finger', 
+        num_parameters = 8;
+        data_path = '_data/htrack_model/2D/';
+    case 'hand', 
+        num_parameters = 26;
+end
+
+%% Load data
+
+% load([data_path, 'points_one_finger.mat']);
+% load([data_path, 'normals_rest_pose.mat']);
+load([data_path, 'points.mat']);
+load([data_path, 'normals.mat']);
+data_normals = normals;
+data_points = points;
+damping = 50;
+pose.data_bounding_box = compute_data_bounding_box(points);
+P = zeros(length(points), settings.D);
+for i = 1:length(points), P(i, :) = points{i}'; end
+pose.kdtree = createns(P, 'NSMethod','kdtree');
+settings.skeleton = true;
+
+
+%% Initialize
+segments = create_ik_model(mode);
+theta = zeros(num_parameters, 1);
+[posed_segments, joints] = pose_ik_model(segments, theta, false, mode);
+
+%% Run
+for i = 1:5
+    %% Create model-data correspondences
+    [centers, radii, blocks, solid_blocks] = make_convolution_model(posed_segments, mode);
+    if settings.skeleton
+        [data_model_indices, model_points, block_indices] = compute_skeleton_projections(points, centers, blocks);
+    else
+        [data_model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
+    end
+    
+    if settings.skeleton
+        figure; axis equal; axis off; hold on;
+        mylines(model_points, data_points, [0, 0.8, 0.8]);
+        for i = 1:length(blocks), myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k'); end
+        mypoints(data_points, 'm'); mypoints(centers, 'k'); view(90, 0); drawnow;
+    else
+        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true); campos([10, 160, -1500]); camlight; drawnow;
+    end
+    
+    %% Solve IK & apply
+    [F, J] = jacobian_ik(segments, joints, model_points, data_points, data_normals, get_segment_indcies(block_indices, mode), settings);
+    
+    %% Solve for IK
+    I = eye(length(theta), length(theta));
+
+    LHS = J' * J + damping * I;
+    RHS = J' * F;
+    delta_theta = LHS \ RHS;
+    disp(F' * F);
+    
+    theta = theta + delta_theta;
+    [posed_segments, joints] = pose_ik_model(segments, theta, false, mode);
+end
+

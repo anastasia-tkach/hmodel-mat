@@ -31,7 +31,7 @@ settings.linear_search = false;
 %% Set up optimization
 num_poses = 1; 
 start_pose = 1;
-num_iters = 15;
+num_iters = 10;
 
 %% Compute weights
 damping = 10; w1 = 1; w2 = 1000; w3 = 1;  w4 = 1; w5 = 1;
@@ -55,13 +55,13 @@ data_path = '_data/fingers/';
 num_poses = 1;
 start_pose = 5;
 
-settings.energy1 = false; 
+settings.energy1 = true; 
 settings.energy2 = false; 
 settings.energy3 = true; 
 settings.energy3x = false; 
 settings.energy3y = false; 
 settings.energy3z = false;
-settings.energy4 = true;
+settings.energy4 = false;
 settings.energy5 = false;
 
 settings.skeleton = false;
