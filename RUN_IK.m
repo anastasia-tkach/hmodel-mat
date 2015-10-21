@@ -13,6 +13,10 @@ skeleton = true; mode = 'finger';
 %data_path = '_data/htrack_model/skeleton_bent/';
 %skeleton = true; mode = 'finger';
 
+%% Test: finger skeleton, strongly bent
+%data_path = '_data/htrack_model/skeleton_strongly_bent/';
+%skeleton = true; mode = 'finger';
+
 %% Test: finger skeleton, shifted and bent
 %data_path = '_data/htrack_model/skeleton_shifted_and_bent/';
 %skeleton = true; mode = 'finger';
@@ -57,12 +61,14 @@ for i = 1:num_iters
     end
     
     if skeleton
-        figure; axis equal; axis off; hold on; set(gcf,'color','white'); 
-        mylines(model_points, data_points, [0, 0.8, 0.8]);
-        for i = 1:length(blocks), myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k'); end
-        mypoints(data_points, 'm'); mypoints(centers, 'k'); view(90, 0); drawnow;
+        figure; axis equal; axis off; axis tight; hold on; set(gcf,'color','white'); 
+        mylines(model_points, data_points, [0.75, 0.75, 0.75]);        
+        for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)}; 
+            scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');  
+            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+        end; mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
     else
-        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true); campos([10, 160, -1500]); camlight; drawnow;
+        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true); %campos([10, 160, -1500]); camlight; 
     end
     
     %% Solve IK & apply

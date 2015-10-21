@@ -19,7 +19,7 @@ if length(first_points{1}) == 3
     end
     if (k > 0)
         L = L(1:3*k, :);
-        line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 4, 'color', color);
+        line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', color);
     end
 end
 

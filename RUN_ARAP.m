@@ -12,6 +12,10 @@ skeleton = true;
 %data_path = '_data/htrack_model/skeleton_bent/';
 %skeleton = true;
 
+%% Test: finger skeleton, strongly bent
+%data_path = '_data/htrack_model/skeleton_strongly_bent/';
+%skeleton = true; mode = 'finger';
+
 %% Test: finger skeleton, shifted and bent
 %data_path = '_data/htrack_model/skeleton_shifted_and_bent/';
 %skeleton = true;
@@ -35,7 +39,7 @@ w1 = 1; w2 = 1; damping = 0.1; num_iters = 5;
 load([data_path, 'radii.mat']);
 load([data_path, 'blocks.mat']); [blocks] = reindex(radii, blocks);
 load([data_path, 'centers.mat']);
-load([data_path, 'points.mat']);
+load([data_path, 'points.mat']); data_points = points;
 load([data_path, 'solid_blocks.mat']);
 
 %% Set up data structures
@@ -55,33 +59,35 @@ end
 for iter = 1:num_iters
     [blocks] = reindex(radii, blocks);
     
-    %% Compute projections
+    %% Compute model_points
     if skeleton
-        [data_model_indices, projections, ~] = compute_skeleton_projections(points, centers, blocks);
+        [data_model_indices, model_points, ~] = compute_skeleton_projections(data_points, centers, blocks);
     else
-        [data_model_indices, projections, ~] = compute_projections_matlab(points, centers, blocks, radii);
+        [data_model_indices, model_points, ~] = compute_projections_matlab(data_points, centers, blocks, radii);
         % comment the line above and uncomment the line below to run faster
         % (it might crash)
-        %[data_model_indices, projections, block_indices] = compute_projections(points, centers, blocks, radii);
+        %[data_model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
     
     end
     
     %% Display
     if skeleton
-        figure; axis equal; axis off; hold on; set(gcf,'color','white'); 
-        mylines(projections, points, [0, 0.8, 0.8]);
-        for i = 1:length(blocks), myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k'); end
-        mypoints(points, 'm'); mypoints(centers, 'k'); view(90, 0); drawnow;
+        figure; axis equal; axis off; axis tight; hold on; set(gcf,'color','white'); 
+        mylines(model_points, data_points, [0.75, 0.75, 0.75]);        
+        for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)}; 
+            scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');  
+            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+        end; mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
     else
-        display_result_convtriangles(centers, points, projections, blocks, radii, true); %campos([10, 160, -1500]); camlight;
+        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true); %campos([10, 160, -1500]); camlight;
         drawnow;
     end
     
     %% Translations energy
     if skeleton
-        [f1, J1] = jacobian_arap_translation_skeleton(centers, projections, data_model_indices, points, D);
+        [f1, J1] = jacobian_arap_translation_skeleton(centers, model_points, data_model_indices, data_points, D);
     else
-        [f1, J1] = jacobian_arap_translation(centers, radii, blocks, points, data_model_indices, points, D);
+        [f1, J1] = jacobian_arap_translation(centers, radii, blocks, data_points, data_model_indices, data_points, D);
     end
     
     %% Rotations energy

@@ -1,5 +1,5 @@
 
-data_path = '_data/htrack_model/skeleton_shifted_and_bent/';
+data_path = '_data/htrack_model/skeleton_strongly_bent/';
 mode = 'finger';
 skeleton = true;
 
@@ -23,7 +23,7 @@ save([data_path, 'blocks.mat'], 'blocks');
 %% Create posed data
 switch mode
     case 'finger'
-        theta = zeros(8, 1); theta(3) = 20; theta(7) = pi/7; theta(8) = pi/7; 
+        theta = zeros(8, 1); theta(4) = pi/5; theta(7) = pi/5; theta(8) = pi/5; 
     case 'hand'
         theta = zeros(26, 1); theta(24:26) = -pi/7;
 end
