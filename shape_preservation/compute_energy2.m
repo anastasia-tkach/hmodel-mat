@@ -1,7 +1,7 @@
-function [f2, J2] = compute_energy2(poses, blocks, num_centers, num_parameters, num_links, settings)
+function [f2, J2] = compute_energy2(poses, blocks, num_centers, settings)
 D = settings.D;
-f2 = zeros(num_links, 1);
-J2 = zeros(num_links, settings.D * num_centers);
+f2 = zeros(0, 1);
+J2 = zeros(0, settings.D * num_centers);
 
 switch settings.mode
     

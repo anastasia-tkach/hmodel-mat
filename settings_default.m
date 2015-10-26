@@ -2,7 +2,7 @@ clc;
 clear;
 close all;
 
-%set_path;
+set_path;
 data_path = '_data/implicit_skinning/old/';
 D = 3;
 

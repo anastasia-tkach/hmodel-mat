@@ -1,6 +1,8 @@
 function [f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D)
 
 
+rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
+
 %% Compute rotations
 rotations = cell(length(blocks), 1);
 edges = cell(length(blocks), 1);

@@ -1,7 +1,7 @@
 
-data_path = '_data/htrack_model/skeleton_strongly_bent/';
+data_path = '_data/htrack_model/finger_strongly_bent/';
 mode = 'finger';
-skeleton = true;
+skeleton = false;
 
 %% Get model
 segments = create_ik_model(mode);
@@ -25,11 +25,11 @@ switch mode
     case 'finger'
         theta = zeros(8, 1); theta(4) = pi/5; theta(7) = pi/5; theta(8) = pi/5; 
     case 'hand'
-        theta = zeros(26, 1); theta(24:26) = -pi/7;
+        theta = zeros(26, 1); theta(25:26) = -pi/7;
 end
 [segments, joints] = pose_ik_model(segments, theta, false, mode);
 [centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
-
+%save([data_path, 'centers.mat'], 'centers');
 if skeleton
     points = sample_skeleton(centers, blocks);    
     mypoints(points, 'm'); view(90, 0); drawnow;

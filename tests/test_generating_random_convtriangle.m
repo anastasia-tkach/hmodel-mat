@@ -46,7 +46,14 @@ num = 50;
 centers{1} = c1; centers{2} = c2; centers{3} = c3;
 radii{1} = r1; radii{2} = r2; radii{3} = r3;
 num_centers = 3;
-[min_x, min_y, min_z, max_x, max_y, max_z] = compute_bounding_box(centers, radii);
+bounding_box = compute_model_bounding_box(centers, radii);
+min_x = bounding_box.min_x;
+min_y = bounding_box.min_y;
+min_z = bounding_box.min_z;
+max_x = bounding_box.max_x;
+max_y = bounding_box.max_y;
+max_z = bounding_box.max_z;
+
 xm = linspace(min_x, max_x, num);
 ym = linspace(min_y, max_y, num);
 zm = linspace(min_z, max_z, num);
@@ -70,7 +77,6 @@ set(h,'FaceColor',color,'EdgeColor','none');
 alpha(0.4); grid off; view([1,1,1]);
 axis equal; camlight; lighting gouraud;
 
-return;
 
 %% Draw spheres
 figure; hold on;
@@ -79,8 +85,7 @@ for j = 1:length(centers)
     distances = zeros(N, 1);
     points = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
     for i = 1:N
-        p = points(i, :)';
-        
+        p = points(i, :)';        
         distances(i) = norm(p - centers{j}) - radii{j};
     end
     
