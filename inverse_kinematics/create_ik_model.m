@@ -10,6 +10,8 @@ switch mode
         segments = segments_parameters();
     case 'finger'
         segments = finger_segments_parameters();
+    case 'palm_finger'
+        segments = palm_finger_segments_parameters();
 end
 
 for i = 1:length(segments)

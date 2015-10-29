@@ -1,15 +1,21 @@
-
-data_path = '_data/htrack_model/finger_strongly_bent/';
-mode = 'finger';
+clear
+data_path = '_data/htrack_model/hand_shifted_articulated/';
+mode = 'hand';
 skeleton = false;
 
 %% Get model
 segments = create_ik_model(mode);
-[centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
+[centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode);
 if skeleton
-    figure; axis equal; axis off; hold on;    
-    for i = 1:length(blocks), myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k'); end
-    mypoints(centers, 'k'); 
+    figure; axis equal; axis off; hold on;
+    for i = 1:length(blocks),
+        myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k');
+        if length(blocks{i}) == 3
+            myline(centers{blocks{i}(1)}, centers{blocks{i}(3)}, 'k');
+            myline(centers{blocks{i}(2)}, centers{blocks{i}(3)}, 'k');
+        end
+    end
+    mypoints(centers, 'k');
 else
     display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 end
@@ -19,19 +25,22 @@ save([data_path, 'solid_blocks.mat'], 'solid_blocks');
 save([data_path, 'centers.mat'], 'centers');
 save([data_path, 'radii.mat'], 'radii');
 save([data_path, 'blocks.mat'], 'blocks');
+save([data_path, 'attachments.mat'], 'attachments');
 
 %% Create posed data
 switch mode
     case 'finger'
-        theta = zeros(8, 1); theta(4) = pi/5; theta(7) = pi/5; theta(8) = pi/5; 
+        theta = zeros(8, 1); theta(4) = pi/5; theta(7) = pi/5; theta(8) = pi/5;
+    case 'palm_finger'
+        theta = zeros(10, 1); theta(8:10) = -pi/4;
     case 'hand'
-        theta = zeros(26, 1); theta(25:26) = -pi/7;
+        theta = zeros(26, 1); theta(1:3) = 10; theta(24:26) = -pi/5; theta(7:10) = -pi/5;
 end
 [segments, joints] = pose_ik_model(segments, theta, false, mode);
 [centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
 %save([data_path, 'centers.mat'], 'centers');
 if skeleton
-    points = sample_skeleton(centers, blocks);    
+    points = sample_skeleton(centers, blocks);
     mypoints(points, 'm'); view(90, 0); drawnow;
     save([data_path, 'points.mat'], 'points');
     normals = cell(length(points), 1); save([data_path, 'normals.mat'], 'normals');

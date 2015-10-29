@@ -1,14 +1,7 @@
-function [f2, J2, previous_rotations] = jacobian_arap_rotation_joint_limits(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, mode)
+function [f2, J2] = jacobian_arap_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, attachments, D)
+
 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
-
-switch mode
-    case 'finger'
-        parents = {[], 1, 2};
-    case 'hand'
-        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], 16, 16, 16, 16, 16};
-end
-edge_ids = zeros(0, 1);
 
 %% Compute rotations
 rotations = cell(length(blocks), 1);
@@ -28,7 +21,6 @@ for i = 1:length(edge_indices)
             if norm((d - c) / norm(d - c) - rotation(theta) * e / norm(e)) > 1e-10, theta = - theta; end
             rotations{k} = rotation(real(theta));
         end
-        edge_ids(i) = k;
         k = k + 1;
     end
 end
@@ -60,25 +52,8 @@ for i = 1:length(solid_blocks)
     end
 end
 
-%% Joint limits
-
-for i = 3:length(edge_indices)
-    if isempty(parents{i}), continue; end
-    parent_rotation = rotations{edge_ids(parents{i})};
-    child_rotation =  rotations{edge_ids(i)};
-    parent_edge = parent_rotation * restpose_edges{edge_ids(parents{i})};
-    child_edge = child_rotation * restpose_edges{edge_ids(i)};
-    
-    if D == 2
-        theta = acos(parent_edge' * child_edge / norm(parent_edge) / norm(child_edge));
-        if norm(child_edge / norm(child_edge) - rotation(theta) * parent_edge / norm(parent_edge)) > 1e-10, theta = - theta; end
-        if theta < 0        
-    end
-    
-end
 
 %% Rotations energy
-
 num_centers = length(centers);
 num_blocks = length(blocks);
 k = 1;
@@ -90,11 +65,12 @@ for i = 1:length(edge_indices)
         index2 = edge_indices{i}{j}(2);
         b = centers{index1}; c = centers{index2};
         e = rotations{k} * restpose_edges{k};
+        
+        gradients = get_parameters_gradients([index1, index2], attachments, D);
         f2(D * (k - 1) + 1: D * k) = c - b - e;
-        J2(D * (k - 1) + 1: D * k, D * (index1 - 1) + 1:D * index1) = -eye(D, D);
-        J2(D * (k - 1) + 1: D * k, D * (index2 - 1) + 1:D * index2) = eye(D, D);
+        for l = 1:length(gradients)
+            J2(D * (k - 1) + 1: D * k, D * (gradients{l}.index - 1) + 1:D * gradients{l}.index) = gradients{l}.dc2 - gradients{l}.dc1;
+        end
         k = k + 1;
     end
 end
-
-previous_rotations = rotations;

@@ -20,7 +20,7 @@ points{1} = c1;
 points{2} = c4;
 c5 = c3 + c4 - c2;
 % Set up data structures
- 
+
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 
 settings.skeleton = true;
@@ -35,7 +35,7 @@ solid_blocks = {1, [2, 3]};
 [blocks] = reindex(radii, blocks);
 
 data_path = '_data/convtriangles/';
-save([data_path, 'points.mat'], 'points');
+save([data_path, 'points.mat'], 'points'); data_points = points;
 save([data_path, 'solid_blocks.mat'], 'solid_blocks');
 save([data_path, 'centers.mat'], 'centers');
 save([data_path, 'radii.mat'], 'radii');
@@ -62,7 +62,7 @@ history = cell(num_iter, 1);
 while true
     %% Display
     if settings.skeleton
-        [model_indices, projections, block_indices] = compute_skeleton_projections(points, centers, blocks);
+        [model_indices, model_points, block_indices] = compute_skeleton_projections(points, centers, blocks);
         figure; hold on; axis equal; axis off;
         for i = 1:length(blocks)
             for j = 1:length(blocks{i})
@@ -71,14 +71,15 @@ while true
                 mypoint(centers{blocks{i}(j)}, 'b');
             end
         end
-        mylines(points, projections, 'g');
-        mypoints(points, 'k'); mypoints(projections, 'g');
+        mylines(points, model_points, 'g');
+        mypoints(points, 'k'); mypoints(model_points, 'g');
     end
     
     if iter == num_iter, break; end
     iter = iter + 1;
     
-    [f1, J1, f2, J2] = compute_energy_arap(centers, points, radii, blocks, solid_blocks, restpose_edges, edge_indices, settings, false);
+    [f1, J1] = jacobian_arap_translation_skeleton(centers, model_points, model_indices, data_points, D);   
+    [f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D);
     
     %% Solve
     I = eye(D * length(centers), D * length(centers));

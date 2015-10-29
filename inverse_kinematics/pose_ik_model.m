@@ -4,7 +4,10 @@ function [segments, joints] = pose_ik_model(segments, t, display, mode)
 switch mode
     case 'hand'
         joints = joints_parameters(t);
-        order = [1, 2, 3, 4, 5, 6, 8 7 9 10 12 11 13 14 16 15 17 18 20 19 21 22 24 23 25 26];
+        order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 11, 13, 14, 16, 15, 17, 18, 20, 19, 21, 22, 24, 23, 25, 26];
+    case 'palm_finger'
+        joints = palm_finger_joints_parameters(t);
+        order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10];
     case 'finger'
         joints = finger_joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 7, 8];

@@ -3,6 +3,8 @@ function [f2, J2, previous_rotations] = jacobian_arap_ik_rotation(centers, block
 switch mode
     case 'finger'
     parents = {[], 1, 2};
+    case 'palm_finger'
+        parents = {2, 3, 4, [], []};
     case 'hand'
         parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], 16, 16, 16, 16, 16};
 end
@@ -48,6 +50,8 @@ for i = 1:length(solid_blocks)
     S = E' * G;
     [U, ~, V] = svd(S);
     R = V * U';
+    if det(R) < 0, U(:, 3) = -  U(:, 3); R = V * U'; end
+    
     for j = 1:length(solid_blocks{i})
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
             if length(solid_blocks{i}) > 1

@@ -34,15 +34,19 @@ settings_default;
 %skeleton = false; mode = 'hand';
 
 %% Test: full hand with one bent finger
-data_path = '_data/htrack_model/hand_one_finger/';
-skeleton = false; mode = 'hand';
+%data_path = '_data/htrack_model/hand_one_finger/';
+%skeleton = false; mode = 'hand';
 
 %% Test: full hand with all bent fingers
-%data_path = '_data/htrack_model/hand_rest_pose/';
+data_path = '_data/htrack_model/hand_rest_pose/';
+skeleton = false; mode = 'hand';
+
+%% Test: full hand with bent middle finger
+%data_path = '_data/htrack_model/hand_middle_finger/';
 %skeleton = false; mode = 'hand';
 
 %% Settings
-damping = 50; num_iters = 5;
+damping = 50; num_iters = 7;
 switch mode, case 'finger', num_parameters = 8;        
 case 'hand', num_parameters = 26; end
 
