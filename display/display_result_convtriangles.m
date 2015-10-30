@@ -32,7 +32,7 @@ for i = 1:length(blocks)
         c1 = centers{blocks{i}(1)}; c2 = centers{blocks{i}(2)};
         r1 = radii{blocks{i}(1)}; r2 = radii{blocks{i}(2)};
         distances = distance_to_model_convsegment(c1, c2, r1, r2, P');
-    end
+    end    
     min_distances = min(min_distances, distances);
 end
 

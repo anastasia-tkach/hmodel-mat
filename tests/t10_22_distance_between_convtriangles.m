@@ -1,55 +1,65 @@
 clear;
 D = 3;
 close all;
-[centers1, radii1, blocks1] = get_random_convtriangle();
-[centers2, radii2, blocks2] = get_random_convtriangle();
-for i = 1:length(radii1)
-    radii1{i} = radii1{i} * 0.5;
-    radii2{i} = radii2{i} * 0.5;
+[centers1, radii1, blocks1] = get_random_convsegment();
+[centers2, radii2, blocks2] = get_random_convsegment();
+%[centers1, radii1, blocks1] = get_random_convtriangle();
+%[centers2, radii2, blocks2] = get_random_convtriangle();
+for i = 1:length(radii1), radii1{i} = radii1{i} * 0.5; end
+for i = 1:length(radii2), radii2{i} = radii2{i} * 0.5; end
+a = rand; b = rand; c = rand;
+d = a + b + c; a = a/d; b = b/d; c = c/d;
+original_centers1 = centers1;
+% close all;
+% centers1 = original_centers1;
+
+tangent_points = blocks_tangent_points([centers1; centers2], {[1:length(centers1)], ...
+    [length(centers1) + 1: length(centers1) + length(centers2)]}, [radii1; radii2]);
+
+for iter = 1:2
+    
+    %% Display
+    display_result_convtriangles([centers1; centers2], [], [], {[1:length(centers1)], ...
+        [length(centers1) + 1: length(centers1) + length(centers2)]}, [radii1; radii2], true);
+    %myline(centers1{1}, centers1{2}, 'b'); myline(centers2{1}, centers2{2}, 'b');
+    %if length(centers1) == 3
+    %    myline(centers1{1}, centers1{3}, 'b'); myline(centers1{2}, centers1{3}, 'b');
+    %end
+    %if length(centers2) == 3
+    %    myline(centers2{1}, centers2{3}, 'b'); myline(centers2{2}, centers2{3}, 'b');
+    %end
+    %myline(p, q, 'k'); mypoint(surface_p, 'm'); mypoint(surface_q, 'm');
+    %myline(surface_q, surface_q + 0.1 * n, 'g');
+    %drawnow;
+    
+    %% Find max. penetration
+    normal2 = [];
+    [p, surface_p, q, surface_q, is_colliding] = get_collision_constraints_convtriangles([centers1; centers2], [radii1; radii2], ...
+        [1:length(centers1)], [length(centers1) + 1: length(centers1) + length(centers2)], tangent_points{2});
+    if is_colliding == false, continue; end
+    model_points = {surface_p}; data_points = {surface_q};
+    
+    %% Compute normal
+    normals = compute_model_normals_temp(data_points, centers2, blocks2, radii2); n = normals{1};
+    
+    %% Avoid collision: move the point surface_p to the location surface_q
+    [model_indices, ~, ~] = compute_projections(model_points, centers1, blocks1, radii1)
+    [F, J] = jacobian_arap_translation(centers1, radii1, blocks1, model_points, model_indices, data_points, D);
+    
+    F = n' * F;
+    J = n' * J;
+    
+    I = eye(D * length(centers1), D * length(centers1));
+    damping = 0.01;
+    LHS = damping * I + J' * J;
+    rhs = J' * F;
+    delta = -  LHS \ rhs;
+    
+    %% Apply update
+    for o = 1:length(centers1), centers1{o} = centers1{o} + delta(D * o - D + 1:D * o); end
+    
 end
-centers = [centers1; centers2]; radii = [radii1; radii2];
-a = rand; b = rand; c = 1 - a - b;
-[a, b, c]
 
-centers1 = centers(1:3); centers2 = centers(4:6);
-radii1 = radii(1:3); radii2 = radii(4:6);
-
-c1 = centers1{1}; c2 = centers1{2}; c3 = centers1{3};
-c4 = centers2{1}; c5 = centers2{2}; c6 = centers2{3};
-r1 = radii1{1}; r2 = radii1{2}; r3 = radii1{3};
-r4 = radii2{1}; r5 = radii2{2}; r6 = radii2{3};
-
-figure; hold on;
-display_result_convtriangles(centers1, [], [], blocks1, radii1, true);
-
-
-point = a * c1 + b * c2 + c * c3;
-[v1, v2, v3, u1, u2, u3] = tangent_points_function(c1, c2, c3, r1, r2, r3); normal = (c1 - v1)/norm(c1 - v1);
-radius = get_convolution_radius_at_points(centers, radii, [1, 2, 3], normal, point);
-radius = radius + radius * 0.01;
-mypoint(point, 'k');
-myline(c1, c2, 'm'); myline(c2, c3, 'm'); myline(c1, c3, 'm');
-
-num = 80;
-bounding_box = compute_model_bounding_box(centers, radii);
-min_x = bounding_box.min_x; min_y = bounding_box.min_y; min_z = bounding_box.min_z;
-max_x = bounding_box.max_x; max_y = bounding_box.max_y; max_z = bounding_box.max_z;
-xm = linspace(min_x, max_x, num); ym = linspace(min_y, max_y, num); zm = linspace(min_z, max_z, num);
-[x, y, z] = meshgrid(xm,ym,zm);
-N = numel(x);
-distances = zeros(N, 1);
-points = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
-for i = 1:N
-    p = points(i, :)';
-    distances(i) = norm(p - point) - radius;
-end
-distances = reshape(distances, size(x));
-color = 'k';
-h = patch(isosurface(x, y, z, distances,0));
-isonormals(x, y, z, distances, h);
-set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha' , 1);
-grid off; view([1,1,1]);
-axis equal; camlight; lighting gouraud;
 
 
 

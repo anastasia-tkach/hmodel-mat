@@ -23,4 +23,3 @@ mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', 1);
 
 hold on; axis equal; grid off; camlight; lighting gouraud;
 
-

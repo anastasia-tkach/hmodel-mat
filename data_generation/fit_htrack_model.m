@@ -1,5 +1,5 @@
 clear
-data_path = '_data/htrack_model/hand_shifted_articulated/';
+data_path = '_data/htrack_model/collision_palm/';
 mode = 'hand';
 skeleton = false;
 
@@ -17,8 +17,13 @@ if skeleton
     end
     mypoints(centers, 'k');
 else
-    display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
+    %display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 end
+
+% %% Collisions
+theta = zeros(26, 1); theta(24) = -2*pi/3; theta(25:26) = -pi/2;
+[segments, joints] = pose_ik_model(segments, theta, false, mode);
+[centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
 
 %% Save data
 save([data_path, 'solid_blocks.mat'], 'solid_blocks');
@@ -26,7 +31,8 @@ save([data_path, 'centers.mat'], 'centers');
 save([data_path, 'radii.mat'], 'radii');
 save([data_path, 'blocks.mat'], 'blocks');
 save([data_path, 'attachments.mat'], 'attachments');
-
+display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
+return
 %% Create posed data
 switch mode
     case 'finger'
@@ -34,7 +40,7 @@ switch mode
     case 'palm_finger'
         theta = zeros(10, 1); theta(8:10) = -pi/4;
     case 'hand'
-        theta = zeros(26, 1); theta(1:3) = 10; theta(24:26) = -pi/5; theta(7:10) = -pi/5;
+        theta = zeros(26, 1); theta(23) = -pi/6; %theta(19) = pi/5;
 end
 [segments, joints] = pose_ik_model(segments, theta, false, mode);
 [centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
@@ -47,7 +53,7 @@ if skeleton
     return
 end
 
-points = generate_convtriangles_points(centers, blocks, radii);
+%points = generate_convtriangles_points(centers, blocks, radii);
 display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 
 %% Find normals, method 1

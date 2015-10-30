@@ -24,16 +24,16 @@ for i = 1:num_points
     end
     
     %% Compute gradients of the model point
-    gradients = get_parameters_gradients(index, attachments, length(p));
+    gradients = get_parameters_gradients(index, attachments, length(q));
     if length(index) == 1
-        [q, gradients] = jacobian_sphere_attachment(p, centers{index(1)}, radii{index(1)}, gradients);
+        [q, gradients] = jacobian_sphere_attachment(q, centers{index(1)}, radii{index(1)}, gradients);
     end
     if length(index) == 2
-        [q, gradients] = jacobian_convsegment_attachment(p, centers{index(1)}, centers{index(2)}, radii{index(1)}, radii{index(2)}, gradients);
+        [q, gradients] = jacobian_convsegment_attachment(q, centers{index(1)}, centers{index(2)}, radii{index(1)}, radii{index(2)}, gradients);
     end
     if length(index) == 3
-        if (index(1) > 0), [q, gradients] = jacobian_convtriangle_attachment(p, tangent_gradient, gradients, 'v');
-        else [q, gradients] = jacobian_convtriangle_attachment(p, tangent_gradient, gradients, 'u'); end
+        if (index(1) > 0), [q, gradients] = jacobian_convtriangle_attachment(q, tangent_gradient, gradients, 'v');
+        else [q, gradients] = jacobian_convtriangle_attachment(q, tangent_gradient, gradients, 'u'); end
     end
     
     %% Fill in the Jacobian

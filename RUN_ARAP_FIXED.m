@@ -25,8 +25,8 @@ settings_default;
 % skeleton = false; mode = 'finger';
 
 %% Test: single finger
-%data_path = '_data/htrack_model/finger_strongly_bent/';
-%skeleton = false; mode = 'finger';
+data_path = '_data/htrack_model/finger_strongly_bent/';
+skeleton = false; mode = 'finger';
 
 %% Test: palm and finger
 %data_path = '_data/htrack_model/palm_finger_strongly_bent/';
@@ -61,8 +61,8 @@ settings_default;
 %skeleton = false; mode = 'hand';
 
 %% Test: full hand, shifted and articulated
-data_path = '_data/htrack_model/hand_shifted_articulated/';
-skeleton = false; mode = 'hand';
+%data_path = '_data/htrack_model/hand_shifted_articulated/';
+%skeleton = false; mode = 'hand';
 
 %% Weights
 w1 = 1;
@@ -165,6 +165,9 @@ for iter = 1:10
         %% Rotations energy
         %[f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D);
         [f2, J2, previous_rotations] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode);
+        
+        %% Collisions eneryg
+        [f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
         
         %% Compute update
         I = eye(D * length(centers), D * length(centers));
