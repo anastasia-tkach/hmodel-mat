@@ -16,7 +16,7 @@ for i = 1:num_points
     %% Compute gradients of the model point
     if length(index) == 1
         c1 = centers{index(1)};
-        [q, dq] = jacobian_arap_point(p, c1);        
+        [q, dq] = jacobian_arap_point(q, c1);        
     end
     if length(index) == 2
         c1 = centers{index(1)}; c2 = centers{index(2)};

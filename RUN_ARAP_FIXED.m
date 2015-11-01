@@ -1,4 +1,4 @@
-settings_default;
+settings_default; display_data = true;
 
 %% Test: finger skeleton, rotated
 %data_path = '_data/htrack_model/skeleton_rotated/';
@@ -25,8 +25,8 @@ settings_default;
 % skeleton = false; mode = 'finger';
 
 %% Test: single finger
-data_path = '_data/htrack_model/finger_strongly_bent/';
-skeleton = false; mode = 'finger';
+% data_path = '_data/htrack_model/finger_strongly_bent/';
+% skeleton = false; mode = 'finger';
 
 %% Test: palm and finger
 %data_path = '_data/htrack_model/palm_finger_strongly_bent/';
@@ -61,15 +61,19 @@ skeleton = false; mode = 'finger';
 %skeleton = false; mode = 'hand';
 
 %% Test: full hand, shifted and articulated
-%data_path = '_data/htrack_model/hand_shifted_articulated/';
-%skeleton = false; mode = 'hand';
+data_path = '_data/htrack_model/hand_shifted_articulated/';
+skeleton = false; mode = 'hand';
+
+%% Test: collision between two fingers
+%data_path = '_data/htrack_model/collision_palm/';
+%skeleton = false; mode = 'hand'; collision_test = 1;
 
 %% Weights
-w1 = 1;
+damping = 0.1; w1 = 1; w3 = 0; num_iters = 15; 
 if skeleton, w2 = 10; end
 if ~skeleton && strcmp(mode, 'finger') w2 = 50; end
 if ~skeleton && strcmp(mode, 'hand') w2 = 50; end
-damping = 0.1; num_iters = 8;
+if exist('collision_test', 'var'), w1 = 0; w2 = 1; w3 = 10; num_iters = 2; display_data = false; end
 
 %% Load data
 load([data_path, 'radii.mat']);
@@ -93,8 +97,26 @@ for i = 1:length(blocks)
     end
 end
 
+%% Build adjucency matrix
+adjacency_matrix = zeros(length(blocks), length(blocks));
+for i = 1:length(blocks)-1
+    for j = i+1:length(blocks)
+        for k = 1:length(blocks{i})
+            if ismember(blocks{i}(k), blocks{j})
+                adjacency_matrix(i, j) = 1;
+            end
+            if isempty(attachments{blocks{i}(k)}), continue; end
+            for l = 1:length(attachments{blocks{i}(k)}.indices)
+                if ismember(attachments{blocks{i}(k)}.indices(l), blocks{j})
+                    adjacency_matrix(i, j) = 1;
+                end
+            end
+        end
+    end
+end
+
 %% Optimizaion
-for iter = 1:10
+for iter = 1:num_iters
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
@@ -113,9 +135,9 @@ for iter = 1:10
             line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
         end; %mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
     else
-        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true);
-        view([-90, 0]); drawnow;
-        %campos([10, 160, -1500]); camlight;
+        display_result_convtriangles(centers, data_points, model_points, blocks, radii, display_data);
+        %view([-90, 0]); camlight; drawnow;
+        campos([10, 160, -1500]); camlight; drawnow;
     end
     
     %% Compute projections locations
@@ -171,8 +193,8 @@ for iter = 1:10
         
         %% Compute update
         I = eye(D * length(centers), D * length(centers));
-        LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);
-        rhs = w1 * (J1' * f1) + w2 * (J2' * f2);
+        LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w3 * (J3' * J3);
+        rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w3 * (J3' * f3);
         delta = -  LHS \ rhs;
         
         %% Apply update
@@ -196,7 +218,7 @@ for iter = 1:10
     %for i = 1:length(blocks)
     %disp([norm(centers{blocks{i}(2)} - centers{blocks{i}(1)}), norm(restpose_edges{i})]);
     %end
-    disp(w1 * f1' * f1 + w2 * f2' * f2);
+    disp(w1 * f1' * f1 + w2 * f2' * f2 + w3 * f3' * f3);
     %disp(' ');
 end
 

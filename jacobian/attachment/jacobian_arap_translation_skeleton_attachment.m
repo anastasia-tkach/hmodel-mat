@@ -21,17 +21,17 @@ for i = 1:num_points
        
     if length(index) == 1
         c1 = centers{index(1)};
-        [q, gradients] = jacobian_arap_point_attachment(p, c1, gradients);
+        [q, gradients] = jacobian_arap_point_attachment(q, c1, gradients);
     end
     
     if length(index) == 2
         c1 = centers{index(1)}; c2 = centers{index(2)};
-        [q, gradients] = jacobian_arap_segment_attachment(p, c1, c2, gradients);
+        [q, gradients] = jacobian_arap_segment_attachment(q, c1, c2, gradients);
     end
     
     %if length(index) == 3
     %c1 = centers{index(1)}; c2 = centers{index(2)}; c3 = centers{index(3)};
-    %[q, dq] = jacobian_arap_triangle(p, c1, c2, c3);
+    %[q, dq] = jacobian_arap_triangle(q, c1, c2, c3);
     %end
     
     %% Fill in the Jacobian

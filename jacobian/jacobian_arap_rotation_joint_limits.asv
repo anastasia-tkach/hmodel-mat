@@ -1,23 +1,6 @@
-function [f2, J2, previous_rotations, limits_centers] = jacobian_arap_rotation_joint_limits(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, mode)
+function [f2, J2, previous_rotations] = jacobian_arap_rotation_joint_limits(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, mode)
 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
-
-%% Build kinematic chain
-kinematic_chain{1}.parent_index = [];
-kinematic_chain{1}.children_indices = [2];
-kinematic_chain{1}.block_index = 1;
-
-kinematic_chain{2}.parent_index = [1];
-kinematic_chain{2}.children_indices = [3];
-kinematic_chain{2}.block_index = 1;
-
-kinematic_chain{3}.parent_index = [2];
-kinematic_chain{3}.children_indices = [4];
-kinematic_chain{3}.block_index = 2;
-
-kinematic_chain{4}.parent_index = [3];
-kinematic_chain{4}.children_indices = [];
-kinematic_chain{4}.block_index = 3;
 
 switch mode
     case 'finger'
@@ -79,8 +62,7 @@ for i = 1:length(solid_blocks)
 end
 
 %% Joint limits
-%limits_centers = cell(length(centers), 1);
-limits_rotations = rotations;
+limited_centers = cell(length(centers), 1);
 
 for i = 1:length(edge_indices)
     if isempty(parents{i}), continue; end
@@ -93,24 +75,22 @@ for i = 1:length(edge_indices)
         theta = acos(parent_edge' * child_edge / norm(parent_edge) / norm(child_edge));
         if norm(child_edge / norm(child_edge) - rotation(theta) * parent_edge / norm(parent_edge)) > 1e-10, theta = - theta; end
         if theta > 0.01
-            %rotations{edge_ids(i)} = rotations{edge_ids(parents{i})};
-            limits_rotations{edge_ids(i)} = rotations{edge_ids(parents{i})};
+            disp(theta)
+            rotations{edge_ids(i)} = rotations{edge_ids(parents{i})};
             
             parent_rotation = rotations{edge_ids(parents{i})};
-            child_rotation =  rotations{edge_ids(parents{i})};
+            child_rotation =  rotations{edge_ids(i)};
             parent_edge = parent_rotation * restpose_edges{edge_ids(parents{i})};
             child_edge = child_rotation * restpose_edges{edge_ids(i)};
             theta = acos(parent_edge' * child_edge / norm(parent_edge) / norm(child_edge));
             
             %% Target point for the wrong center
-            %index1 = edge_indices{i}{j}(1);
-            %index2 = edge_indices{i}{j}(2);
-            %limits_centers{index2} = centers{index1} + child_edge;
+            index2 = edge_indices{i}{j}(2);
+            cen
         end
     end
     
 end
-[limits_centers] = find_limited_positions(centers, 1, limits_rotations, edge_ids, restpose_edges, kinematic_chain);
 
 %% Rotations energy
 

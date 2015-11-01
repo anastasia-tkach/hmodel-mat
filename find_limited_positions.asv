@@ -1,0 +1,14 @@
+function [centers] = find_limited_positions(centers, index, kinematic_chain)
+
+if ~isempty(kinematic_chain{index}.parent_index)
+    T.frames{i} = makehgtform('translate', T.thetas(1:settings.num_translations));   
+    centers{index} = 
+
+T.frames{i} = T.frames{i} * makehgtform('axisrotate', T.axis(i - 1,:), T.thetas(i - 1));
+T.frames{i} = T.frames{i} * makehgtform('translate',  T.local_translation(i,:));
+T.global_translation(i,:) = T.frames{i}(1:settings.num_translations, end);    
+
+for c = T.children_ids{i}
+    T = pose(T, c, settings);
+end
+
