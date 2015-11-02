@@ -1,4 +1,4 @@
-function [index, q, s, is_inside] = projection_convsegment(p, c1, c2, r1, r2, index1, index2)
+function [index, q, s, is_inside] = projection_convsegment_matlab(p, c1, c2, r1, r2, index1, index2)
 
 if r2 > r1
     temp = r1;

@@ -1,4 +1,4 @@
-function [f2, J2, previous_rotations, limits_centers] = jacobian_arap_rotation_joint_limits(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, mode)
+function [f2, J2, f3, J3, previous_rotations, limits_centers] = jacobian_arap_rotation_joint_limits(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, mode)
 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 
@@ -79,8 +79,8 @@ for i = 1:length(solid_blocks)
 end
 
 %% Joint limits
-%limits_centers = cell(length(centers), 1);
-limits_rotations = rotations;
+limits_centers = cell(length(centers), 1);
+limits_rotations = cell(length(rotations), 1);
 
 for i = 1:length(edge_indices)
     if isempty(parents{i}), continue; end
@@ -110,11 +110,12 @@ for i = 1:length(edge_indices)
     end
     
 end
-[limits_centers] = find_limited_positions(centers, 1, limits_rotations, edge_ids, restpose_edges, kinematic_chain);
+%[limits_centers] = find_limited_positions(centers, 1, limits_rotations, edge_ids, restpose_edges, kinematic_chain);
 
-%% Rotations energy
 
-num_centers = length(centers);%
+%% ARAP energy
+
+num_centers = length(centers);
 num_blocks = length(blocks);
 k = 1;
 f2 = zeros(num_blocks * D, 1);
@@ -133,3 +134,26 @@ for i = 1:length(edge_indices)
 end
 
 previous_rotations = rotations;
+
+
+%% Join limits energy
+
+k = 0;
+f3 = zeros(num_blocks * D, 1);
+J3 = zeros(num_blocks * D, num_centers * D);
+for i = 1:length(edge_indices)
+    for j = 1:length(edge_indices{i})
+        k = k + 1;
+        if isempty(limits_rotations{k}), continue; end
+        
+        index1 = edge_indices{i}{j}(1);
+        index2 = edge_indices{i}{j}(2);
+        b = centers{index1}; c = centers{index2};
+        e = limits_rotations{k} * restpose_edges{k};
+        f3(D * (k - 1) + 1: D * k) = c - b - e;
+        J3(D * (k - 1) + 1: D * k, D * (index1 - 1) + 1:D * index1) = -eye(D, D);
+        J3(D * (k - 1) + 1: D * k, D * (index2 - 1) + 1:D * index2) = eye(D, D);
+        
+    end
+end
+

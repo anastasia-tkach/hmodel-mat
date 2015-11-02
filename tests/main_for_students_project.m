@@ -8,7 +8,7 @@ pose_id = 2;
 
 absolute_path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HandModel\'];
 data_path = [absolute_path, '_data\fingers\'];
-load([data_path, 'final_radii']);
+load([data_path, 'radii']);
 load([data_path, 'blocks']);
 
 if (pose_id == 1)
