@@ -12,6 +12,8 @@ switch mode
         segments = finger_segments_parameters();
     case 'palm_finger'
         segments = palm_finger_segments_parameters();
+    case 'joint_limits'
+        segments = palm_finger_segments_parameters();
 end
 
 for i = 1:length(segments)

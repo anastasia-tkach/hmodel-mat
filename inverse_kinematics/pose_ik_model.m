@@ -11,6 +11,9 @@ switch mode
     case 'finger'
         joints = finger_joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 7, 8];
+    case 'joint_limits'
+        joints = joint_limits_parameters(t);
+        order = 1:14;
 end
 
 for i = order

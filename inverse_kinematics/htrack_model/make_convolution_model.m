@@ -1,5 +1,7 @@
 function [centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode)
 
+if strcmp(mode, 'joint_limits'), mode = 'palm_finger'; end
+
 blocks = {0, 1};
 centers = cell(0, 1);
 radii = cell(0, 1);
@@ -17,6 +19,7 @@ if strcmp(mode, 'finger')
     blocks = {[1, 2]; [2, 3]; [3, 4]};
     blocks = reindex(radii, blocks);
     solid_blocks = {[1], [2], [3]};
+    attachments = cell(length(centers), 1);
     return
 end
 
@@ -72,11 +75,11 @@ switch mode
         %% Attachments
         attachments = cell(length(centers), 1);
         
-        attachments{4}.indices = [21, 22]; %attachments{4}.weights = [0.05, 0.95];
-        attachments{8}.indices = [21, 22]; %attachments{8}.weights = [0.34, 0.66];
-        attachments{12}.indices = [21, 22]; %attachments{12}.weights = [0.66, 0.34];
-        attachments{16}.indices = [21, 22]; %attachments{16}.weights = [0.95, 0.05];
-        attachments{20}.indices = [22, 23]; %attachments{20}.weights = [0.1, 0.9];
+        attachments{4}.indices = [21, 22]; 
+        attachments{8}.indices = [21, 22]; 
+        attachments{12}.indices = [21, 22]; 
+        attachments{16}.indices = [21, 22];
+        attachments{20}.indices = [22, 23]; 
         
 end
 

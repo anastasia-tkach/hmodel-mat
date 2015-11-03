@@ -1,11 +1,15 @@
 clear
-data_path = '_data/htrack_model/collision_palm/';
-mode = 'hand';
-skeleton = false;
+data_path = '_data/htrack_model/joint_limits/';
+mode = 'joint_limits';
+skeleton = true;
 
 %% Get model
 segments = create_ik_model(mode);
 [centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode);
+if strcmp(mode, 'joint_limits'), 
+    blocks{4} = [5, 6]; blocks{5} = [6, 8]; blocks{6} = [7, 8]; blocks{7} = [5, 7]; 
+    solid_blocks{4} = [4, 5, 6, 7];
+end
 if skeleton
     figure; axis equal; axis off; hold on;
     for i = 1:length(blocks),
@@ -17,13 +21,8 @@ if skeleton
     end
     mypoints(centers, 'k');
 else
-    %display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
+    display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 end
-
-% %% Collisions
-theta = zeros(26, 1); theta(24) = -2*pi/3; theta(25:26) = -pi/2;
-[segments, joints] = pose_ik_model(segments, theta, false, mode);
-[centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
 
 %% Save data
 save([data_path, 'solid_blocks.mat'], 'solid_blocks');
@@ -31,8 +30,8 @@ save([data_path, 'centers.mat'], 'centers');
 save([data_path, 'radii.mat'], 'radii');
 save([data_path, 'blocks.mat'], 'blocks');
 save([data_path, 'attachments.mat'], 'attachments');
-display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
-return
+%display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
+
 %% Create posed data
 switch mode
     case 'finger'
@@ -41,19 +40,25 @@ switch mode
         theta = zeros(10, 1); theta(8:10) = -pi/4;
     case 'hand'
         theta = zeros(26, 1); theta(23) = -pi/6; %theta(19) = pi/5;
+    case 'joint_limits'
+        theta = zeros(12, 1); theta(4) = pi/6; theta(10) = pi/6;
 end
 [segments, joints] = pose_ik_model(segments, theta, false, mode);
-[centers, radii, blocks, solid_blocks] = make_convolution_model(segments, mode);
+[centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode);
+if strcmp(mode, 'joint_limits'), 
+    blocks{4} = [5, 6]; blocks{5} = [6, 8]; blocks{6} = [7, 8]; blocks{7} = [5, 7]; 
+    solid_blocks{4} = [4, 5, 6, 7];
+end
 %save([data_path, 'centers.mat'], 'centers');
 if skeleton
     points = sample_skeleton(centers, blocks);
     mypoints(points, 'm'); view(90, 0); drawnow;
     save([data_path, 'points.mat'], 'points');
-    normals = cell(length(points), 1); save([data_path, 'normals.mat'], 'normals');
+    normals = cell(length(points), 1); save([data_path, 'normals.mat'], 'normals');    
     return
 end
 
-%points = generate_convtriangles_points(centers, blocks, radii);
+points = generate_convtriangles_points(centers, blocks, radii);
 display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 
 %% Find normals, method 1

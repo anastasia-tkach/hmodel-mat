@@ -1,14 +1,17 @@
-function [f2, J2, previous_rotations] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode)
+function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode)
 
 switch mode
     case 'finger'
-    parents = {[], 1, 2};
+        parents = {[], 1, 2};
     case 'palm_finger'
         parents = {2, 3, 4, [], []};
+    case 'joint_limits'
+        parents = {2, 3, 4, [], [], [], []};
     case 'hand'
         parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], 16, 16, 16, 16, 16};
 end
 edge_ids = zeros(0, 1);
+rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 
 %% Compute rotations
 rotations = cell(length(blocks), 1);
@@ -33,6 +36,7 @@ for i = 1:length(edge_indices)
     end
 end
 
+
 k = 1;
 for i = 1:length(solid_blocks)
     E = zeros(length(solid_blocks{i}), D);
@@ -43,14 +47,14 @@ for i = 1:length(solid_blocks)
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
             E(l, :) = restpose_edges{k} / norm(restpose_edges{k});
             G(l, :) = edges{k} / norm(edges{k});
-            l = l + 1;   
+            l = l + 1;
             k = k + 1;
         end
     end
     S = E' * G;
     [U, ~, V] = svd(S);
     R = V * U';
-    if det(R) < 0, U(:, 3) = -  U(:, 3); R = V * U'; end
+    if det(R) < 0, U(:, D) = -  U(:, D); R = V * U'; end
     
     for j = 1:length(solid_blocks{i})
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
@@ -79,17 +83,19 @@ for i = 1:length(edge_indices)
         if ~isempty(parents{i})
             previous_parent_rotation = previous_rotations{edge_ids(parents{i})};
             parent_rotation = rotations{edge_ids(parents{i})};
-        else previous_parent_rotation = eye(3, 3);  parent_rotation = eye(3, 3);  
-        end     
+        else previous_parent_rotation = eye(D, D);  parent_rotation = eye(D, D);
+        end
         
         e = previous_parent_rotation' * parent_rotation * rotations{k} * restpose_edges{k};
+        %e = rotations{k} * restpose_edges{k};
         
-        gradients = get_parameters_gradients([index1, index2], attachments, D);
+        gradients = get_parameters_gradients([index1, index2], attachments, D);        
+       
         f2(D * (k - 1) + 1: D * k) = c - b - e;
         for l = 1:length(gradients)
             J2(D * (k - 1) + 1: D * k, D * (gradients{l}.index - 1) + 1:D * gradients{l}.index) = gradients{l}.dc2 - gradients{l}.dc1;
         end
-
+        
         k = k + 1;
     end
 end

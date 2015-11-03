@@ -1,4 +1,4 @@
-settings_default; display_data = true;
+settings_default; display_data = true; %close all;
 
 %% Test: finger skeleton, rotated
 %data_path = '_data/htrack_model/skeleton_rotated/';
@@ -61,19 +61,25 @@ settings_default; display_data = true;
 %skeleton = false; mode = 'hand';
 
 %% Test: full hand, shifted and articulated
-data_path = '_data/htrack_model/hand_shifted_articulated/';
-skeleton = false; mode = 'hand';
+%data_path = '_data/htrack_model/hand_shifted_articulated/';
+%skeleton = false; mode = 'hand';
+
+%% Test: joint limits
+data_path = '_data/htrack_model/joint_limits/';
+skeleton = true; mode = 'joint_limits';
+
 
 %% Test: collision between two fingers
 %data_path = '_data/htrack_model/collision_palm/';
 %skeleton = false; mode = 'hand'; collision_test = 1;
 
 %% Weights
-damping = 0.1; w1 = 1; w3 = 0; num_iters = 15; 
+damping = 0.1; w1 = 1; w3 = 0; num_iters = 10; 
 if skeleton, w2 = 10; end
 if ~skeleton && strcmp(mode, 'finger') w2 = 50; end
 if ~skeleton && strcmp(mode, 'hand') w2 = 50; end
 if exist('collision_test', 'var'), w1 = 0; w2 = 1; w3 = 10; num_iters = 2; display_data = false; end
+w4 = 10e3;
 
 %% Load data
 load([data_path, 'radii.mat']);
@@ -86,11 +92,19 @@ load([data_path, 'solid_blocks.mat']);
 %% Set up data structures
 edge_indices = cell(length(blocks), 1);
 restpose_edges = cell(length(blocks), 1);
+switch mode
+    case 'joint_limits'
+        edge_indices = {{[2, 1]}, {[3, 2]}, {[4, 3]}, {[8, 6]}, {[5, 6]}, {[7, 8]}, {[5, 7]}};
+end
+limits = cell(length(blocks), 1);
+limits{1}.theta_min = [-pi/2, 0, -2 * pi]; limits{1}.theta_max = [0, 0, 2 * pi];
+limits{2}.theta_min = [-pi/2, 0, -2 * pi]; limits{2}.theta_max = [0, 0, 2 * pi];
+limits{3}.theta_min = [-pi/2, 0, -2 * pi]; limits{3}.theta_max = [0, 0, 2 * pi];
 k = 1;
 for i = 1:length(blocks)
     index = nchoosek(blocks{i}, 2);
     for j = 1:size(index, 1)
-        edge_indices{i}{j} = [index(j, :)];
+        %edge_indices{i}{j} = [index(j, :)];
         restpose_edges{k} = centers{edge_indices{i}{j}(2)} - centers{edge_indices{i}{j}(1)};
         previous_rotations{k} = eye(3, 3);
         k = k + 1;
@@ -116,7 +130,7 @@ for i = 1:length(blocks)-1
 end
 
 %% Optimizaion
-for iter = 1:num_iters
+for iter = 1:1
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
@@ -133,7 +147,10 @@ for iter = 1:num_iters
         for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
             scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
             line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
-        end; %mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
+        end; 
+        %mypoints(data_points, [0.9, 0.3, 0.5]);
+        %campos([10, 160, -1500]); camlight; drawnow;
+        view(0, 90); drawnow;
     else
         display_result_convtriangles(centers, data_points, model_points, blocks, radii, display_data);
         %view([-90, 0]); camlight; drawnow;
@@ -163,38 +180,48 @@ for iter = 1:num_iters
         end
         
         %% Display
-        %         if skeleton
-        %             figure; axis equal; axis off; hold on; set(gcf,'color','white');
-        %             mylines(model_points, data_points, [0.75, 0.75, 0.75]);
-        %             for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
-        %                 scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
-        %                 line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
-        %             end; mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
-        %         else
-        %             display_result_convtriangles(centers, data_points, model_points, blocks, radii, true);
-        %             view([-90, 0]); drawnow;
-        %             %campos([10, 160, -1500]); camlight;
-        %         end
+                if skeleton
+                    figure; axis equal; axis off; hold on; set(gcf,'color','white');
+                    %mylines(model_points, data_points, [0.75, 0.75, 0.75]);
+                    for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
+                        scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
+                        line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+                    end; 
+                    %mypoints(data_points, [0.9, 0.3, 0.5]);
+                    view(0, 90); drawnow;
+                    %campos([10, 160, -1500]); camlight; drawnow;
+                else
+                    display_result_convtriangles(centers, data_points, model_points, blocks, radii, true);
+                    view([-90, 0]); drawnow;
+                    %campos([10, 160, -1500]); camlight;
+                end
         
         %% Translations energy
-        if skeleton
-            [f1, J1] = jacobian_arap_translation_skeleton_attachment(centers, model_points, model_indices, data_points, attachments, D);
-        else
-            %[f1, J1] = jacobian_arap_translation(centers, radii, blocks, data_points, model_indices, data_points, D);
-            [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
-        end
+        %if skeleton
+            %[f1, J1] = jacobian_arap_translation_skeleton_attachment(centers, model_points, model_indices, data_points, attachments, D);
+        %else
+            %%[f1, J1] = jacobian_arap_translation(centers, radii, blocks, data_points, model_indices, data_points, D);
+            %[f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
+        %end
         
         %% Rotations energy
         %[f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D);
-        [f2, J2, previous_rotations] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode);
+        [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode);
         
-        %% Collisions eneryg
-        [f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
+        %% Collisions energy
+        %[f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
+        
+        %% Joint limits energy
+        [f4, J4] = jacobian_joint_limits(centers, previous_rotations, edge_indices, edge_ids, restpose_edges, parents, limits, D);    
         
         %% Compute update
         I = eye(D * length(centers), D * length(centers));
-        LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w3 * (J3' * J3);
-        rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w3 * (J3' * f3);
+        %LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w3 * (J3' * J3);
+        %rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w3 * (J3' * f3);
+        
+        LHS = damping * I + w2 * (J2' * J2) + w4 * (J4' * J4);
+        rhs = w2 * (J2' * f2) + w4 * (J4' * f4);
+        
         delta = -  LHS \ rhs;
         
         %% Apply update
@@ -218,7 +245,7 @@ for iter = 1:num_iters
     %for i = 1:length(blocks)
     %disp([norm(centers{blocks{i}(2)} - centers{blocks{i}(1)}), norm(restpose_edges{i})]);
     %end
-    disp(w1 * f1' * f1 + w2 * f2' * f2 + w3 * f3' * f3);
+    %disp(w1 * f1' * f1 + w2 * f2' * f2 + w4 * f4' * f4);
     %disp(' ');
 end
 

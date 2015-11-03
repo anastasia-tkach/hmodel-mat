@@ -4,18 +4,20 @@ samples = zeros(0,3);
 num_samples = 15;
 
 for i = 1:length(blocks)
-    p1 = centers{blocks{i}(1)};
-    p2 = centers{blocks{i}(2)};
-    
-    s = [
-        linspace(p1(1), p2(1),num_samples + 1);
-        linspace(p1(2), p2(2),num_samples + 1);
-        linspace(p1(3), p2(3),num_samples + 1)  
-        ];
-    %s(:, 1) = []; % origin is not a sample
-    
-    samples = [ samples; s' ]; %#ok<AGROW>
-    %block_indices  = [block_indices; i * ones(num_samples,1) ]; %#ok<AGROW>
+    index = nchoosek(blocks{i}, 2);
+    for j = 1:size(index, 1)
+        p1 = centers{index(j, 1)};
+        p2 = centers{index(j, 2)};
+        
+        s = [
+            linspace(p1(1), p2(1),num_samples + 1);
+            linspace(p1(2), p2(2),num_samples + 1);
+            linspace(p1(3), p2(3),num_samples + 1)
+            ];
+        %s(:, 1) = []; % origin is not a sample
+        
+        samples = [ samples; s' ]; %#ok<AGROW>
+    end
 end
 
 points = cell(length(samples), 1);

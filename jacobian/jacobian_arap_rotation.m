@@ -1,4 +1,4 @@
-function [f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D)
+function [f2, J2, rotations, edge_ids] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D)
 
 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
@@ -6,6 +6,7 @@ rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 %% Compute rotations
 rotations = cell(length(blocks), 1);
 edges = cell(length(blocks), 1);
+edge_ids = zeros(0, 1);
 k = 1;
 for i = 1:length(edge_indices)
     for j = 1:length(edge_indices{i})
@@ -21,6 +22,7 @@ for i = 1:length(edge_indices)
             if norm((d - c) / norm(d - c) - rotation(theta) * e / norm(e)) > 1e-10, theta = - theta; end
             rotations{k} = rotation(real(theta));
         end
+        edge_ids(i) = k;
         k = k + 1;
     end
 end
@@ -42,6 +44,8 @@ for i = 1:length(solid_blocks)
     S = E' * G;
     [U, ~, V] = svd(S);
     R = V * U';
+    if det(R) < 0, U(:, D) = -  U(:, D); R = V * U'; end
+    
     for j = 1:length(solid_blocks{i})
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
             if length(solid_blocks{i}) > 1
