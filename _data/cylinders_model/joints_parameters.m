@@ -184,4 +184,19 @@ theta{i}.type = 'R';
 theta{i}.axis = [1; 0; 0];
 theta{i}.segment_id = 7;
 
+% %% 27: Pinky2 abduction 
+% i = i + 1;
+% theta{i}.value = t(i);
+% theta{i}.type = 'R';
+% theta{i}.axis = [0; 0; 1];
+% theta{i}.segment_id = 6;
+% 
+% %% 28: Pinky3 abduction 
+% i = i + 1;
+% theta{i}.value = t(i);
+% theta{i}.type = 'R';
+% theta{i}.axis = [0; 0; 1];
+% theta{i}.segment_id = 7;
+
+
 

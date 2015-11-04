@@ -1,7 +1,7 @@
 clear
-data_path = '_data/htrack_model/joint_limits/';
-mode = 'joint_limits';
-skeleton = true;
+data_path = '_data/htrack_model/joint_limits_hand/';
+mode = 'hand';
+skeleton = false;
 
 %% Get model
 segments = create_ik_model(mode);
@@ -39,7 +39,7 @@ switch mode
     case 'palm_finger'
         theta = zeros(10, 1); theta(8:10) = -pi/4;
     case 'hand'
-        theta = zeros(26, 1); theta(23) = -pi/6; %theta(19) = pi/5;
+        theta = zeros(26, 1); %theta(3) = 10; theta(5) = pi/3; theta(24:26) = -pi/6; theta(8:10) = -pi/6;
     case 'joint_limits'
         theta = zeros(12, 1); theta(4) = pi/6; theta(10) = pi/6;
 end

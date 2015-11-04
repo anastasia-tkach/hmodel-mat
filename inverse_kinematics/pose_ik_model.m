@@ -5,6 +5,7 @@ switch mode
     case 'hand'
         joints = joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 11, 13, 14, 16, 15, 17, 18, 20, 19, 21, 22, 24, 23, 25, 26];
+        %order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 11, 13, 14, 16, 15, 17, 18, 20, 19, 21, 22, 24, 23, 25, 27, 26, 28];
     case 'palm_finger'
         joints = palm_finger_joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10];
@@ -31,6 +32,7 @@ end
 
 %% Display the model
 if display
+    figure; hold on;
     [~, Triangles] = get_initial_segment(1, 1, 1, 1);
     figure; hold on; axis equal;
     for i = 1:length(segments)

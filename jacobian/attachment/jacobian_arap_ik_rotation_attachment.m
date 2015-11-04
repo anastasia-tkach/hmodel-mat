@@ -8,7 +8,7 @@ switch mode
     case 'joint_limits'
         parents = {2, 3, 4, [], [], [], []};
     case 'hand'
-        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], 16, 16, 16, 16, 16};
+        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], []};
 end
 edge_ids = zeros(0, 1);
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
@@ -18,6 +18,7 @@ rotations = cell(length(blocks), 1);
 edges = cell(length(blocks), 1);
 k = 1;
 for i = 1:length(edge_indices)
+    edge_ids(i) = k;
     for j = 1:length(edge_indices{i})
         e = restpose_edges{k};
         c = centers{edge_indices{i}{j}(1)};
@@ -30,8 +31,7 @@ for i = 1:length(edge_indices)
             theta = acos(e' * (d - c) / norm(e) / norm(d - c));
             if norm((d - c) / norm(d - c) - rotation(theta) * e / norm(e)) > 1e-10, theta = - theta; end
             rotations{k} = rotation(real(theta));
-        end
-        edge_ids(i) = k;
+        end        
         k = k + 1;
     end
 end
