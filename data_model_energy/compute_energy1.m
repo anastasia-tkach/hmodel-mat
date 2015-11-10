@@ -26,7 +26,7 @@ end
 
 if (display)
     if settings.D == 3
-        display_result_convtriangles(pose, blocks, radii, true); drawnow;%mypoints(pose.points, 'm'); drawnow;
+        display_result_convtriangles(pose.centers, pose.points, pose.projections, blocks, radii, true); drawnow;%mypoints(pose.points, 'm'); drawnow;
         set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);
     else
         display_result_2D(pose, blocks, radii, true); drawnow;

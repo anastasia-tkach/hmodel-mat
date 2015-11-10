@@ -1,24 +1,26 @@
-function [x, y, z] = draw_plane(point, normal, color, bounding_box)
+function [x, y, z] = draw_plane(point, normal, color, points)
+
+bounding_box = compute_data_bounding_box(points);
 
 d = -point' * normal;
 
 num = 60;
 
-if normal(1) ~= 0
+if abs(normal(1)) > 1e-2
     ym = linspace(bounding_box.min_y, bounding_box.max_y, num);
     zm = linspace(bounding_box.min_z, bounding_box.max_z, num);    
     [y, z] = meshgrid(ym, zm);    
     x = (-normal(2) * y - normal(3) * z - d)/normal(1);
 end
 
-if normal(2) ~= 0
+if abs(normal(2)) > 1e-2
     xm = linspace(bounding_box.min_x, bounding_box.max_x, num);
     zm = linspace(bounding_box.min_z, bounding_box.max_z, num);    
     [x, z] = meshgrid(xm, zm);    
     y = (-normal(1) * x - normal(3) * z - d)/normal(2);
 end
 
-if (normal(3) ~= 0)
+if abs(normal(3)) > 1e-2
     xm = linspace(bounding_box.min_x, bounding_box.max_x, num);
     ym = linspace(bounding_box.min_y, bounding_box.max_y, num);    
     [x, y] = meshgrid(xm, ym);    

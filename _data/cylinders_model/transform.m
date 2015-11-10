@@ -1,4 +1,4 @@
-function [V] = transform_segment(V, T)
+function [V] = transform(V, T)
 
 V = [V; ones(1, size(V, 2))];    
 V = T * V;

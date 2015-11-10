@@ -23,8 +23,10 @@ for i = order
     switch joints{i}.type
         case 'R'
             T = segment.local * makehgtform('axisrotate', joints{i}.axis, joints{i}.value);
+            %T = makehgtform('axisrotate', joints{i}.axis, joints{i}.value) * segment.local;
         case 'T'
             T = segment.local * makehgtform('translate', joints{i}.axis * joints{i}.value);
+            %T = makehgtform('translate', joints{i}.axis * joints{i}.value) * segment.local;
     end
     segments{joints{i}.segment_id}.local = T;
     segments = update_transform(segments, joints{i}.segment_id);

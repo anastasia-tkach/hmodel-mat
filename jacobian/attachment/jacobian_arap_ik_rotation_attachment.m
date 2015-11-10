@@ -8,7 +8,7 @@ switch mode
     case 'joint_limits'
         parents = {2, 3, 4, [], [], [], []};
     case 'hand'
-        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], []};
+        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], [], []};
 end
 edge_ids = zeros(0, 1);
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
@@ -71,6 +71,7 @@ end
 
 num_centers = length(centers);
 num_blocks = length(blocks);
+full_rotations = rotations;
 k = 1;
 f2 = zeros(num_blocks * D, 1);
 J2 = zeros(num_blocks * D, num_centers * D);
@@ -86,7 +87,9 @@ for i = 1:length(edge_indices)
         else previous_parent_rotation = eye(D, D);  parent_rotation = eye(D, D);
         end
         
-        e = previous_parent_rotation' * parent_rotation * rotations{k} * restpose_edges{k};
+        full_rotations{k} = previous_parent_rotation' * parent_rotation * rotations{k};
+        e = full_rotations{k} * restpose_edges{k};
+        
         %e = rotations{k} * restpose_edges{k};
         
         gradients = get_parameters_gradients([index1, index2], attachments, D);        
@@ -100,4 +103,4 @@ for i = 1:length(edge_indices)
     end
 end
 
-previous_rotations = rotations;
+previous_rotations = full_rotations;

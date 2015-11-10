@@ -30,7 +30,7 @@ for i = 1:num_points
     end
     
     if length(index) == 3
-        disp('triangle with attachment is not implemented yet');
+        %disp('triangle with attachment is not implemented yet');
         continue; 
     end
     %if length(index) == 3

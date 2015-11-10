@@ -2,6 +2,7 @@ D = 3;
 [centers, radii, blocks] = get_random_convtriangle();
 %[centers, radii, blocks] = get_random_convsegment();
 
+
 n = 60; color = [0.2, 0.8, 0.8];
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);

@@ -16,9 +16,15 @@ for i = 1:length(edge_indices)
     child_edge = child_rotation * restpose_edges{edge_ids(i)};
     
     if D == 2
-        theta = acos(parent_edge' * child_edge / norm(parent_edge) / norm(child_edge));
-        if norm(child_edge / norm(child_edge) - rotation(theta) * parent_edge / norm(parent_edge)) > 1e-10, theta = - theta; end
-        if theta > 0.01, limits_rotations{edge_ids(i)} = rotations{edge_ids(parents{i})}; end
+        G = rotation(vrrotvec2D(parent_edge, initial_edges{edge_ids(parents{i})}));
+        rotated_parent_edge = G * parent_edge; rotated_child_edge = G * child_edge;
+        
+        theta = vrrotvec2D(rotated_parent_edge, rotated_child_edge);
+        if theta > limits{i}.theta_min && theta < limits{i}.theta_max, continue; end
+        
+        theta_limited = max(theta, limits{i}.theta_min);
+        theta_limited = min(theta_limited, limits{i}.theta_max);
+        limits_rotations{edge_ids(i)} = G' * rotation(theta_limited) * rotation(theta)' * G * rotations{edge_ids(i)};
     end
     
     if D == 3
@@ -26,20 +32,29 @@ for i = 1:length(edge_indices)
         
         
         %% Find global rotation
-        a = initial_edges{edge_ids(parents{i})} / norm(initial_edges{edge_ids(parents{i})});
-        b = initial_edges{19} / norm(initial_edges{19});
-        u = parent_edge/norm(parent_edge);
-        v = rotations{19} * restpose_edges{19} / norm(restpose_edges{19});
-        F = [a'; b']; E = [u'; v'];
-        S = E' * F;
-        [U, ~, V] = svd(S);
-        G = V * U';
-        if det(G) < 0, U(:, D) = -  U(:, D); G = V * U'; end        
-        %G = vrrotvec2mat(vrrotvec(parent_edge, initial));        
+%                 a = initial_edges{edge_ids(parents{i})} / norm(initial_edges{edge_ids(parents{i})});
+%                 b = initial_edges{19} / norm(initial_edges{19});
+%                 u = parent_edge/norm(parent_edge);
+%                 v = rotations{19} * restpose_edges{19} / norm(restpose_edges{19});
+%                 F = [a'; b']; E = [u'; v'];
+%                 S = E' * F;
+%                 [U, ~, V] = svd(S);
+%                 G = V * U';
+%                 if det(G) < 0, U(:, D) = -  U(:, D); G = V * U'; end
+        
+        %% Unapply global rotation
+        initial = [0; 1; 0];
+        G = vrrotvec2mat(vrrotvec(parent_edge, initial));
         
         rotated_parent_edge = G * parent_edge;
         rotated_child_edge = G * child_edge;
         R = vrrotvec2mat(vrrotvec(rotated_child_edge, rotated_parent_edge));
+        
+        %JB = vrrotvec2mat(vrrotvec([0; 1; 0], GA' * edge3))
+        %I = vrrotvec2mat(vrrotvec(initial_edges{edge_ids(i)}, initial_edges{edge_ids(parents{i})}));
+        %R = R * I';
+        %R = R * I' * J';
+        %R = R * J' * I';
         
         theta = SpinCalc('DCMtoEA132', R, 1e-10, 0) / 180 * pi;
         for h = 1:3, if abs(theta(h)) > pi, theta(h) = theta(h) - 2 * pi; end; end
@@ -49,15 +64,17 @@ for i = 1:length(edge_indices)
             if theta(h) < limits{i}.theta_min(h) || theta(h) > limits{i}.theta_max(h)
                 joint_limits_violation = true;
             end
-        end               
-       
+        end
+        
         if joint_limits_violation == false, continue; end
-         
+        
         theta_limited = max(theta, limits{i}.theta_min);
         theta_limited = min(theta_limited, limits{i}.theta_max);
         
+        %% Initial rotation
+        
         %% R' = Rx(theta(1)) * Rz(theta(2)) * Ry(theta(3));
-        if i < 2, disp(['i = ', num2str(i)]); disp(theta); end
+        if i < 4, disp(['i = ', num2str(i)]); disp(theta); end
         limits_rotations{edge_ids(i)} = G' * Rx(theta_limited(1)) * Rz(theta_limited(2)) *  Ry(theta_limited(3)) * ...
             Ry(theta(3))' * Rz(theta(2))' * Rx(theta(1))' * G * rotations{edge_ids(i)};
     end

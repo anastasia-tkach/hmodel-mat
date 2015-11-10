@@ -35,6 +35,11 @@ for i = 1:length(blocks)
         k = k + 1;
     end
 end
+limits = cell(length(blocks), 1);
+for i = 1:length(blocks)
+    limits{i}.theta_min = -pi/2;
+    limits{i}.theta_max = 0; 
+end
 attachments = cell(length(centers), 1);
 %% Optimizaion
 figure; axis equal; axis off; hold on; set(gcf,'color','white');
@@ -62,7 +67,7 @@ while true
         [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, ...
             edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, 'finger');
 
-        [f3, J3] = jacobian_joint_limits(centers, previous_rotations, edge_indices, edge_ids, restpose_edges, parents, D);        
+        [f3, J3] = jacobian_joint_limits(centers, previous_rotations, edge_indices, edge_ids, restpose_edges, restpose_edges, parents, limits, attachments, D);       
         
         %% Compute update
         J1(:, 1:2) = 0;

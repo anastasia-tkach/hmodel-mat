@@ -1,5 +1,5 @@
 settings_default;
-
+data_path = '_data/implicit_skinning/old/';
 %% One radius is allowed to change
 %settings_test1;
 
@@ -47,32 +47,28 @@ for k = start_pose:start_pose + num_poses - 1
         for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
         poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
     end
-    poses{p} = compute_distance_invariants(poses{p}, solids);
+    poses{p}.invariants = compute_distance_invariants(poses{p}.centers, solids);
 end
 
 poses = compute_closing_radius(poses, radii, settings);
 history = cell(num_iters + 1, 1);
 
 %% Reduce data
-blocks = blocks(1:4);
-solids = {}; solids{1} = [3, 4, 5, 6];
-poses{1}.points = poses{1}.points(1000:1000);
-poses{1}.normals = poses{1}.normals(1000:1000);
-display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(poses{1}.points, 'm'); drawnow;
-P = zeros(length(poses{p}.points), settings.D);
-for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
-poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
+% blocks = blocks(1:4);
+% solids = {}; solids{1} = [3, 4, 5, 6];
+% poses{1}.points = poses{1}.points(1000:1000);
+% poses{1}.normals = poses{1}.normals(1000:1000);
+% display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(poses{1}.points, 'm'); drawnow;
+% P = zeros(length(poses{p}.points), settings.D);
+% for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
+% poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
 
 %% Optimizaion
 for iter = 1:num_iters
     settings.iter = iter; disp(['ITER ', num2str(success_iter + 1)]);
     %% Re-index
-    [blocks] = reindex(radii, blocks);
-    
-    if iter == 5,
-        disp(' ');
-    end
-    
+    [blocks] = reindex(radii, blocks);    
+  
     for p = 1:num_poses
         %disp(['pose ', num2str(p)]);
         
@@ -86,8 +82,9 @@ for iter = 1:num_iters
         poses{p} = compute_energy5(poses{p}, radii, blocks, settings);
         
     end
+    
     %% Shape consistency energy
-    [f2, J2] = compute_energy2(poses, blocks, num_centers, num_parameters, num_links, settings);
+    [f2, J2] = compute_energy2(poses, blocks, num_centers, settings);
     
     if (iter > num_iters), break; end
     
@@ -154,8 +151,9 @@ for iter = 1:num_iters
     
 end
 
-save([absolute_path, 'rendering\history'], 'history');
+%save([absolute_path, 'rendering\history'], 'history');
 %examine_history(settings, history);
 %display_hand_sketch(poses, radii, blocks);
-%display_result_convtriangles(poses{1}, blocks, radii, false); mypoints(pose.points, 'm'); drawnow;
-
+display_result_convtriangles(poses{1}.centers, [], [], blocks, radii, false); 
+display_result_convtriangles(poses{2}.centers, [], [], blocks, radii, false); 
+display_result_convtriangles(poses{3}.centers, [], [], blocks, radii, false); 
