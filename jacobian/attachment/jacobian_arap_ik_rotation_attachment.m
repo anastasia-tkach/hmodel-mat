@@ -9,6 +9,9 @@ switch mode
         parents = {2, 3, 4, [], [], [], []};
     case 'hand'
         parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], [], []};
+    otherwise 
+        parents = cell(length(blocks), 1);
+        
 end
 edge_ids = zeros(0, 1);
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];

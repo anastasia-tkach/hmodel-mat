@@ -14,6 +14,10 @@ for h = 1:H
 end
 %% Compute projection
 pose.closest_data_points = cell(length(pose.model_points), 1);
+
+pose.model_points_2D = cell(length(pose.model_points), 1);
+pose.data_points_2D = cell(length(pose.model_points), 1);
+
 A = pose.P(:, 1:3); b = pose.P(:, 4);
 for i = 1:length(pose.model_points)
     q = pose.model_points{i};
@@ -23,6 +27,8 @@ for i = 1:length(pose.model_points)
     else mx = W - n1/n3; end
     my = n2/n3; m = [mx; my];
     x = round(m(1)); y = round(m(2));
+    
+    pose.model_points_2D{i} = [x; y];
     
     if x < 1 || y < 1 || x > W || y > H
         pose.closest_data_points{i} = [];
@@ -41,16 +47,19 @@ for i = 1:length(pose.model_points)
             count = count + 1;
         end
     end
+    
+    pose.data_points_2D{i} = [x; y];
+    
     point = squeeze(pose.back_map_for_rendered_data(y, x, :));
     if sum(abs(point)) == 0, continue; end
     pose.closest_data_points{i} = point;
-    switch view_axis
-        case 'X'
-            pose.closest_data_points{i}(1) = q(1);
-        case 'Y'
-            pose.closest_data_points{i}(2) = q(2);
-        case 'Z'
-            pose.closest_data_points{i}(3) = q(3);
-    end
+%     switch view_axis
+%         case 'X'
+%             pose.closest_data_points{i}(1) = q(1);
+%         case 'Y'
+%             pose.closest_data_points{i}(2) = q(2);
+%         case 'Z'
+%             pose.closest_data_points{i}(3) = q(3);
+%     end
 end
 

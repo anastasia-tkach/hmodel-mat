@@ -10,13 +10,15 @@ D = 3;
 settings.mode = 'fitting';
 
 settings.sparse_data = false;
-settings.closing_radius = 25;
+settings.closing_radius = 10;
 settings.fov = 15;
-downscaling_factor = 16;
+downscaling_factor = 3;
 settings.H = 480/downscaling_factor;
-settings.W = 640/downscaling_factor;
+settings.W = 636/downscaling_factor;
 settings.D = D;
 settings.RAND_MAX = 32767;
+settings.side = 'front';
+settings.view_axis = 'Z';
 
 settings.energy1 = true; 
 settings.energy2 = true; 
