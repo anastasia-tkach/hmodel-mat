@@ -2,7 +2,15 @@ function [] = mylines(first_points, second_points, color)
 
 if isempty(first_points) || isempty(second_points), return; end
 
-if length(first_points{1}) == 3
+D = 1;
+for i = 1:length(first_points)
+    if ~isempty(first_points{i})
+        D = length(first_points{i});
+        break;
+    end
+end
+
+if D == 3
     P = zeros(length(first_points), 3);
     Q = zeros(length(first_points), 3);
     L = zeros(length(first_points) * 3, 3);
@@ -23,7 +31,7 @@ if length(first_points{1}) == 3
     end
 end
 
-if length(first_points{1}) == 2
+if D == 2
     P = zeros(length(first_points), 2);
     Q = zeros(length(first_points), 2);
     L = zeros(length(first_points) * 3, 2);

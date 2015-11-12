@@ -14,11 +14,11 @@ closing_radius = 10;
 mode = 'synthetic';
 
 %% Generate data
-[centers, radii, blocks] = get_random_convtriangle();
-edge_indices = {{[1, 2], [1, 3], [2, 3]}};
+% [centers, radii, blocks] = get_random_convtriangle();
+% edge_indices = {{[1, 2], [1, 3], [2, 3]}};
 
-% [centers, radii, blocks] = get_random_convsegment();
-% edge_indices = {{[1, 2]}};
+[centers, radii, blocks] = get_random_convsegment();
+edge_indices = {{[1, 2]}};
 
 data_bounding_box = compute_model_bounding_box(centers, radii);
 model_points  = [];
@@ -32,8 +32,8 @@ for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)
 points = model_points;
 
 %% Generate model
-rotation_axis = randn(D, 1); rotation_angle = 0.5 * randn;
-translation_vector = 1 * randn(D, 1);
+rotation_axis = randn(D, 1); rotation_angle = 0.2 * randn;
+translation_vector = 0.5 * randn(D, 1);
 R = makehgtform('axisrotate', rotation_axis, rotation_angle);
 T = makehgtform('translate', translation_vector);
 for i = 1:length(centers)
