@@ -13,8 +13,9 @@ P = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
 distances = zeros(N, 1);
 
 figure; hold on;
-set(gcf,'color','w');
+
 %figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+set(gcf,'color','w');
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 RAND_MAX = 32767;
@@ -33,7 +34,12 @@ for i = 1:length(blocks)
         c1 = centers{blocks{i}(1)}; c2 = centers{blocks{i}(2)};
         r1 = radii{blocks{i}(1)}; r2 = radii{blocks{i}(2)};
         distances = distance_to_model_convsegment(c1, c2, r1, r2, P');
-    end    
+    end
+    if length(blocks{i}) == 1
+        c1 = centers{blocks{i}(1)};
+        r1 = radii{blocks{i}(1)};
+        distances = distance_to_model_sphere(c1, r1, P');
+    end
     min_distances = min(min_distances, distances);
 end
 
@@ -42,9 +48,10 @@ min_distances = reshape(min_distances, size(x));
 h = patch(isosurface(x, y, z, min_distances,0));
 isonormals(x, y, z, min_distances, h);
 
-set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 0.5);
+set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', 1);
 
-grid off; view([-1, -1, -1]); axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); camlight; 
+grid off; view([-1, -1, -1]); axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); camlight;
+view([1, 1, 1]); camlight;
 
 %% Display data
 

@@ -57,7 +57,7 @@ if skeleton, w2 = 10; end
 if ~skeleton && strcmp(mode, 'finger') w2 = 50; end
 if ~skeleton && strcmp(mode, 'hand') w2 = 50; end
 if exist('collision_test', 'var'), w1 = 0; w2 = 1; w3 = 10; num_iters = 2; display_data = false; end
-w4 = 100; w3 = 10000; w5 = 10;
+w4 = 50; w3 = 10000; w5 = 10;
 
 %% Load data
 load([data_path, 'radii.mat']);
@@ -125,7 +125,7 @@ for i = 1:length(blocks)-1
 end
 
 %% Optimizaion
-for iter = 1:1
+for iter = 1:8
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
@@ -146,9 +146,12 @@ for iter = 1:1
         mypoints(data_points, [0.9, 0.3, 0.5]);
         %campos([10, 160, -1500]); camlight; drawnow;
         view([-90, 0]);  camlight; drawnow;
-        elses
-        %display_result_convtriangles(centers, data_points, model_points, blocks, radii, display_data);
-        %view([-90, 0]); camlight; drawnow;
+    else
+        display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+        %mylines(model_points, data_points, [0.75, 0.75, 0.75]);
+        mypoints(data_points, [0.65, 0.1, 0.5]);
+        mypoints(model_points, [0, 0.7, 1]);
+        view([-180, -90]); camlight; drawnow;        
         %campos([10, 160, -1500]); camlight; drawnow;
     end
     
@@ -175,30 +178,30 @@ for iter = 1:1
         end
         
         %% Display
-        if skeleton
-            figure; axis equal; axis off; hold on; set(gcf,'color','white');
-            %mylines(model_points, data_points, [0.75, 0.75, 0.75]);
-            for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
-                scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
-                line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
-            end;
-            %mypoints(data_points, [0.9, 0.3, 0.5]);
-            %view([-90, 0]);  camlight; drawnow;
-            campos([10, 160, -1500]); camlight; drawnow;
-        else
-            display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
-            mypoints(data_points, [0.65, 0.1, 0.5]);
-            view([-180, -90]); camlight; drawnow;
-            %campos([10, 160, -1500]); camlight; drawnow;
-        end
+%         if skeleton
+%             figure; axis equal; axis off; hold on; set(gcf,'color','white');
+%             %mylines(model_points, data_points, [0.75, 0.75, 0.75]);
+%             for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
+%                 scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
+%                 line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+%             end;
+%             %mypoints(data_points, [0.9, 0.3, 0.5]);
+%             %view([-90, 0]);  camlight; drawnow;
+%             campos([10, 160, -1500]); camlight; drawnow;
+%         else
+%             display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+%             mypoints(data_points, [0.65, 0.1, 0.5]);
+%             view([-180, -90]); camlight; drawnow;
+%             %campos([10, 160, -1500]); camlight; drawnow;
+%         end
         
         %% Translations energy
-        %if skeleton
-        %    [f1, J1] = jacobian_arap_translation_skeleton_attachment(centers, model_points, model_indices, data_points, attachments, D);
-        %else
-            %[f1, J1] = jacobian_arap_translation(centers, radii, blocks, data_points, model_indices, data_points, D);
-        %    [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
-        %end
+%         if skeleton
+%            [f1, J1] = jacobian_arap_translation_skeleton_attachment(centers, model_points, model_indices, data_points, attachments, D);
+%         else
+%            %[f1, J1] = jacobian_arap_translation(centers, radii, blocks, data_points, model_indices, data_points, D);
+%            [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
+%         end
         
         %% Rotations energy
         %[f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D);
@@ -227,8 +230,8 @@ for iter = 1:1
         %LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w3 * (J3' * J3);
         %rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w3 * (J3' * f3);
         
-        %LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w4 * (J4' * J4);
-        %rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w4 * (J4' * f4);
+%         LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w4 * (J4' * J4);
+%         rhs = w1 * (J1' * f1) + w2 * (J2' * f2) + w4 * (J4' * f4);
         
         %LHS = damping * I + w2 * (J2' * J2) + w4 * (J4' * J4);
         %rhs = w2 * (J2' * f2) + w4 * (J4' * f4);

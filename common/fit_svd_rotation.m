@@ -1,5 +1,7 @@
 function [R] = fit_svd_rotation(E, F)
 
+% E - initial, F - current
+
 D = 3;
 
 S = F' * E;

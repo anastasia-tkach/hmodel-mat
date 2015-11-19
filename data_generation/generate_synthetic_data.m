@@ -1,7 +1,7 @@
 
 close all; clear;
 
-num_blocks = 2;
+num_blocks = 1;
 
 n = 70;
 min_x = 0; max_x = 1; min_y = 0; max_y = 1; min_z = 0; max_z = 1;
@@ -87,13 +87,13 @@ ylim([model_bounding_box.min_y, model_bounding_box.max_y]);
 
 %% Save the results
 
-solid_blocks = {[1], [2]};
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\points.mat'], 'points');
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\normals.mat'], 'normals');
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\centers.mat'], 'centers');
+solids = [];
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_points.mat'], 'points');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_normals.mat'], 'normals');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\1_centers.mat'], 'centers');
 save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\radii.mat'], 'radii');
 save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\blocks.mat'], 'blocks');
-save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\solid_blocks.mat'], 'solid_blocks');
+save(['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\HModel\_data\convtriangles\solids.mat'], 'solids');
 
 
 

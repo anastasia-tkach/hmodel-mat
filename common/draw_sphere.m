@@ -1,5 +1,6 @@
 function [] = draw_sphere(center, radius, color)
 num = 60;
+face_alpha = 0.3;
 [rho, theta] = meshgrid(linspace(0, radius, num), linspace(0, 2*pi, num));
 x0 = rho .* cos(theta);
 y0 = rho .* sin(theta);
@@ -14,12 +15,11 @@ z0 = (radius.^2 - rho.^2).^0.5;
 x = x0 + center(1);
 y = y0 + center(2);
 z = z0 + center(3);
-
-mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', 1);
+mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', face_alpha);
 
 z0 = - (radius.^2 - rho.^2).^0.5;
 z = z0 + center(3);
-mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', 1);
+mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', face_alpha);
 
 hold on; axis equal; grid off; camlight; lighting gouraud;
 

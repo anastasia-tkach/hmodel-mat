@@ -28,8 +28,9 @@ model_centers = centers;
 
 %% Create posed data
 theta = zeros(26, 1);
-theta(1) = 70;
-theta(2) = -40;
+theta(1) = 300;
+theta(2) = -100;
+
 %theta([9, 13, 17, 21, 25]) = -pi/4;
 %theta(1) = 0; theta(3) = 0; theta(4:5) = pi/9;
 %theta(24:26) = -pi/6; 

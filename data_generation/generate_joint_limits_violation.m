@@ -33,11 +33,8 @@ switch mode
     case 'palm_finger'
         theta = zeros(10, 1); theta(8:10) = -pi/4;
     case 'hand'
-        theta = 0 * ones(26, 1);
-        theta(25:26) = pi/3;
-        theta(4:6) = pi/3;
-        theta(19) = pi/3;
-        %theta([9, 13, 17, 21, 25]) = -pi/24;
+        theta = zeros * ones(26, 1); 
+        theta(5) = pi;
     case 'joint_limits'
         theta = zeros(14, 1); 
         theta([8, 9, 12]) = -0.6; 
@@ -58,16 +55,7 @@ end
 
 %% Display
 if skeleton
-    figure; axis equal; axis off; hold on;
-    for i = 1:length(blocks),
-        myline(centers{blocks{i}(1)}, centers{blocks{i}(2)}, 'k');
-        if length(blocks{i}) == 3
-            myline(centers{blocks{i}(1)}, centers{blocks{i}(3)}, 'k');
-            myline(centers{blocks{i}(2)}, centers{blocks{i}(3)}, 'k');
-        end
-    end
-    mypoints(centers, 'k');
-    campos([10, 160, -1500]); camlight; drawnow;
+    display_skeleton(centers, radii, blocks, [], false);
 else
     display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
 end

@@ -34,13 +34,18 @@ end
 
 %% Display the model
 if display
-    figure; hold on;
+    %figure; hold on;
+    first_points = {};
+    second_points = {};
     [~, Triangles] = get_initial_segment(1, 1, 1, 1);
-    figure; hold on; axis equal;
     for i = 1:length(segments)
         V = transform(segments{i}.V, segments{i}.global);
-        draw_segment(V , Triangles);
+        [first, second] = draw_segment(V , Triangles);
+        first_points = [first_points, first];
+        second_points = [second_points, second];
     end
+    
+    mylines(first_points, second_points, 0.9 * [196/255, 178/255, 190/255]);
     campos([10, 160, -1500]);
     grid off; axis off;
 end

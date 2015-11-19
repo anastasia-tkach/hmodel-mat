@@ -27,19 +27,24 @@ for i = 1:length(blocks)
         v1 = tangent_points{i}.v1; v2 = tangent_points{i}.v2; v3 = tangent_points{i}.v3;
         u1 = tangent_points{i}.u1; u2 = tangent_points{i}.u2; u3 = tangent_points{i}.u3;
         distances = distance_to_model_convtriangle(c1, c2, c3, r1, r2, r3, v1, v2, v3, u1, u2, u3, points');
-    end    
+    end
     if length(blocks{i}) == 2
         c1 = pose.centers{blocks{i}(1)}; c2 = pose.centers{blocks{i}(2)};
         r1 = radii{blocks{i}(1)}; r2 = radii{blocks{i}(2)};
         distances = distance_to_model_convsegment(c1, c2, r1, r2, points');
-    end    
+    end
+    if length(blocks{i}) == 1
+        c1 = pose.centers{blocks{i}(1)};
+        r1 = radii{blocks{i}(1)};
+        distances = distance_to_model_sphere(c1, r1, points');
+    end
     
     min_distances = min(min_distances, distances);
 end
 
 distances = min_distances;
 
-valid_indices = abs(distances) < 0.01;
+valid_indices = abs(distances) < 0.005;
 valid_indices = find(valid_indices);
 valid_points = cell(length(valid_indices), 1);
 for i = 1:length(valid_indices)
@@ -49,7 +54,7 @@ end
 % figure; hold on; axis equal;
 % P = zeros(length(valid_points), 3);
 % for i = 1:length(valid_points)
-%     P(i, :) = valid_points{i}';    
+%     P(i, :) = valid_points{i}';
 % end
 % scatter3(P(:, 1), P(:, 2), P(:, 3), 30, [0, 0.7, 0.6], 'filled', 'm');
 points = valid_points;

@@ -1,6 +1,6 @@
 function [Vertices, Triangles] = get_initial_segment(d, r1, r2, ratio)
-u = 10;
-v = 6;
+u = 5;
+v = 3;
 
 a1 = r1;
 b1 = r1 * ratio;

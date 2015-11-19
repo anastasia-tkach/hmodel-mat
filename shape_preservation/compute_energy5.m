@@ -13,6 +13,9 @@ Jr = zeros(num_constaints, length(centers));
 
 count = 1;
 for b = 1:length(blocks)
+    if b == 24
+        disp(' ');
+    end
     
     %% Tangent cone
     indices = nchoosek(blocks{b}, 2);
@@ -71,6 +74,9 @@ for b = 1:length(blocks)
             switch settings.mode
                 case 'fitting'
                     [f, df] = jacobian_tangent_plane_existence(c1, c2, c3, r1, r2, r3, factor, {'c1', 'c2', 'c3', 'r1', 'r2', 'r3'});
+                    if isnan(f)
+                        disp(' ')
+                    end
                     Jr(count, i1) = df.dr1;
                     Jr(count, i2) = df.dr2;
                     Jr(count, i3) = df.dr3;    

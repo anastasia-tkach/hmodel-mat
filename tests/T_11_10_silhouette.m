@@ -1,58 +1,59 @@
-close all;
-clear
-D = 3; RAND_MAX = 32767;
-settings.fov = 15;
-downscaling_factor = 3;
-settings.H = 480/downscaling_factor;
-settings.W = 636/downscaling_factor;
-settings.D = D;
-settings.sparse_data = false;
-settings.RAND_MAX = 32767;
-settings.side = 'front';
-settings.view_axis = 'X';
-closing_radius = 10;
-mode = 'synthetic';
-
-%% Generate data
+% close all;
+% clear
+% D = 3; RAND_MAX = 32767;
+% settings.fov = 15;
+% downscaling_factor = 3;
+% settings.H = 480/downscaling_factor;
+% settings.W = 636/downscaling_factor;
+% settings.D = D;
+% settings.sparse_data = false;
+% settings.RAND_MAX = 32767;
+% settings.side = 'front';
+% settings.view_axis = 'X';
+% closing_radius = 10;
+% mode = 'synthetic';
+% 
+% %% Generate data
 % [centers, radii, blocks] = get_random_convtriangle();
 % edge_indices = {{[1, 2], [1, 3], [2, 3]}};
-
-[centers, radii, blocks] = get_random_convsegment();
-edge_indices = {{[1, 2]}};
-
-data_bounding_box = compute_model_bounding_box(centers, radii);
-model_points  = [];
-[raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
-rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
-
-[I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
-N = length(model_points);
-model_points = [model_points; cell(length(I), 1)];
-for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)); end
-points = model_points;
-
-%% Generate model
-rotation_axis = randn(D, 1); rotation_angle = 0.2 * randn;
-translation_vector = 0.5 * randn(D, 1);
-R = makehgtform('axisrotate', rotation_axis, rotation_angle);
-T = makehgtform('translate', translation_vector);
-for i = 1:length(centers)
-    centers{i} = transform(centers{i}, R);
-    centers{i} = transform(centers{i}, T);
-end
-
-data_bounding_box = compute_data_bounding_box(points);
-solid_blocks = {[1]};
-k = 1;
-for i = 1:length(blocks)
-    index = nchoosek(blocks{i}, 2);
-    for j = 1:size(index, 1)
-        restpose_edges{k} = centers{edge_indices{i}{j}(2)} - centers{edge_indices{i}{j}(1)};
-        previous_rotations{k} = eye(3, 3);
-        k = k + 1;
-    end
-end
-initial_centers = centers;
+% 
+% % [centers, radii, blocks] = get_random_convsegment();
+% % edge_indices = {{[1, 2]}};
+% 
+% data_bounding_box = compute_model_bounding_box(centers, radii);
+% model_points  = [];
+% [raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
+% rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
+% 
+% [I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
+% N = length(model_points);
+% model_points = [model_points; cell(length(I), 1)];
+% for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)); end
+% points = model_points;
+% 
+% %% Generate model
+% rotation_axis = randn(D, 1); rotation_angle = 0.2 * randn;
+% translation_vector = 2 * randn(D, 1);
+% R = makehgtform('axisrotate', rotation_axis, rotation_angle);
+% T = makehgtform('translate', translation_vector);
+% for i = 1:length(centers)
+%     centers{i} = transform(centers{i}, R);
+%     centers{i} = transform(centers{i}, T);
+% end
+% 
+% data_bounding_box = compute_data_bounding_box(points);
+% solid_blocks = {[1]};
+% k = 1;
+% for i = 1:length(blocks)
+%     index = nchoosek(blocks{i}, 2);
+%     for j = 1:size(index, 1)
+%         restpose_edges{k} = centers{edge_indices{i}{j}(2)} - centers{edge_indices{i}{j}(1)};
+%         previous_rotations{k} = eye(3, 3);
+%         k = k + 1;
+%     end
+% end
+% attachments = cell(length(centers), 1);
+% initial_centers = centers;
 
 %% Algorithm
 close all; centers = initial_centers;
@@ -90,11 +91,12 @@ for iter = 1:4
     if isempty(model_points), break; end
     
     %% Move behind the data silhouette
-    attachments = cell(length(centers), 1);
     [F, J] = jacobian_arap_translation_attachment(centers, radii, blocks, ...
         model_points, model_indices, closest_data_points, attachments, settings.D);
     
     normals = cell(length(model_points), 1);
+    
+    
     for i = 1:length(model_points)
         m = model_points{i};
         d =  closest_data_points{i};

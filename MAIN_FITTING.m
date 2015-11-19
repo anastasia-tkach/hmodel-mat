@@ -1,5 +1,5 @@
 settings_default;
-data_path = '_data/implicit_skinning/old/';
+data_path = '_data/my_hand/trial1/';
 %% One radius is allowed to change
 %settings_test1;
 

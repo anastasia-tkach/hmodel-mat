@@ -50,15 +50,15 @@ for i = 1:length(finger_indices)
         normal = - normal;
         axis_angle = vrrotvec(b, normal);
     end
-    myline(centers{i * 4}, centers{i * 4} + 10 * normal, 'm');
-    myline(centers{i * 4}, centers{i * 4} + 10 * b, 'g');
+    %myline(centers{i * 4}, centers{i * 4} + 10 * normal, 'm');
+    %myline(centers{i * 4}, centers{i * 4} + 10 * b, 'g');
     if i ~= 5 && axis_angle(4) > pi/12
         R1 = vrrotvec2mat(axis_angle);
         axis_angle(4) = pi/12;
         R2 = vrrotvec2mat(axis_angle);
         normal = R2 * R1' * normal;
     end
-    myline(centers{i * 4}, centers{i * 4} + 10 * normal, 'b');
+    %myline(centers{i * 4}, centers{i * 4} + 10 * normal, 'b');
     %draw_plane(origin, normal, 'b', points); drawnow;
     
     for j = 1:length(finger_indices{i})

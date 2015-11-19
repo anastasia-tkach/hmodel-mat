@@ -1,0 +1,97 @@
+clear;
+
+model_path = '_data/my_hand/model/';
+data_path = '_data/my_hand/trial1/';
+
+load([model_path, 'centers.mat']);
+load([model_path, 'radii.mat']);
+load([model_path, 'blocks.mat']);
+load([model_path, 'solids.mat']);
+load([data_path, 'names_map.mat']);
+load([data_path, 'named_blocks.mat']);
+
+centers_map = containers.Map();
+radii_map = containers.Map();
+
+for key = keys(names_map)
+    key = key{1};
+    c = centers(names_map(key)); c = c{1};
+    r = radii(names_map(key)); r = r{1};
+    centers_map(key) = c;
+    radii_map(key) = r;
+end
+
+centers = {};
+radii = {};
+for key = keys(names_map)
+    key = key{1};   
+    centers{names_map(key)} = centers_map(key);
+    radii{names_map(key)} = radii_map(key);
+end
+
+%display_result_convtriangles(centers, [], [], blocks, radii, false);
+
+%% Describe attachments
+attachments_map = containers.Map();
+
+attachments_map('pinky_membrane') = {'pinky_bottom', 'pinky_base'};
+attachments_map('ring_membrane') = {'ring_bottom', 'ring_base'};
+attachments_map('middle_membrane') = {'middle_bottom', 'middle_base'};
+attachments_map('index_membrane') = {'index_bottom', 'index_base'};
+attachments_map('thumb_membrane') = {'thumb_bottom', 'thumb_middle'};
+
+attachments_map('palm_pinky') = {'pinky_bottom', 'pinky_base'};
+attachments_map('palm_ring') = {'ring_bottom', 'ring_base'};
+attachments_map('palm_middle') = {'middle_bottom', 'middle_base'};
+attachments_map('palm_index') = {'index_bottom', 'index_base'};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAYBE REPLACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+attachments_map('palm_fromt') = {'palm_right', 'palm_back', 'ring_base'};
+attachments_map('palm_attachment') = {'palm_right', 'palm_back', 'ring_base'};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAYBE REPLACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+attachements = cell(length(centers), 1);
+for key = keys(names_map)
+    key = key{1};   
+    index = names_map(key);
+    if index == 28
+        disp(' ')
+    end
+    if ~isKey(attachments_map, key), continue; end
+    
+    attachment_names = sort(attachments_map(key));
+    for i = 1:length(named_blocks)
+        block_names = sort(named_blocks{i})
+        if length(attachment_names) ~= length(block_names), continue; end
+        is_equal = true;
+        for j = 1:length(attachment_names)
+            if ~strcmp(attachment_names{j}, block_names{j}), is_equal = false; end
+        end
+        if is_equal == true
+            attachements{index}.block_index = i;
+            break;
+        end
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

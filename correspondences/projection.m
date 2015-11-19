@@ -15,3 +15,10 @@ if length(block) == 2
     index1 = block(1); index2 = block(2);
     [index, q, s, is_inside] = projection_convsegment(p, c1, c2, r1, r2, index1, index2);
 end
+
+if length(block) == 1
+    c1 = centers{block(1)};
+    r1 = radii{block(1)};
+    index1 = block(1);    
+    [index, q, s, is_inside] = projection_sphere(p, c1, r1, index1);
+end
