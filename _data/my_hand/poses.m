@@ -1,10 +1,10 @@
 close all; clear;
-pose_id = 2;
+pose_id = 1;
 data_path = 'C:/Users/tkach/OneDrive/EPFL/Code/HModel/_data/my_hand/trial1/';
 
 %% Read the centers locations
-pose2;
-skeleton5;
+pose1;
+skeleton6;
 
 %% Build the data structures
 for i = 1:length(named_blocks)
@@ -70,3 +70,4 @@ save([data_path, 'blocks.mat'], 'blocks');
 save([data_path, 'solids.mat'], 'solids');
 save([data_path, 'names_map.mat'], 'names_map');
 save([data_path, 'named_blocks.mat'], 'named_blocks');
+

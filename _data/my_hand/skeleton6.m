@@ -18,9 +18,6 @@ radii_map('palm_attachment') = 0.4;
 centers_map('palm_back') = 0.5 * centers_map('palm_left') + 0.5 * centers_map('palm_right') + 0.3 * back;
 radii_map('palm_back') = 0.6;
 
-centers_map('palm_front') = 0.5 * centers_map('palm_left') + 0.5 * centers_map('palm_right') - 0.1 * back;
-radii_map('palm_front') = 0.5;
-
 centers_map('palm_ring') = 0.34 * centers_map('palm_index') + 0.66 * centers_map('palm_pinky');
 radii_map('palm_ring') = radii_map('palm_pinky');
 
@@ -88,11 +85,6 @@ named_blocks{end + 1} = {'thumb_bottom', 'thumb_base'};
 named_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_thumb'};
 named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
 
-named_blocks{end + 1} = {'palm_middle', 'palm_thumb', 'palm_front'};
-named_blocks{end + 1} = {'palm_thumb', 'thumb_base', 'palm_front'}; 
-named_blocks{end + 1} = {'palm_right', 'palm_ring', 'palm_front'};
-named_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_front'};
-
 named_blocks{end + 1} = {'palm_middle', 'palm_thumb', 'palm_back'};
 named_blocks{end + 1} = {'palm_thumb', 'thumb_base', 'palm_back'}; 
 named_blocks{end + 1} = {'palm_right', 'palm_ring', 'palm_back'};
@@ -131,7 +123,7 @@ names_map_keys = {
     'thumb_top', 'thumb_middle', 'thumb_bottom', 'thumb_base', ...
     ...
     'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', ...
-    'palm_back', 'palm_front', 'palm_attachment', 'palm_right', ...
+    'palm_back', 'palm_attachment', 'palm_right', ...
     'wrist_top_left', 'wrist_top_right', 'wrist_bottom_left', 'wrist_bottom_right', ...
     'pinky_membrane', 'ring_membrane', 'middle_membrane', 'index_membrane', 'thumb_membrane', ...
     };

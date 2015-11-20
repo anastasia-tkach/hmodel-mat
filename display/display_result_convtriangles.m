@@ -57,14 +57,14 @@ view([1, 1, 1]); camlight;
 
 
 if (display_data)
-    mypoints(points, 'm');
+    mypoints(points, [0.65, 0.1, 0.5]);
     if ~isempty(projections)
         back_projections = cell(size(projections));
         for i = 1:length(projections)
             if ~isempty(projections{i}), back_projections{i} = projections{i} - (points{i} - projections{i}); end
         end
-        mypoints(projections, [0.1, 0.8, 0.8]);
-        mylines(points, projections, [0.1, 0.8, 0.8]);
+        mypoints(projections, [0, 0.7, 1]);
+        %mylines(points, projections, [0.1, 0.8, 0.8]);
         %mypoints(back_projections, [0.6, 0.6, 0.6]);
         %mylines(back_projections, projections, [0.6, 0.6, 0.6]);
     end

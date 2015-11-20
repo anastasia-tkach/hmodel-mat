@@ -3,7 +3,7 @@ function [centers, radii, blocks] = get_random_convtriangle()
 D = 3;
 while(true)
     c1 = rand(D, 1); c2 = rand(D, 1); c3 = rand(D, 1);
-    x1 = rand(1, 1); x2 = rand(1, 1); x3 = rand(1, 1);
+    x1 = 0.2 * rand(1, 1); x2 = 0.2 * rand(1, 1); x3 = 0.2 * rand(1, 1);
     x = [x1, x2, x3];
     [r1, i1] = max(x); [r3, i3] = min(x);
     x([i1, i3]) = 0; r2 = max(x);

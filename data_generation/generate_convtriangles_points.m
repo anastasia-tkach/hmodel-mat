@@ -5,8 +5,8 @@ pose.centers = centers;
 
 %N = 2000000; % palm_finger
 %N = 500000; % finger
-%N = 5000000; % hand
-N = 40000; % synthetic
+N = 3000000; % hand
+%N = 40000; % synthetic
 model_bounding_box = compute_model_bounding_box(centers, radii);
 x = model_bounding_box.min_x + (model_bounding_box.max_x - model_bounding_box.min_x) * rand(N, 1);
 y = model_bounding_box.min_y + (model_bounding_box.max_y - model_bounding_box.min_y) * rand(N, 1);

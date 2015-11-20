@@ -16,6 +16,9 @@ global_frame = find_frame(centers(global_frame_indices));
 
 frames = cell(length(axis_indices), 1);
 for i = 1:length(axis_indices)
+    %if i == 21
+    %    disp(' ');
+    %end
     if length(axis_indices{i}) == 2
         local_axis = (centers{axis_indices{i}(2)} - centers{axis_indices{i}(1)}) / norm(centers{axis_indices{i}(1)} - centers{axis_indices{i}(2)});
         axis_angle = vrrotvec(global_axis, local_axis);

@@ -2,7 +2,7 @@
 % clear
 % D = 3; RAND_MAX = 32767;
 % settings.fov = 15;
-% downscaling_factor = 3;
+% downscaling_factor = 12;
 % settings.H = 480/downscaling_factor;
 % settings.W = 636/downscaling_factor;
 % settings.D = D;
@@ -14,32 +14,16 @@
 % mode = 'synthetic';
 % 
 % %% Generate data
-% % [centers, radii, blocks] = get_random_convtriangle();
-% % edge_indices = {{[1, 2], [1, 3], [2, 3]}};
-% 
-% [centers, radii, blocks] = get_random_convsegment();
-% edge_indices = {{[1, 2]}};
-% 
-% %[centers, radii, blocks] = get_random_sphere();
-% 
-% % data_bounding_box = compute_model_bounding_box(centers, radii);
-% % model_points  = [];
-% % [raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
-% % rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
-% 
-% % [I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
-% % N = length(model_points);
-% % model_points = [model_points; cell(length(I), 1)];
-% % for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)); end
-% % data_points = model_points;
+% [centers, radii, blocks] = get_random_convtriangle();
+% edge_indices = {{[1, 2], [1, 3], [2, 3]}};
+% % [centers, radii, blocks] = get_random_convsegment();
+% % edge_indices = {{[1, 2]}};
 % 
 % data_points = generate_convtriangles_points(centers, blocks, radii);
 % 
-% %data_points = sample_skeleton(centers, blocks);
-% 
 % %% Generate model
-% rotation_axis = randn(D, 1); rotation_angle = randn;
-% translation_vector = randn(D, 1);
+% rotation_axis = randn(D, 1); rotation_angle = 0.3 * randn;
+% translation_vector = 0.1 * randn(D, 1);
 % R = makehgtform('axisrotate', rotation_axis, rotation_angle);
 % T = makehgtform('translate', translation_vector);
 % for i = 1:length(centers)
@@ -68,116 +52,93 @@
 close all;
 centers = initial_centers;
 data_points = initial_data_points;
+global_frame_indices = blocks{1};
 
-% i = randi([1, length(data_points)],1 , 1);
-% data_points = data_points(i);
+i = randi([1, length(data_points)],1 , 4);
+data_points = data_points(i);
 
-for iter = 1:6
+for iter = 1:1
     
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
-    %[model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
-    [model_indices, model_points, block_indices] = compute_projections_matlab(data_points, centers, blocks, radii);
-    %[model_indices, model_points, block_indices] = compute_skeleton_projections(data_points, centers, blocks);
+    [model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
     
-%         new_data_points = [];
-%         new_model_points = [];
-%         new_model_indices = [];
-%         new_block_indices = [];
-%         for i = 1:length(data_points)
-%             if length(model_indices{i}) == 1
-%                 new_model_indices{end + 1} = model_indices{i};
-%                 new_data_points{end + 1} = data_points{i};
-%                 new_model_points{end + 1} = model_points{i};
-%                 new_block_indices{end + 1} = block_indices{i};
-%             end
-%         end
-%         model_indices = new_model_indices;
-%         data_points = new_data_points;
-%         model_points = new_model_points;
-%         block_indices = new_block_indices;
+    [silh_data_points, silh_model_points, silh_data_normals, silh_model_indices, silh_block_indices] = ...
+        compute_silhouette_projections(centers, blocks, radii, data_points, data_bounding_box, settings);
+    
+    %% Display
+    %display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+    %mypoints(data_points, [0.65, 0.1, 0.5]);
+    %mypoints(model_points, [0, 0.7, 1]);
+    %camlight; drawnow;
     
     %% Compute projections locations
-%     offsets = cell(length(block_indices), 1);
-%     directions = cell(length(block_indices), 1);
-%     for i = 1:length(block_indices)
-%         if isempty(model_points{i}), continue; end
-%         if length(blocks{block_indices{i}}) == 1
-%             offsets{i} = model_points{i}  - centers{blocks{block_indices{i}}(1)};
-%             continue;
-%         end
-%         c1 = centers{blocks{block_indices{i}}(1)}; c2 = centers{blocks{block_indices{i}}(2)};
-%         offsets{i} = model_points{i}  - c1; directions{i} = (c2 - c1) / norm(c2 - c1);
-%     end
-%     
-%     for inner_iter = 1:1
-%         
-%         %% Compute model points
-%         for i = 1:length(block_indices)
-%             if isempty(model_points{i}), continue; end
-%             if length(blocks{block_indices{i}}) == 1
-%                 model_points{i}  = centers{blocks{block_indices{i}}(1)} + offsets{i};
-%                 continue;
-%             end
-%             c1 = centers{blocks{block_indices{i}}(1)}; c2 = centers{blocks{block_indices{i}}(2)};
-%             direction = (c2 - c1) / norm(c2 - c1);
-%             rotation = vrrotvec2mat(vrrotvec(directions{i}, direction));
-%             model_points{i} = c1 + rotation * offsets{i};
-%         end
+    offsets = cell(length(model_points), 1);
+    for i = 1:length(offsets), offsets{i}.block_index = block_indices{i}; end
+    offsets = initialize_attachments(model_points, centers, blocks, offsets, global_frame_indices);
+    
+    silh_offsets = cell(length(silh_model_points), 1);
+    for i = 1:length(silh_offsets), silh_offsets{i}.block_index = silh_block_indices{i}; end
+    silh_offsets = initialize_attachments(silh_model_points, centers, blocks, silh_offsets, global_frame_indices);
+    
+    for inner_iter = 1:5
         
-        %% Display
-        display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+        [model_points, ~] = update_attachments(model_points, centers, blocks, offsets, global_frame_indices);
         
-        %figure; axis equal; axis off; hold on; set(gcf,'color','white');
-        %for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
-        %    scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
-        %    line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
-        %end;
+        [silh_model_points, ~] = update_attachments(silh_model_points, centers, blocks, silh_offsets, global_frame_indices);
         
-        %mylines(model_points, data_points, [0.75, 0.75, 0.75]);
-        mypoints(data_points, [0.65, 0.1, 0.5]);
-        mypoints(model_points, [0, 0.7, 1]);
-        %view([-180, -90]); %xlim([-1.5; 1]); ylim([-0.5; 1.5]);
-        camlight; drawnow;
+        %% Display 3D
+        %display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+        %mylines(data_points, model_points, [0.75, 0.75, 0.75]);
+        %mypoints(data_points, [0.65, 0.1, 0.5]);
+        %mypoints(model_points, [0, 0.7, 1]);
+        %camlight; drawnow;
         
         %% Translations energy
-        [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D, iter == 1);
-        %[f1, J1] = jacobian_arap_translation_skeleton_attachment(centers, model_points, model_indices, data_points, attachments, D);
+        [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
+        
+        %% Display silhouette
+        display_result_convtriangles(centers, data_points, [], blocks, radii, false);
+        mylines(silh_data_points, silh_model_points, [0.75, 0.75, 0.75]);
+        mypoints(silh_model_points, [0, 0.7, 1]);
+        mypoints(data_points, [0.65, 0.1, 0.5]);
+        mypoints(silh_data_points, 'm');
+        view([-90, 0]); camlight; drawnow;      
+        
+        [Fn, Jn] = jacobian_silhouette(centers, radii, blocks,  silh_model_points, silh_model_indices, silh_data_points, silh_data_normals, attachments, settings);
         
         %% Rotations energy
         [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode);
         
         %% Compute update
         I = eye(D * length(centers), D * length(centers));
-        w1 = 1; w2 = 20; damping = 0.01;
+        w1 = 1; w2 = 200; damping = 0.1;
         
-        %LHS = damping * I + w2 * (J2' * J2) + w1 * (Jn' * Jn);
-        %rhs = w2 * (J2' * f2) + w1 * (Jn' * Fn);
+        %LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);
+        %rhs = w1 * (J1' * f1) + w2 * (J2' * f2);   
         
-        LHS = damping * I + w2 * (J2' * J2) + w1 * (J1' * J1);
-        rhs = w2 * (J2' * f2) + w1 * (J1' * f1);
-        
-        %LHS = damping * I +  w1 * (J1' * J1);
-        %rhs = w1 * (J1' * f1);
+        LHS = damping * I + w1 * (Jn' * Jn) + w2 * (J2' * J2);
+        rhs = w1 * (Jn' * Fn) + w2 * (J2' * f2);
         
         delta = - LHS \ rhs;
         
-        disp(f1' * f1);
+        energies(1) = w1 * (Fn' * Fn); energies(2) = w2 * (f2' * f2); disp(energies);
         
         %% Apply update
         for o = 1:length(centers), centers{o} = centers{o} + delta(D * o - D + 1:D * o); end
-        for o = 1:length(attachments)
-            if isempty(attachments{o}), continue; end
-            attachments{o}.axis_projection = zeros(D, 1);
-            for l = 1:length(attachments{o}.indices)
-                attachments{o}.axis_projection = attachments{o}.axis_projection + attachments{o}.weights(l) * centers{attachments{o}.indices(l)};
-            end
-            direction = (centers{attachments{o}.indices(2)} - centers{attachments{o}.indices(1)}) / ...
-                norm(centers{attachments{o}.indices(2)} - centers{attachments{o}.indices(1)});
-            rotation = vrrotvec2mat(vrrotvec(attachments{o}.direction, direction));
-            centers{o} = attachments{o}.axis_projection + rotation * attachments{o}.offset;
-        end
-    %end
+        
+        %for o = 1:length(attachments)
+        %    if isempty(attachments{o}), continue; end
+        %    attachments{o}.axis_projection = zeros(D, 1);
+        %    for l = 1:length(attachments{o}.indices)
+        %        attachments{o}.axis_projection = attachments{o}.axis_projection + attachments{o}.weights(l) * centers{attachments{o}.indices(l)};
+        %    end
+        %    direction = (centers{attachments{o}.indices(2)} - centers{attachments{o}.indices(1)}) / ...
+        %        norm(centers{attachments{o}.indices(2)} - centers{attachments{o}.indices(1)});
+        %    rotation = vrrotvec2mat(vrrotvec(attachments{o}.direction, direction));
+        %    centers{o} = attachments{o}.axis_projection + rotation * attachments{o}.offset;
+        %end
+    end
     
 end

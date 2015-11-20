@@ -38,9 +38,6 @@ attachments = cell(length(centers), 1);
 
 normals = cell(length(model_points), 1);
 for i = 1:length(model_points)
-    if i == 670
-        disp(' ')
-    end
     m = model_points{i};
     d =  closest_data_points{i};
     if isempty(m) || isempty(d), continue; end

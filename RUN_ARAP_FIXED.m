@@ -87,6 +87,7 @@ switch mode
         end
 end
 
+%% Set up joint limits
 limits = cell(length(blocks), 1);
 for i = 1:14
     limits{i}.theta_min = [-pi/2, 0, -2 * pi];
@@ -104,6 +105,20 @@ for i = 1:length(blocks)
         previous_rotations{k} = eye(3, 3);
         k = k + 1;
     end
+end
+
+%% Descibe parrents
+switch mode
+    case 'finger'
+        parents = {[], 1, 2};
+    case 'palm_finger'
+        parents = {2, 3, 4, [], []};
+    case 'joint_limits'
+        parents = {2, 3, 4, [], [], [], []};
+    case 'hand'
+        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], [], []};
+    otherwise 
+        parents = cell(length(blocks), 1);
 end
 
 %% Build adjucency matrix
@@ -205,7 +220,7 @@ for iter = 1:8
         
         %% Rotations energy
         %[f2, J2] = jacobian_arap_rotation(centers, blocks, edge_indices, restpose_edges, solid_blocks, D);
-        [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode);
+        [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
         
         %% Collisions energy
         %[f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);

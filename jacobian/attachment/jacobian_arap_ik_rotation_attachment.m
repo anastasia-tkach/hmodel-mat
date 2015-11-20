@@ -1,18 +1,5 @@
-function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, mode)
+function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents)
 
-switch mode
-    case 'finger'
-        parents = {[], 1, 2};
-    case 'palm_finger'
-        parents = {2, 3, 4, [], []};
-    case 'joint_limits'
-        parents = {2, 3, 4, [], [], [], []};
-    case 'hand'
-        parents = {2, 3, 16, 5, 6, 16, 8, 9, 16, 11, 12, 16, 14, 15, 16, [], [], [], []};
-    otherwise 
-        parents = cell(length(blocks), 1);
-        
-end
 edge_ids = zeros(0, 1);
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 

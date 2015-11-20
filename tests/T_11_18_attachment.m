@@ -15,31 +15,16 @@ D = 3;
 %global_frame_indices = blocks{1};
 
 %% Hand model
+
+model_path = '_data/my_hand/model/';
+data_path = '_data/my_hand/trial1/';
+load([model_path, 'centers.mat']);
+load([model_path, 'radii.mat']);
+load([model_path, 'blocks.mat']);
+load([model_path, 'solids.mat']);
+
 compute_attachments;
-D = 3;
-global_frame_indices = blocks{24};
-initial_frames = compute_model_frames(centers, blocks, global_frame_indices);
-
-%% Compute attachment weights
-for i = 1:length(attachments)
-    if isempty(attachments{i}), continue; end
-    
-    indices = blocks{attachments{i}.block_index};
-    [~, projections, ~] = compute_skeleton_projections({centers{i}}, centers, {indices});
-    attachments{i}.axis_projection = projections{1};   
-    
-    if length(indices) == 3
-        P = [centers{indices(1)}'; centers{indices(2)}'; centers{indices(3)}'; attachments{i}.axis_projection'];
-        attachments{i}.weights = [P(4,:),1]/[P(1:3,:),ones(3,1)];
-    end
-    if length(indices) == 2
-        P = [centers{indices(1)}'; centers{indices(2)}'; attachments{i}.axis_projection'];
-        attachments{i}.weights = [P(3,:),1]/[P(1:2,:),ones(2,1)];
-    end
-    
-    attachments{i}.offset = centers{i}  - attachments{i}.axis_projection;
-end
-
+attachments = initialize_attachments(centers, centers, blocks, attachments, global_frame_indices);
 initial_centers = centers;
 
 %% Generate model
@@ -52,22 +37,10 @@ for i = 1:length(centers)
     centers{i} = transform(centers{i}, R);
     centers{i} = transform(centers{i}, T);
 end
-frames = compute_model_frames(centers, blocks, global_frame_indices);
 
-%% Display results
 display_skeleton(centers, radii, blocks, [], false);
 
-%% Move attachments
-for o = 1:length(attachments)
-    if isempty(attachments{o}), continue; end
-    attachments{o}.axis_projection = zeros(D, 1);
-    indices = blocks{attachments{o}.block_index};
-    for l = 1:length(indices)
-        attachments{o}.axis_projection = attachments{o}.axis_projection + attachments{o}.weights(l) * centers{indices(l)};
-    end
-    rotation = find_svd_rotation(initial_frames{attachments{o}.block_index}, frames{attachments{o}.block_index});
-    centers{o} = attachments{o}.axis_projection + rotation' * attachments{o}.offset;
-end
+[centers, rotation] = update_attachments(centers, centers, blocks, attachments, global_frame_indices);
 
 T2 = T;
 T2(1:3, 4) = - T(1:3, 4);
