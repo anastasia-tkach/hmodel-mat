@@ -1,4 +1,4 @@
-function [indices, projections, block_indices] = compute_projections_matlab(points, centers, blocks, radii)
+function [indices, projections, block_indices, axis_projections] = compute_projections_matlab(points, centers, blocks, radii)
 RAND_MAX = 32767;
 num_points = length(points);
 
@@ -6,6 +6,7 @@ indices = cell(num_points, 1);
 block_indices = cell(num_points, 1);
 min_distance = Inf * ones(num_points, 1);
 projections = cell(num_points, 1);
+axis_projections = cell(num_points, 1);
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 
@@ -22,8 +23,9 @@ for i = 1:num_points
         if (j == 16)
             disp('')
         end
-        [index, q, ~, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
+        [index, q, s, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
         all_projections{j} = q;
+        all_axis_projections{j} = s;
         all_distances(j) = norm(p - q);
         if is_inside == 1, all_distances(j) = - norm(p - q); end
         all_indices{j} = index;
@@ -66,6 +68,7 @@ for i = 1:num_points
     indices{i} = all_indices{min_index};
     projections{i} = all_projections{min_index};
     block_indices{i} = all_block_indices(min_index);
+    axis_projections{i} = all_axis_projections{min_index};
     
     %if norm(points{i} - projections{i}) > 100
         %disp([i, norm(points{i} - projections{i})]);

@@ -5,7 +5,9 @@ F = zeros(num_points * D, 1);
 Jc = zeros(num_points * D, length(centers) * D);
 
 %% Compute tangent points
-[tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments);
+if D == 3
+    [tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments);
+end
 for i = 1:num_points
     
     q = model_points{i};

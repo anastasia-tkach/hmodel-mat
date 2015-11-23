@@ -31,5 +31,5 @@ if D == 2
         end
     end
     P = P(1:k, :);
-    scatter(P(:, 1), P(:, 2), 10, color, 'o', 'filled');
+    scatter(P(:, 1), P(:, 2), 25, color, 'o', 'filled');
 end

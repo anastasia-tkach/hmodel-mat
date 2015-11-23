@@ -1,6 +1,5 @@
-function [centers, radii, blocks] = get_random_convsegment()
+function [centers, radii, blocks] = get_random_convsegment(D)
 
-D = 3;
 while(true)
     c1 = rand(D, 1); c2 = rand(D, 1);
     x1 = rand(1, 1); x2 = rand(1, 1); 
