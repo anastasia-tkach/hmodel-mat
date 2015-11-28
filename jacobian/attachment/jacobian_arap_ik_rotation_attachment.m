@@ -48,7 +48,7 @@ for i = 1:length(solid_blocks)
     
     for j = 1:length(solid_blocks{i})
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
-            if length(solid_blocks{i}) > 1
+            if length(solid_blocks{i}) > 1 || length(edge_indices{solid_blocks{i}(j)}) > 1
                 rotations{s} = R;
             end
             s = s + 1;

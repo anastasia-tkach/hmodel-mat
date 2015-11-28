@@ -18,11 +18,9 @@ for i = 1:num_points
     all_distances = -RAND_MAX * ones(length(blocks), 1);
     all_indices = cell(length(blocks), 1);
     all_block_indices = zeros(length(blocks), 1);
+    all_axis_projections = cell(length(blocks), 1);
     
     for j = 1:length(blocks)
-        if (j == 16)
-            disp('')
-        end
         [index, q, s, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
         all_projections{j} = q;
         all_axis_projections{j} = s;
