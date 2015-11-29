@@ -13,12 +13,13 @@ settings.RAND_MAX = 32767;
 settings.side = 'front';
 settings.view_axis = 'X';
 closing_radius = 10;
-num_samples = 3000;
-mode = 'depth';
+num_samples = 500000;
+mode = 'silhouette';
 
 %% Generate data
 [centers, radii, blocks] = get_random_convtriangle();
  edge_indices = {{[1, 2], [1, 3], [2, 3]}};
+ radii{1} = radii{1} * 2;
 %[centers, radii, blocks] = get_random_convsegment(D);
 %edge_indices = {{[1, 2]}};
 
@@ -60,7 +61,7 @@ initial_data_points = data_points;
 solid_blocks = {[1]};
 
 %% Optimizaion
-close all;
+%close all;
 centers = initial_centers;
 data_points = initial_data_points;
 global_frame_indices = blocks{1};
@@ -75,8 +76,8 @@ for iter = 1:1
     %% Compute model_points
     switch mode
         case 'depth'
-            [model_indices, model_points, block_indices, axis_projections] = compute_projections_matlab(data_points, centers, blocks, radii);
-            
+            [model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
+                       
             offsets = cell(length(model_points), 1);
             for i = 1:length(offsets), offsets{i}.block_index = block_indices{i}; end
             [offsets, ~] = initialize_attachments(centers, radii, blocks, model_points, offsets, global_frame_indices);
@@ -86,35 +87,34 @@ for iter = 1:1
                 compute_silhouette_projections(centers, blocks, radii, data_points, data_bounding_box, settings);
             
             silh_offsets = cell(length(silh_model_points), 1);
-            for i = 1:length(silh_offsets), silh_offsets{i}.block_index = silh_block_indices{i}; end
-            %silh_offsets = initialize_attachments(centers, blocks, silh_model_points, silh_axis_projections, silh_offsets, global_frame_indices);
+            for i = 1:length(silh_offsets), silh_offsets{i}.block_index = silh_block_indices{i}; end           
             [silh_offsets, ~] = initialize_attachments(centers, radii, blocks, silh_model_points, silh_offsets, global_frame_indices);
     end
     
     
     %% Fixed correspondences
-    for inner_iter = 1:4
+    for inner_iter = 1:5
         
         switch mode
             case 'depth'
-                %[model_points, ~, offsets] = update_attachments(model_points, centers, blocks, offsets, global_frame_indices);
-                [model_points, axis_projections, frames, offsets] = update_attachments(centers, blocks, offsets, global_frame_indices);
+                [model_points, axis_projections, frames, offsets] = update_attachments(centers, blocks, model_points, offsets, global_frame_indices);
                 
                 %% Display
                 display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
-                %mylines(data_points, axis_projections, [0.75, 0.75, 0.75]);
+                display_skeleton(centers, radii, blocks, [], false);
+                 mylines(model_points, axis_projections, [0.75, 0.75, 0.75]);
+                mylines(data_points, model_points, [0.75, 0.75, 0.75]);
                 mypoints(data_points, [0.65, 0.1, 0.5]);
                 mypoints(model_points, [0, 0.7, 1]);
-                %mypoints(axis_projections, 'r');
+                mypoints(axis_projections, 'r');
                 camlight; drawnow;
                 
                 %% Linear system
-                x = linear_system_icp_arap(centers, radii, blocks, model_points, model_indices, axis_projections, ...
+                centers = linear_system_icp_arap(centers, radii, blocks, model_points, offsets, block_indices, axis_projections, ...
                     data_points, edge_indices, restpose_edges, solid_blocks, settings);
                 
-            case 'silhouette'
-                %[silh_model_points, ~, silh_offsets] = update_attachments(model_points, centers, blocks, silh_offsets, global_frame_indices);
-                [silh_model_points, silh_axis_projections, ~, silh_offsets] = update_attachments(centers, blocks, silh_offsets, global_frame_indices);
+            case 'silhouette'                
+                [silh_model_points, silh_axis_projections, ~, silh_offsets] = update_attachments(centers, blocks, silh_model_points, silh_offsets, global_frame_indices);
                 
                 %% Display
                 display_result_convtriangles(centers, [], [], blocks, radii, true);
@@ -125,11 +125,10 @@ for iter = 1:1
                 view([-90, 0]); camlight; drawnow;
                 
                 %% Linear system
-                x = linear_system_icp_arap(centers, radii, blocks, silh_model_points, silh_model_indices, silh_axis_projections, ...
+                centers = linear_system_icp_arap(centers, radii, blocks, silh_model_points, silh_offsets, silh_block_indices, silh_axis_projections, ...
                     silh_data_points, edge_indices, restpose_edges, solid_blocks, settings);
         end
-                
-        for i = 1:length(centers), centers{i} = x(D * (i - 1) + 1: D * i); end
+
     end
     
 end

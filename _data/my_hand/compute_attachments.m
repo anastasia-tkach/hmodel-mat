@@ -171,6 +171,7 @@ named_solid_blocks{end + 1} = {{'palm_middle', 'palm_thumb', 'palm_back'}, ...
     {'palm_ring', 'palm_middle', 'palm_back'}};
 
 solid_blocks = cell(length(named_solid_blocks), 1);
+solid_indicator = zeros(length(solid_blocks), 1);
 for i = 1:length(named_solid_blocks)
     solid_blocks{i} = [];
     for j = 1:length(named_solid_blocks{i})
@@ -185,6 +186,7 @@ for i = 1:length(named_solid_blocks)
             end
             if is_equal == true
                 solid_blocks{i} = [solid_blocks{i}, index];
+                solid_indicator(index) = 1;
                 break;
             end
             
@@ -192,6 +194,17 @@ for i = 1:length(named_solid_blocks)
         
     end
 end
+
+single_solid_blocks = {};
+for i = 1:length(solid_indicator)
+    if solid_indicator(i) == 0
+        single_solid_blocks = [single_solid_blocks, {i}];
+    end
+end
+solid_blocks = [single_solid_blocks'; solid_blocks];
+%solid_blocks = [{1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}; {9}; {10}; {11}; {12}; {13}; {14}; {15}; solid_blocks];
+%solid_blocks = [];
+
 
 
 

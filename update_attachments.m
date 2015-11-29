@@ -1,8 +1,7 @@
-function [model_points, axis_projections, frames, attachments] = update_attachments(centers, blocks, attachments, global_frame_indices)
+function [attached_points, axis_projections, frames, attachments] = update_attachments(centers, blocks, attached_points, attachments, global_frame_indices)
 
 D = length(centers{1});
 
-model_points = cell(length(attachments), 1);
 axis_projections = cell(length(attachments), 1);
 
 frames = compute_model_frames(centers, blocks, global_frame_indices);
@@ -15,7 +14,6 @@ for o = 1:length(attachments)
         axis_projections{o} = axis_projections{o} + attachments{o}.weights(l) * centers{attachments{o}.indices(l)};
     end
     rotation = find_svd_rotation(attachments{o}.frame, frames{attachments{o}.block_index});
-    model_points{o} = axis_projections{o} + rotation' * attachments{o}.offset;
+    attached_points{o} = axis_projections{o} + rotation' * attachments{o}.offset;
 end
 
-save rotation rotation;

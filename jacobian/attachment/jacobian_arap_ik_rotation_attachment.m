@@ -26,15 +26,13 @@ for i = 1:length(edge_indices)
     end
 end
 
-
-k = 1;
 for i = 1:length(solid_blocks)
     E = zeros(length(solid_blocks{i}), D);
     G = zeros(length(solid_blocks{i}), D);
-    l = 1;
-    s = k;
+    l = 1;   
     for j = 1:length(solid_blocks{i})
-        for e = 1:length(edge_indices{solid_blocks{i}(j)})
+        k = edge_ids(solid_blocks{i}(j));   
+        for e = 1:length(edge_indices{solid_blocks{i}(j)});         
             E(l, :) = restpose_edges{k} / norm(restpose_edges{k});
             G(l, :) = edges{k} / norm(edges{k});
             l = l + 1;
@@ -47,11 +45,12 @@ for i = 1:length(solid_blocks)
     if det(R) < 0, U(:, D) = -  U(:, D); R = V * U'; end
     
     for j = 1:length(solid_blocks{i})
+        k = edge_ids(solid_blocks{i}(j));  
         for e = 1:length(edge_indices{solid_blocks{i}(j)})
             if length(solid_blocks{i}) > 1 || length(edge_indices{solid_blocks{i}(j)}) > 1
-                rotations{s} = R;
+                rotations{k} = R;
             end
-            s = s + 1;
+            k = k + 1;
         end
     end
 end
