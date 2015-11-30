@@ -1,7 +1,7 @@
 function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha)
 
 %% Generating the volumetric domain data:
-n = 70; color = double([234; 189; 157]./255);
+n = 50; color = double([234; 189; 157]./255);
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);
@@ -12,9 +12,9 @@ N = numel(x);
 P = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
 distances = zeros(N, 1);
 
-figure; hold on;
+%figure; hold on;
 
-%figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+figure('units','normalized','outerposition',[0 0 1 1]); hold on;
 set(gcf,'color','w');
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);

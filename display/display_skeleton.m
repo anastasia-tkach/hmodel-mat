@@ -17,13 +17,13 @@ for i = 1:length(blocks)
         if D == 3
             scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
             scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
-            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 4);
         end
         
         if D == 2
             scatter(c1(1), c1(2), 100, [0.1, 0.4, 0.7], 'o', 'filled');
             scatter(c2(1), c2(2), 100, [0.1, 0.4, 0.7], 'o', 'filled');
-            line([c1(1), c2(1)], [c1(2), c2(2)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+            line([c1(1), c2(1)], [c1(2), c2(2)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 4);
         end
     end
 end

@@ -27,35 +27,43 @@ joint_angles = joint_angles([1:6, 10:29], :);
 
 %% Show in XYZ
 figure; axis off; axis equal; hold on;
-for i = 1:num_frames
+for i = 330:330
+    disp(i);
+
     filename = [path, sprintf('%3.7d', i-1), '.png'];
-    D = imread(filename);
-    
+    D = imread(filename);    
     filename = [path, 'mask_', sprintf('%3.7d', i), '.png'];
     M = imread(filename);
-    D(M == 0) = 0;
-    
+    D(M == 0) = 0;    
     [U, V] = meshgrid(1:size(D, 2), 1:size(D, 1));
     UVD = zeros(size(D, 1), size(D, 2), 3);
     UVD(:, :, 1) = U;
     UVD(:, :, 2) = V;
     UVD(:, :, 3) = D;
     uvd = reshape(UVD, size(UVD, 1) * size(UVD, 2), 3)';
-    I = convert_uvd_to_xyz(tx, ty, fx, fy, uvd);
+    I = convert_uvd_to_xyz(tx, ty, fx, fy, uvd);     
     
-    xyz = joint_locations(:, i);
-    xyz = reshape(xyz, 3, num_joints);
-    
+    scatter3(I(1, :), I(2, :), I(3, :), 2, [0, 0.8, 0.9], 'filled');
+
     xlim([-120  100]); ylim([-50, 150]); zlim([250, 450]);
     hold on;
-    scatter3(I(1, :), I(2, :), I(3, :), 1, [0, 0.8, 0.9], 'filled');
+
+    %xyz = joint_locations(:, i);
+    %xyz = reshape(xyz, 3, num_joints);
     %scatter3(xyz(1, :), xyz(2, :), xyz(3, :), 20, 'm', 'filled');
     
     segments = create_ik_model('hand');
     [segments, joints] = pose_ik_model(segments, joint_angles(:, i), true, 'hand');
     %[centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode);
-    %display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
-    
-    drawnow; clf; axis off; axis equal;
+    %display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;   
+    %drawnow; clf; axis off; axis equal;
 end
 %close all;
+
+%% Manual callibration
+% tracking_path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\tracking\';
+% load([tracking_path, 'centers.mat']);
+% load([tracking_path, 'radii.mat']);
+% load([tracking_path, 'blocks.mat']);
+% display_result(centers, [], [], blocks, radii, false, 0.5); view([100, -50]); camlight; drawnow;
+% scatter3(I(1, :), I(2, :), I(3, :), 20, [0, 0, 0.9], 'filled');

@@ -1,9 +1,9 @@
 close all; clear;
-pose_id = 1;
+pose_id = 2;
 data_path = 'C:/Users/tkach/OneDrive/EPFL/Code/HModel/_data/my_hand/trial1/';
 
 %% Read the centers locations
-pose1;
+pose2;
 skeleton6;
 
 %% Build the data structures
