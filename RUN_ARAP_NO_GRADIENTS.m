@@ -8,7 +8,7 @@ skeleton = false; mode = 'my_hand';
 
 %% Weights
 damping = 0.1; num_iters = 10;
-w1 = 1; w2 = 1000; w3 = 10000; w4 = 50; w5 = 10;
+w1 = 1; w2 = 1; w3 = 100000; w4 = 50; w5 = 10;
 
 %% Load data
 load([data_path, 'radii.mat']);
@@ -23,15 +23,24 @@ compute_attachments;
 
 %% Reduce size
 
-centers = centers([20, 19, 26, 25]);
-radii = radii([20, 19, 26, 25]);
-solid_blocks = {} ;
-parents = {[2], []};
-blocks = {[1, 2], [1, 3, 4]};
-global_frame_indices = [1, 3, 4];
-attachments = cell(length(centers), 1);
-data_points = generate_convtriangles_points(centers, blocks, radii, 40000);
-rotation_axis = randn(D, 1); rotation_angle = 0.6 * randn; translation_vector = 1 * randn(D, 1);
+% centers = centers([20, 19, 26, 25]);
+% radii = radii([20, 19, 26, 25]);
+% solid_blocks = {} ;
+% parents = {[2], []};
+% blocks = {[1, 2], [1, 3, 4]};
+% global_frame_indices = [1, 3, 4];
+% attachments = cell(length(centers), 1);
+
+% centers = centers([20, 26, 25]);
+% radii = radii([20, 26, 25]);
+% solid_blocks = {} ;
+% parents = {[]};
+% blocks = {[1, 2, 3]};
+% global_frame_indices = [1, 2, 3];
+% attachments = cell(length(centers), 1);
+
+data_points = generate_convtriangles_points(centers, blocks, radii, 400000);
+rotation_axis = randn(D, 1); rotation_angle = 0.6 * randn; translation_vector = 0.5 * randn(D, 1);
 % save rotation_axis rotation_axis; save rotation_angle rotation_angle; save translation_vector translation_vector;
 load rotation_axis; load rotation_angle; load translation_vector;
 
@@ -85,79 +94,83 @@ end
 %     end
 % end
 
+% for i = 1:length(centers)
+%     centers{i} = centers{i} + 10 * randn(D, 1);
+% end
+tic;
 %% Optimizaion
-for iter = 1:1
+for iter = 1:5
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
+    %[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+    %[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
     [model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
     
     %% Display
-    display_result_convtriangles(centers, data_points, model_points, blocks, radii, true); view([100, -50]); camlight; drawnow; 
-    return;
-    %if iter == 2, break; end    
+    display_result(centers, data_points, model_points, blocks, radii, true, 1); view([100, -50]); camlight; drawnow;
+    %if iter == 2, break; end
     
-    %% Solve with gradients    
-%     [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
-%     [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
-%     %[f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
-%     %[f4, J4] = jacobian_joint_limits_new(centers, blocks, restpose_edges, previous_rotations, limits, parents, attachments, mode, D);
-%     %[f5, J5] = silhouette_energy(centers, radii, blocks, data_points, data_bounding_box, settings);
-%     I = eye(D * length(centers), D * length(centers));
-%     LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);
-%     rhs = w1 * (J1' * f1) + w2 * (J2' * f2);
-%     delta = -  LHS \ rhs;
-%     for o = 1:length(centers), centers{o} = centers{o} + delta(D * o - D + 1:D * o); end
-%     [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
-%     [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);  
-%     [model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
+    %% Solve with gradients
+    [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
+    [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
+    %[f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
+    %[f4, J4] = jacobian_joint_limits_new(centers, blocks, restpose_edges, previous_rotations, limits, parents, attachments, mode, D);
+    %[f5, J5] = silhouette_energy(centers, radii, blocks, data_points, data_bounding_box, settings);
+    I = eye(D * length(centers), D * length(centers));
+    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);
+    rhs = w1 * (J1' * f1) + w2 * (J2' * f2);
+    delta = -  LHS \ rhs;
+    for o = 1:length(centers), centers{o} = centers{o} + delta(D * o - D + 1:D * o); end
+    
+    %[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+    %[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+    [model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
     
     %% Compute projections locations
     offsets = cell(length(model_points), 1); for i = 1:length(offsets), offsets{i}.block_index = block_indices{i}; end
-    [offsets, frames] = initialize_attachments(centers, radii, blocks, model_points, offsets, global_frame_indices);
+    [offsets, ~] = initialize_attachments(centers, radii, blocks, model_points, offsets, global_frame_indices);
     
-    for inner_iter = 1:5
-        [model_points, axis_projections, frames, offsets] = update_attachments(centers, blocks, model_points, offsets, global_frame_indices);
+    for inner_iter = 1:4
+        [model_points, axis_projections, ~, offsets] = update_attachments(centers, blocks, model_points, offsets, global_frame_indices);
         
         %% Display
+        %display_result(centers, data_points, model_points, blocks, radii, true, 1);
+        %mylines(data_points, model_points, [0.75, 0.75, 0.75]);
+        %mylines(axis_projections, model_points, [0.75, 0.75, 0.75]);
+        %display_skeleton(centers, radii, blocks, points, false);
+        %mypoints(axis_projections, 'r');
+        %view([100, -50]); camlight; drawnow;
         
-        display_result_convtriangles(centers, data_points, model_points, blocks, radii, true);
-        view([100, -50]); camlight; drawnow;
-
         %% Solve without gradients
-        settings.w2 = 10;
-        centers = linear_system_icp_arap(centers, radii, blocks, model_points, offsets, block_indices, axis_projections, ...
-            data_points, edge_indices, restpose_edges, solid_blocks, settings);
-        
+        %settings.w2 = 100000;
+        %centers = linear_system_icp_arap(centers, radii, blocks, model_points, offsets, block_indices, axis_projections, ...
+            %data_points, edge_indices, restpose_edges, solid_blocks, settings);
+     
+        %% Solve with gradients
+        [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
+        [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
+        %[f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
+        %[f4, J4] = jacobian_joint_limits_new(centers, blocks, restpose_edges, previous_rotations, limits, parents, attachments, mode, D);
+        %[f5, J5] = silhouette_energy(centers, radii, blocks, data_points, data_bounding_box, settings);
+        I = eye(D * length(centers), D * length(centers));
+        LHS = damping * I + w1 * (J1' * J1) + 100000 * w2 * (J2' * J2);
+        rhs = w1 * (J1' * f1) + 100000 * w2 * (J2' * f2);
+        delta = -  LHS \ rhs;
+        for o = 1:length(centers), centers{o} = centers{o} + delta(D * o - D + 1:D * o); end
         [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
         [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
         
         %energies(1) = w1 * (f1' * f1); energies(2) = 10^inner_iter * w2 * (f2' * f2); disp(energies);
-        
-        %% Examine length
-        restpose_length = zeros(length(restpose_edges), 1);
-        current_length = zeros(length(restpose_edges), 1);
-        k = 1;
-        for i = 1:length(edge_indices)
-            for j = 1:length(edge_indices{i})
-                index1 = edge_indices{i}{j}(1); index2 = edge_indices{i}{j}(2);
-                current_length(k) = norm(centers{index2} - centers{index1}) / norm(restpose_edges{k});
-                restpose_length(k) = 1;
-                k = k + 1;
-            end
-        end
-        figure; hold on; axis off; set(gcf,'color','w');
-        stem(restpose_length, 'filled', 'color', [0, 0.7, 1], 'lineWidth', 2);
-        stem(current_length, 'filled', 'color', [0.65, 0.1, 0.5], 'lineWidth', 2);
-        ylim([0, 3]); drawnow;
+        %display_shape_preservation(centers, edge_indices, restpose_edges);
         
     end
-    
-    
 end
-
-
-
+toc
+[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+display_result(centers, data_points, model_points, blocks, radii, true, 1);
+view([100, -50]); camlight; drawnow;
 
 
 

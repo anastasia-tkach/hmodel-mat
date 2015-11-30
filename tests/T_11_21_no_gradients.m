@@ -24,24 +24,25 @@ solid_blocks = {[1]};
 initial_centers = centers;
 
 centers = initial_centers;
-for iter = 1:7
+for iter = 1:5
     
     [model_indices, model_points, block_indices, axis_projections] = compute_projections_matlab(data_points, centers, blocks, radii);
     
     %% Display
     if D == 2,
         display_result_2D(centers, [], blocks, radii, false);
-        display_skeleton(centers, radii, blocks, [], false);
+        display_skeleton(centers, radii, blocks, [], false);       
     end
     if D == 3
-        display_result_convtriangles(centers, [], [], blocks, radii, false);
-        display_skeleton(centers, radii, blocks, [], false);
+        display_result(centers, [], [], blocks, radii, false, 1);
+        display_skeleton(centers, radii, blocks, [], false);        
     end
     
     mylines(model_points, data_points, [0.7, 0.75, 0.8]);
     %mylines(model_points, axis_projections, [0.75, 0.75, 0.75]);
     mypoints(data_points, [0.65, 0.1, 0.5]);
     mypoints(model_points, [0, 0.7, 1]);
+    drawnow;
     
     %% Compute weights
     W = zeros(D * length(data_points), D * length(centers));
@@ -139,7 +140,7 @@ for iter = 1:7
                 L(D * (k - 1) + l, D * (index2 - 1) + l) = 1;
                 L(D * (k - 1) + l, D * (index1 - 1) + l) = -1;
             end
-            b(D * (k - 1) + 1: D * k) = rotations{k} * (centers{index2} - centers{index1});
+            b(D * (k - 1) + 1: D * k) = rotations{k} * restpose_edges{k};
             k = k + 1;
         end
     end        
@@ -152,7 +153,7 @@ for iter = 1:7
     % [L; W] * x = [b; u];
     x = [w1 * W; w2 * L] \ [w1 * u; w2 * b];
         
-    %[x] = linear_system_icp_arap(centers, radii, blocks, model_points, model_indices, axis_projections, data_points, edge_indices, restpose_edges, solid_blocks, settings);
+    %[centers] = linear_system_icp_arap(centers, radii, blocks, model_points, model_indices, axis_projections, data_points, edge_indices, restpose_edges, solid_blocks, settings);
     for i = 1:length(centers)
         centers{i} = x(D * (i - 1) + 1: D * i);
     end
@@ -178,12 +179,14 @@ for iter = 1:5
         display_skeleton(centers, radii, blocks, [], false);
     end
     if D == 3
-        display_result_convtriangles(centers, [], [], blocks, radii, false);
+        display_result(centers, [], [], blocks, radii, false, 1);
+        
     end
     mylines(model_points, data_points, [0.7, 0.75, 0.8]);
     %mylines(model_points, axis_projections, [0.75, 0.75, 0.75]);
     mypoints(data_points, [0.65, 0.1, 0.5]);
     mypoints(model_points, [0, 0.7, 1]);
+    drawnow;
     
     %% Translations energy
     [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);

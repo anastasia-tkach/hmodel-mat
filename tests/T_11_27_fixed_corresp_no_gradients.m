@@ -1,5 +1,5 @@
 close all;
-clear;
+%clear;
 D = 3; RAND_MAX = 32767;
 w1 = 1; w2 = 50; damping = 0.1;
 settings.w1 = w1; settings.w2 = w2;
@@ -13,8 +13,8 @@ settings.RAND_MAX = 32767;
 settings.side = 'front';
 settings.view_axis = 'X';
 closing_radius = 10;
-num_samples = 500000;
-mode = 'silhouette';
+num_samples = 3000;
+mode = 'depth';
 
 %% Generate data
 [centers, radii, blocks] = get_random_convtriangle();
@@ -97,10 +97,10 @@ for iter = 1:1
         
         switch mode
             case 'depth'
-                [model_points, axis_projections, frames, offsets] = update_attachments(centers, blocks, model_points, offsets, global_frame_indices);
+                [model_points, axis_projections, ~, offsets] = update_attachments(centers, blocks, model_points, offsets, global_frame_indices);
                 
                 %% Display
-                display_result_convtriangles(centers, data_points, model_points, blocks, radii, false);
+                display_result(centers, data_points, model_points, blocks, radii, false, 1);
                 display_skeleton(centers, radii, blocks, [], false);
                  mylines(model_points, axis_projections, [0.75, 0.75, 0.75]);
                 mylines(data_points, model_points, [0.75, 0.75, 0.75]);

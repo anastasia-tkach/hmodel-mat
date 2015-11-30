@@ -2,7 +2,7 @@ clc;
 clear;
 close all;
 
-%set_path;
+set_path;
 D = 3;
 
 %% Settings

@@ -207,6 +207,3 @@ solid_blocks = [single_solid_blocks'; solid_blocks];
 
 
 
-
-
-

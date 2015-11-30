@@ -1,11 +1,12 @@
 function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents)
 
-edge_ids = zeros(0, 1);
+
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
 
 %% Compute rotations
 rotations = cell(length(blocks), 1);
 edges = cell(length(blocks), 1);
+edge_ids = zeros(0, 1);
 k = 1;
 for i = 1:length(edge_indices)
     edge_ids(i) = k;
@@ -54,7 +55,6 @@ for i = 1:length(solid_blocks)
         end
     end
 end
-
 
 %% Rotations energy
 

@@ -58,14 +58,14 @@ end
 
 %% Build ARAP system
 
-W = zeros(D * length(data_points), D * length(centers));
+U = zeros(D * length(data_points), D * length(centers));
 for i = 1:length(data_points)
     if isempty(data_points{i}), continue; end
     if isempty(model_points{i}), continue; end
     
     for w = 1:length(blocks{block_indices{i}})
         for l = 1:D
-            W(D * (i - 1) + l, D * (blocks{block_indices{i}}(w) - 1) + l) = offsets{i}.weights(w);
+            U(D * (i - 1) + l, D * (blocks{block_indices{i}}(w) - 1) + l) = offsets{i}.weights(w);
         end
     end
 end
@@ -77,7 +77,7 @@ for i = 1:length(data_points)
     u(D * (i - 1) + 1: D * i) = data_points{i} - (model_points{i} - axis_projections{i});
 end
 
-L = zeros(D * length(restpose_edges), D * length(centers));
+B = zeros(D * length(restpose_edges), D * length(centers));
 b = zeros(D * length(restpose_edges), 1);
 k = 1;
 for i = 1:length(edge_indices)
@@ -85,19 +85,33 @@ for i = 1:length(edge_indices)
         index1 = edge_indices{i}{j}(1);
         index2 = edge_indices{i}{j}(2);
         for l = 1:D
-            L(D * (k - 1) + l, D * (index2 - 1) + l) = 1;
-            L(D * (k - 1) + l, D * (index1 - 1) + l) = -1;
+            B(D * (k - 1) + l, D * (index2 - 1) + l) = 1;
+            B(D * (k - 1) + l, D * (index1 - 1) + l) = -1;
         end
-        b(D * (k - 1) + 1: D * k) = rotations{k} * (centers{index2} - centers{index1});
+        b(D * (k - 1) + 1: D * k) = rotations{k} * restpose_edges{k};
         k = k + 1;
     end
 end
 
 
-% [L; W] * x = [b; u];
-x = [w1 * W; w2 * L] \ [w1 * u; w2 * b];
+% [U; B] * x = [u; b];
+x = [w1 * U; w2 * B] \ [w1 * u; w2 * b];
+disp([norm(w1 * U * x - w1 * u), norm(w2 * B * x - w2 * b)]);
 
-disp(norm([w1 * W; w2 * L] * x - [w1 * u; w2 * b]));
+for i = 1:length(centers)   
+    centers{i} = x(D * (i - 1) + 1: D * i);
+end
 
 
-for i = 1:length(centers), centers{i} = x(D * (i - 1) + 1: D * i); end
+% myline(centers{1}, centers{1} + norm(restpose_edges{1}) * (previous_centers{2} - previous_centers{1}) / norm(previous_centers{2} - previous_centers{1}), 'g');
+% myline(centers{1}, centers{1} + norm(restpose_edges{2}) * (previous_centers{3} - previous_centers{1}) / norm(previous_centers{3} - previous_centers{1}), 'g');
+% myline(centers{2}, centers{2} + norm(restpose_edges{3}) * (previous_centers{3} - previous_centers{2}) / norm(previous_centers{3} - previous_centers{2}), 'g');
+% 
+% [model_points, axis_projections, ~, offsets] = update_attachments(centers, blocks, model_points, offsets, [1, 2, 3]);
+% display_result(centers, data_points, model_points, blocks, radii, true, 0.3);
+% mylines(data_points, model_points, [0.75, 0.75, 0.75]);
+% mylines(axis_projections, model_points, [0.75, 0.75, 0.75]);
+% display_skeleton(centers, radii, blocks, data_points, false);
+% mypoints(axis_projections, 'r');
+% view([100, -50]); camlight;
+% drawnow;
