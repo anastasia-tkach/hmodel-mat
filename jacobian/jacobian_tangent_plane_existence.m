@@ -6,6 +6,8 @@ dfactor = 0;
 one = 1;
 done =  0;
 
+
+
 for var = 1:length(variables)
     variable = variables{var};
     switch variable

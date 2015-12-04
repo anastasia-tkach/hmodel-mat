@@ -26,10 +26,10 @@ for k = 1:length(I), model_points{k} = squeeze(rendered_model(I(k), J(k), :)); e
 % mypoints(model_points_2D, [0, 0.7, 1]);
 % mypoints(data_points_2D, [1, 0.7, 0.1]);
 
-%display_result_convtriangles(centers, points, [], blocks, radii, true);
-%mypoints(model_points, [0, 0.7, 1]);
-%mypoints(closest_data_points, [0.4, 0, 0.4]);
-%view([-180, -90]); camlight; drawnow;
+% display_result(centers, points, [], blocks, radii, true, 0.5);
+mypoints(model_points, 'y');
+% mypoints(closest_data_points, [0.4, 0, 0.4]);
+% view([-180, -90]); camlight; drawnow;
 
 %% Move behind the data silhouette
 attachments = cell(length(centers), 1);

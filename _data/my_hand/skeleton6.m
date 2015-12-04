@@ -100,10 +100,12 @@ named_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_r
 named_blocks{end + 1} = {'wrist_top_left', 'wrist_top_right', 'palm_back'};
 named_blocks{end + 1} = {'wrist_top_left', 'wrist_top_right', 'palm_attachment'};
 
-named_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'}; named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
-named_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'}; named_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
-named_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; named_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
-
+named_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'}; 
+named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
+named_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'}; 
+named_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
+named_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; 
+named_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
 named_blocks{end + 1} = {'thumb_membrane', 'palm_thumb', 'thumb_base'};
 
 %% Solids

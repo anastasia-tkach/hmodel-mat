@@ -22,6 +22,11 @@ end
 
 %display_result_convtriangles(centers, [], [], blocks, radii, false);
 
+%% Remove wrist
+if length(blocks) > 32
+    blocks(26:29) = [];
+end
+named_blocks(26:29) = [];
 %% Describe attachments
 attachments_map = containers.Map();
 
@@ -36,8 +41,8 @@ attachments_map('palm_ring') = {'ring_bottom', 'ring_base'};
 attachments_map('palm_middle') = {'middle_bottom', 'middle_base'};
 attachments_map('palm_index') = {'index_bottom', 'index_base'};
 
-attachments_map('wrist_bottom_left') = {'wrist_top_left', 'palm_back', 'wrist_top_right'};
-attachments_map('wrist_bottom_right') = {'wrist_top_left', 'palm_back', 'wrist_top_right'};
+% attachments_map('wrist_bottom_left') = {'wrist_top_left', 'palm_back', 'wrist_top_right'};
+% attachments_map('wrist_bottom_right') = {'wrist_top_left', 'palm_back', 'wrist_top_right'};
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAYBE REPLACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -159,13 +164,16 @@ end
 %% Describe solid blocks
 
 named_solid_blocks = {};
-named_solid_blocks{end + 1} = {{'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'}, ...
-    {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'}, ...
-    {'wrist_top_left', 'wrist_top_right', 'palm_back'}, ...
-    {'wrist_top_left', 'wrist_top_right', 'palm_attachment'}};
+% named_solid_blocks{end + 1} = {{'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'}, ...
+%     {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'}, ...
+%     {'wrist_top_left', 'wrist_top_right', 'palm_back'}, ...
+%     {'wrist_top_left', 'wrist_top_right', 'palm_attachment'}};
 named_solid_blocks{end + 1} = {{'ring_membrane', 'middle_membrane', 'palm_ring'}, ...
     {'palm_ring', 'palm_middle', 'middle_membrane'}};
-named_solid_blocks{end + 1} = {{'palm_middle', 'palm_thumb', 'palm_back'}, ...
+named_solid_blocks{end + 1} = {
+    {'middle_base', 'palm_attachment'}, ...
+    {'ring_base', 'palm_attachment'}, ...
+    {'palm_middle', 'palm_thumb', 'palm_back'}, ...
     {'palm_thumb', 'thumb_base', 'palm_back'}, ...
     {'palm_right', 'palm_ring', 'palm_back'}, ...
     {'palm_ring', 'palm_middle', 'palm_back'}};
@@ -202,8 +210,38 @@ for i = 1:length(solid_indicator)
     end
 end
 solid_blocks = [single_solid_blocks'; solid_blocks];
-%solid_blocks = [{1}; {2}; {3}; {4}; {5}; {6}; {7}; {8}; {9}; {10}; {11}; {12}; {13}; {14}; {15}; solid_blocks];
-%solid_blocks = [];
 
+%% Describe elastic blocks
+
+named_elastic_blocks = {};
+named_elastic_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'};
+named_elastic_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
+named_elastic_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'};
+named_elastic_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
+named_elastic_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'};
+named_elastic_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
+named_elastic_blocks{end + 1} = {'thumb_membrane', 'palm_thumb', 'thumb_base'};
+
+elastic_blocks = zeros(length(named_elastic_blocks), 1);
+solid_indicator = zeros(length(elastic_blocks), 1);
+for i = 1:length(named_elastic_blocks)
+    
+    current_name = sort(named_elastic_blocks{i});
+    
+    for index = 1:length(named_blocks)
+        block_name = sort(named_blocks{index});
+        if length(current_name) ~= length(block_name), continue; end
+        is_equal = true;
+        for k = 1:length(current_name)
+            if ~strcmp(current_name{k}, block_name{k}), is_equal = false; end
+        end
+        if is_equal == true
+            elastic_blocks(i) = index;
+            break;
+        end
+        
+    end
+    
+end
 
 

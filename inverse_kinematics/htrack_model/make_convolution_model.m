@@ -34,10 +34,10 @@ for i = 1:length(segments)
 end
 radii{1} = 0.3 * radii{3} + randn/1000; radii{2} = 0.3 * radii{4} + randn/1000;
 radii{3} = 0.3 * radii{3} + randn/1000; radii{4} = 0.3 * radii{4} + randn/1000;
-centers{1} = centers{3} - 25 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
-centers{2} = centers{4} - 25 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
-centers{3} = centers{3} + 25 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
-centers{4} = centers{4} + 25 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
+centers{1} = centers{3} - 20 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
+centers{2} = centers{4} - 20 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
+centers{3} = centers{3} + 20 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
+centers{4} = centers{4} + 20 * segments{1}.global(1:3, 1:3) * [1; 0; 0];
 blocks{1} = [1, 2, 3]; blocks{2} = [2, 3, 4];
 
 switch mode

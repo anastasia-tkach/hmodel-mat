@@ -1,4 +1,4 @@
-function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents)
+function [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, elastic_blocks, D, previous_rotations, attachments, parents)
 
 
 rotation = @(x) [cos(x), -sin(x); sin(x), cos(x)];
@@ -78,6 +78,11 @@ for i = 1:length(edge_indices)
         
         full_rotations{k} = previous_parent_rotation' * parent_rotation * rotations{k};
         e = full_rotations{k} * restpose_edges{k};
+        
+        if ismember(i, elastic_blocks)
+            continue;
+            e = full_rotations{k} * norm(c - b) * restpose_edges{k}/norm(restpose_edges{k});
+        end
         
         %e = rotations{k} * restpose_edges{k};
         

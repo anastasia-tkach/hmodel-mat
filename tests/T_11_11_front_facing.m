@@ -2,9 +2,9 @@ close all;
 clear
 D = 3; RAND_MAX = 32767;
 settings.fov = 15;
-downscaling_factor = 6;
+downscaling_factor = 16;
 settings.H = 480/downscaling_factor;
-settings.W = 636/downscaling_factor;
+settings.W = 640/downscaling_factor;
 settings.D = D;
 settings.sparse_data = false;
 settings.RAND_MAX = 32767;
@@ -17,7 +17,7 @@ mode = 'synthetic';
 % [centers, radii, blocks] = get_random_convtriangle();
 % edge_indices = {{[1, 2], [1, 3], [2, 3]}};
 
-[centers, radii, blocks] = get_random_convsegment();
+[centers, radii, blocks] = get_random_convsegment(D);
 edge_indices = {{[1, 2]}};
 
 data_bounding_box = compute_model_bounding_box(centers, radii);
@@ -34,7 +34,7 @@ data_points = model_points;
 %% Generate model
 rotation_axis = randn(D, 1);
 rotation_angle = 0.2 * randn;
-translation_vector = - rand * [0; 0; 1];
+translation_vector = - 0.5 * rand * [0; 0; 1];
 R = makehgtform('axisrotate', rotation_axis, rotation_angle);
 T = makehgtform('translate', translation_vector);
 for i = 1:length(centers)
@@ -63,11 +63,11 @@ rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix
 model_points = cell(length(I), 1);
 for k = 1:length(I), model_points{k} = squeeze(rendered_model(I(k), J(k), :)); end
 
-display_result_convtriangles(centers, [], [], blocks, radii, false);
+display_result(centers, [], [], blocks, radii, false, 0.5);
 %mypoints(model_points, 'c');
 
 [model_indices, model_points, block_indices] = compute_projections_matlab(data_points, centers, blocks, radii);
-normals = compute_model_normals_temp(model_points, centers, blocks, radii); 
+normals = compute_model_normals_temp(model_points, centers, blocks, radii);
 
 %myline(centers{1}, centers{2}, 'b');
 view([-180, -90]); camlight; drawnow;
@@ -84,47 +84,45 @@ for j = 1:length(data_points)
     l = (camera_center - m) / norm(camera_center - m);
     
     if n' * l < 0
-        %if length(model_indices{j}) == 1
-            %k = radii{model_indices{j}(1)} * n;
-            %f = m - l * (k' * l);
-            %i = centers{model_indices{j}(1)} + radii{model_indices{j}(1)} * (f - centers{model_indices{j}(1)}) / norm(f - centers{model_indices{j}(1)});
-            
-        %else
-            [index, q, s, is_inside] = projection(m, blocks{1}, radii, centers, []);
-            %c = (centers{model_indices{j}(1)} - centers{model_indices{j}(2)}) / norm(centers{model_indices{j}(1)} - centers{model_indices{j}(2)});
-            
-            %% Find intersection of two planes
-            n1 = l; p1  = s;
-            n2 = c; p2 = s + ((m - s)' * c) * c;
-            A = [n1'; n2']; b = [n1' * p1; n2' * p2];
-            x = A\b;
-            a = cross(n1, n2) / norm(cross(n1, n2));
-            
-            %% Find line - circle intersection
-            b = x - p2;
-            r = norm(m - p2);
-            polynomial = [a' * a; 2 * b' * a; b' * b - r^2];
-            t = roots(polynomial);
-            
-            i1 = x + t(1) * a;
-            i2 = x + t(2) * a;
-            
-            if norm(d - i1) < norm(d - i2), i = i1;
-            else i = i2; end
-            if ~isreal(i), continue; end
-            
-        %end
+        
+        [index, q, s, is_inside] = projection(m, blocks{1}, radii, centers, []);
+        %c = (centers{model_indices{j}(1)} - centers{model_indices{j}(2)}) / norm(centers{model_indices{j}(1)} - centers{model_indices{j}(2)});
+        
+        %% Find intersection of two planes
+        n1 = l; p1  = s;
+        n2 = c; p2 = s + ((m - s)' * c) * c;
+        A = [n1'; n2']; b = [n1' * p1; n2' * p2];
+        x = A\b;
+        a = cross(n1, n2) / norm(cross(n1, n2));
+        
+        %% Find line - circle intersection
+        b = x - p2;
+        r = norm(m - p2);
+        polynomial = [a' * a; 2 * b' * a; b' * b - r^2];
+        t = roots(polynomial);
+        
+        i1 = x + t(1) * a;
+        i2 = x + t(2) * a;
+        
+        if norm(d - i1) < norm(d - i2), i = i1;
+        else i = i2; end
+        if ~isreal(i), continue; end
+        
         new_model_points{end + 1} = i;
+        new_data_points{end + 1} = d;
     else
-       new_model_points{end + 1} = m;       
+        new_model_points{end + 1} = m;
+        new_data_points{end + 1} = d;
     end
 end
 
-
-mypoints(data_points, [0.65, 0.1, 0.5]);
+mypoints(new_data_points, [0.65, 0.1, 0.5]);
 mypoints(new_model_points, [0, 0.7, 1]);
-mylines(new_model_points, data_points, [0.75, 0.75, 0.75]);
+mylines(new_model_points, new_data_points, [0.75, 0.75, 0.75]);
 view([-180, -90]); camlight; drawnow;
+
+model_points = new_model_points;
+data_points = new_data_points;
 
 % myline(s, s + 0.5 * l, 'g');
 % myline(m, s, 'k');

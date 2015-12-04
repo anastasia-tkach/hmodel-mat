@@ -1,6 +1,6 @@
 clc;
 clear;
-close all;
+%close all;
 
 set_path;
 D = 3;
@@ -11,7 +11,7 @@ settings.mode = 'fitting';
 settings.sparse_data = false;
 settings.closing_radius = 10;
 settings.fov = 15;
-downscaling_factor = 12;
+downscaling_factor = 2;
 settings.H = 480/downscaling_factor;
 settings.W = 636/downscaling_factor;
 %settings.W = 640/downscaling_factor;

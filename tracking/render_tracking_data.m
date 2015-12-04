@@ -29,6 +29,7 @@ for i = 1:length(points)
 end
 
 rendered_data = imfill(imclose(rendered_data, strel('disk', closing_radius, 0)));
+rendered_data = imdilate(rendered_data,  strel('disk', 2, 8));
 
 rendered_data([1:min_r, max_r:end], :) = 0; rendered_data(:, [1:min_c, max_c:end]) = 0;
 %figure; imshow(rendered_data, []); drawnow;
