@@ -67,7 +67,7 @@ display_result(centers, [], [], blocks, radii, false, 0.5);
 %mypoints(model_points, 'c');
 
 [model_indices, model_points, block_indices] = compute_projections_matlab(data_points, centers, blocks, radii);
-normals = compute_model_normals_temp(model_points, centers, blocks, radii);
+normals = compute_model_normals_temp(centers, blocks, radii, model_points, model_indices);
 
 %myline(centers{1}, centers{2}, 'b');
 view([-180, -90]); camlight; drawnow;

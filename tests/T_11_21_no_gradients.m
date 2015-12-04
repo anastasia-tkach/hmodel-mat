@@ -1,9 +1,9 @@
 close all; clear;
-D = 3;
-w1 = 1; w2 = 50; damping = 0.1;
+D = 2;
+w1 = 1; w2 = 10; damping = 0.1;
 settings.D = D; settings.w1 = w1; settings.w2 = w2;
-%[centers, radii, blocks] = get_random_convsegment(D);
-[centers, radii, blocks] = get_random_convtriangle();
+[centers, radii, blocks] = get_random_convsegment(D);
+%[centers, radii, blocks] = get_random_convtriangle();
 if D == 2, num_samples = 2000; end
 if D == 3, num_samples = 20000; end
 [data_points] = get_transformed_points(centers, blocks, radii, 0.1, num_samples);
@@ -31,11 +31,11 @@ for iter = 1:5
     %% Display
     if D == 2,
         display_result_2D(centers, [], blocks, radii, false);
-        display_skeleton(centers, radii, blocks, [], false);       
+        display_skeleton(centers, radii, blocks, [], false, []);       
     end
     if D == 3
         display_result(centers, [], [], blocks, radii, false, 1);
-        display_skeleton(centers, radii, blocks, [], false);        
+        display_skeleton(centers, radii, blocks, [], false, []);        
     end
     
     mylines(model_points, data_points, [0.7, 0.75, 0.8]);
@@ -162,6 +162,7 @@ for iter = 1:5
     
 end
 
+
 %% Previous approach
 
 centers = initial_centers;
@@ -176,10 +177,10 @@ for iter = 1:5
     %% Display
     if D == 2,
         display_result_2D(centers, [], blocks, radii, false);
-        display_skeleton(centers, radii, blocks, [], false);
+        display_skeleton(centers, radii, blocks, [], false, []);
     end
     if D == 3
-        display_result(centers, [], [], blocks, radii, false, 1);
+        display_result(centers, [], [], blocks, radii, false, 1, []);
         
     end
     mylines(model_points, data_points, [0.7, 0.75, 0.8]);
@@ -192,8 +193,8 @@ for iter = 1:5
     [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
     
     %% Rotations energy
-    [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
-    
+    %[f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, D, previous_rotations, attachments, parents);
+    [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, [], D, previous_rotations, attachments, parents);
     %% Compute update
     I = eye(D * length(centers), D * length(centers));
     LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2);

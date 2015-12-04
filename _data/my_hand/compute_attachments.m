@@ -1,3 +1,4 @@
+data_path = '_data/my_hand/trial1/';
 load([data_path, 'names_map.mat']);
 load([data_path, 'named_blocks.mat']);
 

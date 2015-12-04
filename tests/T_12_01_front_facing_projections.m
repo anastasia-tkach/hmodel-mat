@@ -1,67 +1,67 @@
-% close all;
-% clear
-% D = 3; RAND_MAX = 32767;
-% settings.fov = 15;
-% downscaling_factor = 12;
-% settings.H = 480/downscaling_factor;
-% settings.W = 636/downscaling_factor;
-% settings.D = D;
-% settings.sparse_data = false;
-% settings.RAND_MAX = 32767;
-% settings.side = 'front';
-% settings.view_axis = 'Z';
-% closing_radius = 10;
-% mode = 'synthetic';
-% 
-% %% Generate data
-% [centers, radii, blocks] = get_random_convtriangle();
-% edge_indices = {{[1, 2], [1, 3], [2, 3]}};
-% 
-% % [centers, radii, blocks] = get_random_convsegment(D);
-% % edge_indices = {{[1, 2]}};
-% 
-% data_bounding_box = compute_model_bounding_box(centers, radii);
-% model_points  = [];
-% [raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
-% camera_center = [0; 0; 1.5 * camera_center(3)];
-% rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
-% 
-% [I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
-% N = length(model_points);
-% model_points = [model_points; cell(length(I), 1)];
-% for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)); end
-% data_points = model_points;
-% 
-% %% Generate model
-% rotation_axis = randn(D, 1);
-% rotation_angle = 0.2 * randn;
-% translation_vector = - 0.5 * rand * [0; 0; 1];
-% R = makehgtform('axisrotate', rotation_axis, rotation_angle);
-% T = makehgtform('translate', translation_vector);
-% for i = 1:length(centers)
-%     centers{i} = transform(centers{i}, R);
-%     centers{i} = transform(centers{i}, T);
-% end
-% 
-% %% Compute projections
-% close all;
-% attachments = cell(length(centers), 1); solid_blocks = []; parents = {[]};
-% damping = 0.1; num_iters = 10;
-% w1 = 1; w2 = 1; w3 = 100000; w4 = 50; w5 = 10;
-% global_frame_indices = [1, 2, 3];
-% 
-% restpose_edges = cell(length(blocks), 1); k = 1;
-% for i = 1:length(blocks)
-%     index = nchoosek(blocks{i}, 2);
-%     for j = 1:size(index, 1)
-%         edge_indices{i}{j} = [index(j, :)];
-%         restpose_edges{k} = centers{edge_indices{i}{j}(2)} - centers{edge_indices{i}{j}(1)};
-%         previous_rotations{k} = eye(3, 3);
-%         k = k + 1;
-%     end
-% end
-% 
-% initial_centers = centers;
+close all;
+clear
+D = 3; RAND_MAX = 32767;
+settings.fov = 15;
+downscaling_factor = 12;
+settings.H = 480/downscaling_factor;
+settings.W = 636/downscaling_factor;
+settings.D = D;
+settings.sparse_data = false;
+settings.RAND_MAX = 32767;
+settings.side = 'front';
+settings.view_axis = 'Z';
+closing_radius = 10;
+mode = 'synthetic';
+
+%% Generate data
+[centers, radii, blocks] = get_random_convtriangle();
+edge_indices = {{[1, 2], [1, 3], [2, 3]}};
+
+% [centers, radii, blocks] = get_random_convsegment(D);
+% edge_indices = {{[1, 2]}};
+
+data_bounding_box = compute_model_bounding_box(centers, radii);
+model_points  = [];
+[raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
+camera_center = [0; 0; 1.5 * camera_center(3)];
+rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
+
+[I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
+N = length(model_points);
+model_points = [model_points; cell(length(I), 1)];
+for k = 1:length(I), model_points{N + k} = squeeze(rendered_model(I(k), J(k), :)); end
+data_points = model_points;
+
+%% Generate model
+rotation_axis = randn(D, 1);
+rotation_angle = 0.2 * randn;
+translation_vector = - 0.5 * rand * [0; 0; 1];
+R = makehgtform('axisrotate', rotation_axis, rotation_angle);
+T = makehgtform('translate', translation_vector);
+for i = 1:length(centers)
+    centers{i} = transform(centers{i}, R);
+    centers{i} = transform(centers{i}, T);
+end
+
+%% Compute projections
+close all;
+attachments = cell(length(centers), 1); solid_blocks = []; parents = {[]};
+damping = 0.1; num_iters = 10;
+w1 = 1; w2 = 1; w3 = 100000; w4 = 50; w5 = 10;
+global_frame_indices = [1, 2, 3];
+
+restpose_edges = cell(length(blocks), 1); k = 1;
+for i = 1:length(blocks)
+    index = nchoosek(blocks{i}, 2);
+    for j = 1:size(index, 1)
+        edge_indices{i}{j} = [index(j, :)];
+        restpose_edges{k} = centers{edge_indices{i}{j}(2)} - centers{edge_indices{i}{j}(1)};
+        previous_rotations{k} = eye(3, 3);
+        k = k + 1;
+    end
+end
+
+initial_centers = centers;
 
 %% Optimization
 centers = initial_centers;

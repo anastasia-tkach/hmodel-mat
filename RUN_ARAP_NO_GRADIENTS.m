@@ -1,4 +1,4 @@
-
+close all;
 clear;
 settings_default; display_data = true;
 data_path = 'tracking/test4/';
@@ -25,13 +25,13 @@ load([data_path, 'radii.mat']); load([data_path, 'centers.mat']);
 load([data_path, 'blocks.mat']); [blocks] = reindex(radii, blocks);
 
 display_result(centers, [], [], blocks, radii, false, 0.9);
+mypoints(data_points, [0.65, 0.1, 0.5]);
 %display_skeleton(centers, radii, blocks, data_points, false);
 view([180, -90]); camlight; drawnow;
-return
 
-data_path = '_data/my_hand/trial1/';
 compute_attachments;
-[attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, global_frame_indices);
+names_map_keys = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back'};
+[attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 
 
 %% Reduce size
@@ -114,8 +114,8 @@ for iter = 1:5
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
-    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
-    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
+    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
     [model_indices, model_points, ~] = compute_projections(data_points, centers, blocks, radii);
     model_normals = compute_model_normals_temp(centers, blocks, radii, model_points, model_indices);
     for i = 1:length(model_points)
@@ -208,8 +208,8 @@ for iter = 1:5
     %}
 end
 
-[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
-[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
+[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
+[centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 
 display_result(centers, data_points, model_points, blocks, radii, false, 0.8);
 mypoints(data_points, [0.65, 0.1, 0.5]);

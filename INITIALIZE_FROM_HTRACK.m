@@ -1,10 +1,10 @@
 clear;
 close all;
 D = 3;
-mode = 'hand';
+mode = 'my_hand';
 
 %% Load htrack data
-K = 500;
+K = 390;
 initialized_path = 'tracking/test4/';
 
 num_joints = 21; num_entries = num_joints * D; num_thetas = 29;
@@ -44,7 +44,7 @@ end
 
 %% Display
 display_result(centers, [], [], blocks(16:end-1), radii, false, 0.3);
-display_skeleton(centers, radii, blocks, [], false);
+display_skeleton(centers, radii, blocks, [], false, []);
 segments = create_ik_model('hand');
 [segments, joints] = pose_ik_model(segments, theta, true, 'hand');
 [htrack_centers, htrack_radii, htrack_blocks, ~, ~] = make_convolution_model(segments, 'hand');
@@ -67,6 +67,7 @@ if hmodel_orientation && htrack_orientation == false
     hmodel_frame(:, 2) = -hmodel_frame(:, 2);
     hmodel_frame(:, 3) = -hmodel_frame(:, 3);
 end
+
 %{
 factor = 10;
 myline(htrack_translation, htrack_translation + factor * htrack_frame(:, 1), 'm');
@@ -117,7 +118,7 @@ end
 
 figure; axis off; axis equal; hold on;
 %segments = create_ik_model('hand'); pose_ik_model(segments, theta, true, 'hand');
-display_skeleton(centers, radii, blocks, [], false);
+display_skeleton(centers, radii, blocks, [], false, []);
 
 %% Run ARAP
 damping = 0.1; w1 = 1; w2 = 1;
@@ -131,13 +132,13 @@ for inner_iter = 1:20
         a = 100;
     end
     [centers, axis_projections, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
-    %figure; axis off; axis equal; hold on; display_skeleton(centers, radii, blocks, [], false);
+    %figure; axis off; axis equal; hold on; display_skeleton(centers, radii, blocks, [], false, []);
     [centers, axis_projections, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
     
     %% Display
     figure; axis off; axis equal; hold on;
     %segments = create_ik_model('hand'); pose_ik_model(segments, theta, true, 'hand');
-    display_skeleton(centers, radii, blocks, [], false);
+    display_skeleton(centers, radii, blocks, [], false, []);
     for i = 1:length(hmodel_indices), q{i} = centers{hmodel_indices(i)}; end
     for i = 1:length(attachments)
         if ~isempty(attachments{i}), myline(axis_projections{i}, centers{i}, 'g'); end
