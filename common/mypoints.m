@@ -19,7 +19,7 @@ if D == 3
         end
     end
     P = P(1:k, :);
-    scatter3(P(:, 1), P(:, 2), P(:, 3), 15, color, 'o', 'filled');
+    scatter3(P(:, 1), P(:, 2), P(:, 3), 5, color, 'o', 'filled');
 end
 if D == 2
     P = zeros(length(points), 2);

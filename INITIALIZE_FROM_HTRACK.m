@@ -4,7 +4,7 @@ D = 3;
 mode = 'my_hand';
 
 %% Load htrack data
-K = 390;
+K = 171;
 initialized_path = 'tracking/test4/';
 
 num_joints = 21; num_entries = num_joints * D; num_thetas = 29;
@@ -57,6 +57,7 @@ points = cell(length(names_map_keys), 1);
 for i = 1:length(names_map_keys)
     points{i} = centers{names_map(names_map_keys{i})};
 end
+
 [hmodel_frame, hmodel_translation] = compute_principle_axis(points, true);
 [htrack_frame, htrack_translation] = compute_principle_axis(htrack_centers([21:24]), true);
 
