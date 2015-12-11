@@ -1,6 +1,6 @@
 function [] = draw_sphere(center, radius, color)
 num = 60;
-face_alpha = 1;
+face_alpha = 0.5;
 [rho, theta] = meshgrid(linspace(0, radius, num), linspace(0, 2*pi, num));
 x0 = rho .* cos(theta);
 y0 = rho .* sin(theta);
