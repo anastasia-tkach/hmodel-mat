@@ -19,9 +19,8 @@ static const void* ZERO_BUFFER_OFFSET = 0;
 
 const int window_w = 1024;
 const int window_h = 768;
-
-const int window_w = 1024;
-const int window_h = 768;
+GLuint  ModelView;
+GLuint Projection;
 
 GLuint textureID;
 
@@ -245,7 +244,12 @@ void init(){
     
     /// Specify window bounds
     glUniform1f(glGetUniformLocation(programID, "window_h"), window_h);    
-    glUniform1f(glGetUniformLocation(programID, "window_w"), window_w);    
+    glUniform1f(glGetUniformLocation(programID, "window_w"), window_w);   
+
+	// Get camera matrices
+	ModelView = glGetUniformLocation( programID, "ModelView" );
+	Projection = glGetUniformLocation( programID, "Projection" );
+	//glUniformMatrix4fv(ModelView, 1, GL_TRUE, model_view);
     
     
 #ifdef WITH_TEXTURE

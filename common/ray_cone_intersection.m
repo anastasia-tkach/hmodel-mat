@@ -1,4 +1,4 @@
-function [i] = ray_cone_intersection(pa, va, alpha, p, v)
+function [i, normal] = ray_cone_intersection(pa, va, alpha, p, v)
 D = length(p);
 
 cos2 = cos(alpha)^2;
@@ -34,5 +34,12 @@ end
 if (abs(t1) > abs(t2))
     i = i2;
 end
+
+%% Find normal
+c = pa - va;
+a = i - c;
+b = (i - pa)/norm(i - pa);
+normal = a - a' * b * b;
+normal = normal / norm(normal);
 
 

@@ -1,6 +1,5 @@
-function [] = write_blocks_to_file(blocks)
+function [] = write_blocks_to_file(path, blocks)
 
-path = 'C:\Users\tkach\OneDrive\EPFL\Code\HandModel\_cpp\Input\';
 fid = fopen([path, 'blocks.txt'],'wt');
 
 for i = 1:length(blocks)

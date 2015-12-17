@@ -1,4 +1,4 @@
-function [i] = ray_sphere_intersection(c, r, p, v)
+function [i, normal] = ray_sphere_intersection(c, r, p, v)
 D = length(p);
 
 A = v' * v;
@@ -23,4 +23,8 @@ if (norm(i2 - p) < norm(i1 - p))
     i = i2;
 end
 
+%% Compute normal
+
+normal = i - c;
+normal = normal / norm(normal);
 

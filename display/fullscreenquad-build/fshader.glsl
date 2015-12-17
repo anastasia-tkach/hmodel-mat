@@ -8,6 +8,11 @@ uniform float window_h;
 uniform float window_w;
 uniform vec3 camera_position;
 
+in vec4 gl_FragCoord;
+out float gl_FragDepth;
+in vec2 gl_PointCoord;
+in int gl_PrimitiveID;
+
 void main() {
     vec2 pixel = vec2(window_w, window_h) * uv;
     vec2 center = vec2(window_w/2,window_h/2);

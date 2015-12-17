@@ -58,12 +58,6 @@ void get_input_matrix(string name, MatrixXd & input) {
 					input(i, j) = numbers[k];
 				}
 			}
-			/*for (size_t i = 0; i < input.rows(); i++) {
-			for (size_t j = 0; j < input.cols(); j++) {
-			input(i, j) = numbers[i * input.cols() + j];
-			}
-			}
-			}*/
 		}
 		inputfile.close();
 	}

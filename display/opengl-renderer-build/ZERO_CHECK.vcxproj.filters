@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-build\CMakeFiles\a0871f448210b1de3a6f0be350db1d22\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{7E20FF95-A491-48A6-B089-0C80FDDAAF37}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
