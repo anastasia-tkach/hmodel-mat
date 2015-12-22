@@ -36,10 +36,10 @@
 
 %% Sphere in parametric form
 close all;
-theta = linspace(0, 2 * pi, 50);
-phi = linspace(0, pi, 30);
+theta = linspace(0, 2 * pi, 20);
+phi = linspace(0, pi, 15);
 
-figure; axis equal; hold on;
+figure; axis equal; hold on; axis off;
 p = {};
 for i = 1:length(theta)
     for j = 1:length(phi)
@@ -50,18 +50,6 @@ for i = 1:length(theta)
     end
 end
 mypoints(p, 'b');
-return
-%% Experiments
-theta = 0;
-x = cos(phi);
-y = 0;
-z = sin(phi);
-
-phi = 1;
-x = 0;
-y = sin(theta);
-z = cos(theta);
-
 
 
 

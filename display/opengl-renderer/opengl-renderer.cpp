@@ -1,16 +1,7 @@
 #pragma once
-
-///--- Standard library IO
 #include <iostream>
+#include <cstdio>
 #include <cassert>
-
-///--- On some OSs the exit flags are not defined
-#ifndef EXIT_SUCCESS
-#define EXIT_SUCCESS 0
-#endif
-#ifndef EXIT_FAILURE
-#define EXIT_FAILURE 1
-#endif
 
 #include <GL/glew.h> 
 #include <GL/glfw.h>
@@ -28,16 +19,39 @@
 using namespace opengp;
 using namespace Eigen;
 using namespace std;
-
+int D = 3;
 int window_left = 0;
 int window_bottom = 0;
 int window_width = 1920;
 int window_height = 1080;
 
-GLuint vertex_array;
-GLuint program_id;
-GLuint memory_buffer;
-GLuint texture_id;
+string path = "C:\\Users\\tkach\\OneDrive\\EPFL\\Code\\HModel\\display\\opengl-renderer-build\\Input\\";
+
+void get_input_matrix(string name, MatrixXd & input) {
+	FILE *fp = fopen((path + name + ".txt").c_str(), "r");
+	int x, y;
+	fscanf(fp, "%d%d", &x, &y);
+	input = MatrixXd::Zero(x, y);
+	for (int j = 0; j < y; ++j) {
+		for (int i = 0; i < x; ++i) {
+			fscanf(fp, "%lf", &input(i, j));
+		}
+	}
+	fclose(fp);
+}
+
+template <class T>
+vector<T> parse_centers(double * P, int N) {
+	vector<T> centers;
+	for (size_t i = 0; i < N; i++) {
+		T center = T::Zero();
+		for (size_t j = 0; j < D; j++) {
+			center[j] = P[j * N + i];
+		}
+		centers.push_back(center);
+	}
+	return centers;
+}
 
 struct Light {
 	Vector3f Ia = Vector3f(1.0f, 1.0f, 1.0f);
@@ -47,7 +61,7 @@ struct Light {
 	Vector3f light_pos = Vector3f(0.0f, 0.0f, 0.01f);
 
 	///--- Pass light properties to the shader
-	void setup() {
+	void setup(GLuint program_id) {
 		glUseProgram(program_id);
 		GLuint light_pos_id = glGetUniformLocation(program_id, "light_pos"); //Given in camera space
 		GLuint Ia_id = glGetUniformLocation(program_id, "Ia");
@@ -60,6 +74,8 @@ struct Light {
 	}
 };
 
+Light light;
+
 struct Material {
 	Vector3f ka = 0.5 * Vector3f(0.9176, 0.7412, 0.6157);
 	Vector3f kd = 0.7 * Vector3f(0.9176, 0.7412, 0.6157);
@@ -67,7 +83,7 @@ struct Material {
 	float p = 60.0f;
 
 	///--- Pass material properties to the shaders
-	void setup() {
+	void setup(GLuint program_id) {
 		glUseProgram(program_id);
 		GLuint ka_id = glGetUniformLocation(program_id, "ka");
 		GLuint kd_id = glGetUniformLocation(program_id, "kd");
@@ -80,83 +96,24 @@ struct Material {
 	}
 };
 
-struct Canvas {
-
-	void setup() {
-		///--- Vertex one vertex Array
-		glGenVertexArrays(1, &vertex_array);
-		glBindVertexArray(vertex_array);
-
-		///--- Vertex coordinates
-		const GLfloat position[] = {
-			/*V1*/ -1.0f, -1.0f, 0.0f,
-			/*V2*/ +1.0f, -1.0f, 0.0f,
-			/*V3*/ -1.0f, +1.0f, 0.0f,
-			/*V4*/ +1.0f, +1.0f, 0.0f };
-
-		///--- Buffer
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(position), position, GL_STATIC_DRAW);
-
-		///--- Attribute
-		GLuint position_id = glGetAttribLocation(program_id, "position");
-		glEnableVertexAttribArray(position_id);
-		glVertexAttribPointer(position_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
-		/// Specify window bounds
-		glUniform1f(glGetUniformLocation(program_id, "window_left"), window_left);
-		glUniform1f(glGetUniformLocation(program_id, "window_bottom"), window_bottom);
-		glUniform1f(glGetUniformLocation(program_id, "window_height"), window_height);
-		glUniform1f(glGetUniformLocation(program_id, "window_width"), window_width);
-	}
-};
-
-struct Texture {
-	void setup() {
-		///--- Texture coordinates
-		const GLfloat vtexcoord[] = {
-			/*V1*/ 0.0f, 0.0f,
-			/*V2*/ 1.0f, 0.0f,
-			/*V3*/ 0.0f, 1.0f,
-			/*V4*/ 1.0f, 1.0f };
-
-		///--- Buffer
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vtexcoord), vtexcoord, GL_STATIC_DRAW);
-
-		///--- Attribute
-		GLuint vtexcoord_id = glGetAttribLocation(program_id, "vtexcoord");
-		glEnableVertexAttribArray(vtexcoord_id);
-		glVertexAttribPointer(vtexcoord_id, 2, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
-		///--- Load texture
-		glGenTextures(1, &texture_id);
-		glBindTexture(GL_TEXTURE_2D, texture_id);
-		glfwLoadTexture2D("quad_texture.tga", 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-		///--- Texture uniforms
-		GLuint tex_id = glGetUniformLocation(program_id, "tex");
-		glUniform1i(tex_id, 0 /*GL_TEXTURE0*/);
-	}
-};
+Material material;
 
 struct Camera {
-	// fovy - specifies the field of view angle, in degrees, in the y direction.
-	float fovy = 45.0f;
-	// specifies the aspect ratio that determines the field of view in the x direction.The aspect ratio is the ratio of x(width) to y(height).
-	float aspect = window_width / (float)window_height;
-	// specifies the distance from the viewer to the near clipping plane(always positive).
+	
+	float fovy = 45.0f;	
+	float aspect = window_width / (float)window_height;	
 	float zNear = 0.1f;
-	// specifies the distance from the viewer to the far clipping plane(always positive).
-	float zFar = 10.0f;
+	float zFar = 20.0f;
 	Vector3f camera_center = Vector3f(0, 0, 10);
 	Vector3f image_center = Vector3f(0, 0, 0);
 	Vector3f camera_up = Vector3f(0, 1, 0);
 	Vector3f world_up = Vector3f(0, 1, 0);
+
+	Matrix4f projection;
+	Matrix4f view;
+	Matrix4f model;
+	Matrix4f MVP;
+	Matrix4f invMVP;
 
 	float d = (camera_center - image_center).norm();
 	int wheel_rotation = 0;
@@ -180,11 +137,11 @@ struct Camera {
 
 			camera_center = d * (x + y + z);
 			euler_angles = Vector2f(theta, phi);
-		}		
+		}
 		else {
 			cursor_position = Vector2f(cursor_x, cursor_y);
 			initial_euler_angles = euler_angles;
-		}		
+		}
 	}
 
 	void process_mouse_scroll(GLfloat rotation) {
@@ -193,22 +150,22 @@ struct Camera {
 	}
 
 	void process_mouse_button(int button) {
-		if (button == 0) 
+		if (button == 0)
 			left_button_pressed = !left_button_pressed;
 		if (button == 1)
 			right_button_pressed = !right_button_pressed;
 	}
 
-	void setup() {
+	void setup(GLuint program_id) {
 
-		cout << euler_angles.transpose() << endl;
+		//cout << euler_angles.transpose() << endl;
 
-		Matrix4f projection = Eigen::perspective(fovy, aspect, zNear, zFar);
-		Matrix4f view = Eigen::lookAt(camera_center, image_center, camera_up);
-		Matrix4f model = Matrix4f::Identity();
+		projection = Eigen::perspective(fovy, aspect, zNear, zFar);
+		view = Eigen::lookAt(camera_center, image_center, camera_up);
+		model = Matrix4f::Identity();
 
-		Matrix4f MVP = projection * view * model;
-		Matrix4f invMVP = MVP.inverse();
+		MVP = projection * view * model;
+		invMVP = MVP.inverse();
 
 		// test_project_unproject(projection, model, view);
 		glUniform3fv(glGetUniformLocation(program_id, "camera_center"), 1, camera_center.data());
@@ -221,62 +178,140 @@ struct Camera {
 	}
 };
 
-struct Model {
-	int D = 3;
-	string path = "C:\\Users\\tkach\\Desktop\\sphere3d-build\\Input\\";
+Camera camera;
 
-	vector<double> parse_line(string line) {
-		istringstream iss(line);
-		vector<string> tokens;
-		vector<double> numbers;
-		copy(istream_iterator<string>(iss),
-			istream_iterator<string>(),
-			back_inserter(tokens));
-		for (size_t i = 0; i < tokens.size(); i++) {
-			numbers.push_back(std::stod(tokens[i]));
-		}
-		return numbers;
+struct ShaderObject {
+	GLuint vertex_array;
+	GLuint program_id;
+	GLuint memory_buffer;
+	string vertex_shader_name;
+	string fragment_shader_name;
+	std::vector<Vector3f> points;
+
+	void call_shader(int mode) {
+		glUseProgram(program_id);
+		glBindVertexArray(vertex_array);
+		if (mode == GL_TRIANGLE_STRIP)
+			camera.setup(program_id);
+		else
+			glUniformMatrix4fv(glGetUniformLocation(program_id, "MVP"), 1, GL_FALSE, camera.MVP.data());
+		glDrawArrays(mode, 0, points.size());
+		glBindVertexArray(0);
+		glUseProgram(0);
 	}
 
-	void get_input_matrix(string name, MatrixXd & input) {
-		string line;
-		ifstream inputfile(path + name + ".txt");
-		bool first_line = true;
-		if (inputfile.is_open()) {
-			while (getline(inputfile, line)) {
-				vector<double> numbers = parse_line(line);
-				if (first_line) {
-					input = MatrixXd::Zero(numbers[0], numbers[1]);
-					first_line = false;
-				}
-				else {
-					for (size_t k = 0; k < numbers.size(); k++) {
-						int i = k % input.rows();
-						int j = k / input.rows();
-						input(i, j) = numbers[k];
-					}
-				}
-			}
-			inputfile.close();
+	void send_vertices_to_shader() {
+		/*glUseProgram(program_id);
+
+		glGenVertexArrays(1, &vertex_array);
+		glBindVertexArray(vertex_array);
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
+
+		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
+		glEnableVertexAttribArray(vpoint_id);
+		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		glBindVertexArray(0);
+		glUseProgram(0);
+		///
+		glUseProgram(program_id);
+
+		glGenVertexArrays(1, &vertex_array);
+		glBindVertexArray(vertex_array);
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
+
+		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
+		glEnableVertexAttribArray(vpoint_id);
+		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		glBindVertexArray(0);
+		glUseProgram(0);*/
+		///
+	}
+};
+
+struct Data :public ShaderObject {
+
+	void get_shader_name(string name) {
+		if (!strcmp(name.c_str(), "P")) {
+			vertex_shader_name = "data_points_vshader.glsl";
+			fragment_shader_name = "data_points_fshader.glsl";
+		}
+		if (!strcmp(name.c_str(), "M")) {
+			vertex_shader_name = "model_points_vshader.glsl";
+			fragment_shader_name = "model_points_fshader.glsl";
+		}
+		if (!strcmp(name.c_str(), "L")) {
+			vertex_shader_name = "lines_vshader.glsl";
+			fragment_shader_name = "lines_fshader.glsl";
 		}
 	}
 
-	template <class T>
-	vector<T> parse_centers(double * P, int N) {
-		vector<T> centers;
-		for (size_t i = 0; i < N; i++) {
-			T center = T::Zero();
-			for (size_t j = 0; j < D; j++) {
-				center[j] = P[j * N + i];
-			}
-			centers.push_back(center);
+	void setup(std::vector<Vector3f> data_points, std::vector<Vector3f> model_points, string name) {
+		for (size_t i = 0; i < data_points.size(); i++) {
+			if (model_points[i][0] == 0 && model_points[i][1] == 0 && model_points[i][2] == 0) continue;
+			points.push_back(data_points[i]);
+			points.push_back(model_points[i]);
 		}
-		return centers;
+
+		get_shader_name(name);
+		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
+		if (!program_id) exit(EXIT_FAILURE);
+		glUseProgram(program_id);
+
+		glGenVertexArrays(1, &vertex_array);
+		glBindVertexArray(vertex_array);
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
+
+		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
+		glEnableVertexAttribArray(vpoint_id);
+		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		glBindVertexArray(0);
+		glUseProgram(0);
 	}
+	
+	void setup(string name) {
+		MatrixXd P;
+		get_input_matrix(name, P);		
+		points = parse_centers<Vector3f>(P.data(), P.rows());
+
+		get_shader_name(name);
+		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
+		if (!program_id) exit(EXIT_FAILURE);
+
+		glUseProgram(program_id);
+
+		glGenVertexArrays(1, &vertex_array);
+		glBindVertexArray(vertex_array);
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
+
+		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
+		glEnableVertexAttribArray(vpoint_id);
+		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		glBindVertexArray(0);
+		glUseProgram(0);
+	}
+};
+
+Data data_points;
+Data model_points;
+Data lines;
+
+struct Model :public ShaderObject {
 
 	vector<float> parse_radii(double * P, int N) {
 		vector<float> radii;
-		for (size_t i = 0; i < N; i++) {					
+		for (size_t i = 0; i < N; i++) {
 			radii.push_back(P[i]);
 		}
 		return radii;
@@ -298,7 +333,7 @@ struct Model {
 			tangents_u1.push_back(tangent);
 			tangents_u2.push_back(tangent);
 			tangents_u3.push_back(tangent);
-			if (T[i] >= RAND_MAX) {				
+			if (T[i] >= RAND_MAX) {
 				continue;
 			}
 			for (size_t j = 0; j < D; j++) {
@@ -318,29 +353,49 @@ struct Model {
 		tangents.push_back(tangents_u3);
 		return tangents;
 	}
-	
-	void setup() {
 
+	void setup_canvas() {
+		///--- Vertex coordinates
+		points = vector<Vector3f>(4, Vector3f::Zero());
+		points[0] = Vector3f(-1, -1, 0); points[1] = Vector3f(1, -1, 0);
+		points[2] = Vector3f(-1, 1, 0); points[3] = Vector3f(1, 1, 0);
+
+		///--- Vertex one vertex Array
+		glGenVertexArrays(1, &vertex_array);
+		glBindVertexArray(vertex_array);
+
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
+		GLuint position_id = glGetAttribLocation(program_id, "position");
+		glEnableVertexAttribArray(position_id);
+		glVertexAttribPointer(position_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		/// Specify window bounds
+		glUniform1f(glGetUniformLocation(program_id, "window_left"), window_left);
+		glUniform1f(glGetUniformLocation(program_id, "window_bottom"), window_bottom);
+		glUniform1f(glGetUniformLocation(program_id, "window_height"), window_height);
+		glUniform1f(glGetUniformLocation(program_id, "window_width"), window_width);
+
+	}
+	void load_model() {
 		MatrixXd B, T, C, R;
 		get_input_matrix("B", B);
 		get_input_matrix("T", T);
 		get_input_matrix("C", C);
 		get_input_matrix("R", R);
 
-		double * B_pointer = B.data();
-		double * T_pointer = T.data();
-		
 		vector<Vector3f> centers = parse_centers<Vector3f>(C.data(), C.rows());
 		vector<float> radii = parse_radii(R.data(), R.rows());
 		vector<Vector3i> blocks = parse_centers<Vector3i>(B.data(), B.rows());
-		vector<vector<Vector3f>> tangents = parse_tangent_points(T_pointer, T.rows());
+		vector<vector<Vector3f>> tangents = parse_tangent_points(T.data(), T.rows());
 		vector<Vector3f> tangents_v1 = tangents[0];
 		vector<Vector3f> tangents_v2 = tangents[1];
 		vector<Vector3f> tangents_v3 = tangents[2];
 		vector<Vector3f> tangents_u1 = tangents[3];
 		vector<Vector3f> tangents_u2 = tangents[4];
 		vector<Vector3f> tangents_u3 = tangents[5];
-		
+
 		glUniform1f(glGetUniformLocation(program_id, "num_blocks"), blocks.size());
 		glUniform3fv(glGetUniformLocation(program_id, "centers"), centers.size(), (GLfloat *)centers.data());
 		glUniform1fv(glGetUniformLocation(program_id, "radii"), radii.size(), (GLfloat *)radii.data());
@@ -351,21 +406,28 @@ struct Model {
 		glUniform3fv(glGetUniformLocation(program_id, "tangents_u1"), tangents_u1.size(), (GLfloat *)tangents_u1.data());
 		glUniform3fv(glGetUniformLocation(program_id, "tangents_u2"), tangents_u2.size(), (GLfloat *)tangents_u2.data());
 		glUniform3fv(glGetUniformLocation(program_id, "tangents_u3"), tangents_u3.size(), (GLfloat *)tangents_u3.data());
+	}
 
+	void setup() {
+		vertex_shader_name = "model_vshader.glsl";
+		fragment_shader_name = "model_fshader.glsl";
 
-		//GLfloat *f = (GLfloat *)radii.data();
-		//for (size_t i = 0; i < 2; ++i, f += 3) 
-			//printf("Index %u value %f, %f, %f\n", i, f[0], f[1], f[2]);
+		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
+		if (!program_id) exit(EXIT_FAILURE);
+		glUseProgram(program_id);
+
+		setup_canvas();
+		load_model();
+		
+		material.setup(program_id);
+		light.setup(program_id);
+		glBindVertexArray(0);
+		glUseProgram(0);
 	}
 
 };
-
-Material material;
-Light light;
-Canvas canvas;
-Texture texture;
-Camera camera;
 Model model;
+
 
 void test_project_unproject(Matrix4f projection, Matrix4f model, Matrix4f view) {
 
@@ -406,42 +468,32 @@ void test_project_unproject(Matrix4f projection, Matrix4f model, Matrix4f view) 
 }
 
 void init() {
-	glClearColor(1, 1, 1, /*solid*/1.0); 
+	glClearColor(1, 1, 1, 1);
 	glEnable(GL_DEPTH_TEST);
-	program_id = opengp::load_shaders("vertex_shader.glsl", "fragment_shader.glsl");
-	if (!program_id) exit(EXIT_FAILURE);
-	glUseProgram(program_id);
 
-	canvas.setup();
+	glPointSize(5);
+	glLineWidth(2);
+
 	model.setup();
-	texture.setup();
-	material.setup();
-	light.setup();
-
-	///--- to avoid the current object being polluted
-	glBindVertexArray(0);
-	glUseProgram(0);
-
+	data_points.setup("P");
+	model_points.setup("M");
+	lines.setup(data_points.points, model_points.points, "L");
 }
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glUseProgram(program_id);
-	glBindVertexArray(vertex_array);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texture_id);
 
-	camera.setup();	
-	
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	glBindVertexArray(0);
-	glUseProgram(0);
+	model.call_shader(GL_TRIANGLE_STRIP); 
+	model_points.call_shader(GL_POINTS);
+	data_points.call_shader(GL_POINTS);
+	lines.call_shader(GL_LINES);
+
 }
 
 void mouse_position_callback(int xpos, int ypos) {
 	camera.process_mouse_movement(xpos, ypos);
 }
-void scroll_callback(int offset) {	
+void scroll_callback(int offset) {
 	cout << offset << endl;
 	camera.process_mouse_scroll(offset);
 }
@@ -449,17 +501,17 @@ void mouse_button_callback(int button, int) {
 	camera.process_mouse_button(button);
 }
 
-
 int main(int, char**) {
 	glfwInitWindowSize(window_width, window_height);
 	glfwCreateWindow("Title");
 	glfwDisplayFunc(display);
 
 	glfwSetMousePosCallback(mouse_position_callback);
-	glfwSetMouseButtonCallback(mouse_button_callback);	
+	glfwSetMouseButtonCallback(mouse_button_callback);
 	glfwSetMouseWheelCallback(scroll_callback);
 
 	init();
 	glfwMainLoop();
-	return EXIT_SUCCESS;
+	return 0;
 }
+

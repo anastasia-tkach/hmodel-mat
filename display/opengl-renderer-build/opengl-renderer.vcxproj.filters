@@ -10,11 +10,17 @@
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{EEC8B145-410D-435A-B152-FA226B2FF1FA}</UniqueIdentifier>
+      <UniqueIdentifier>{719D5ED0-A7DA-4FCC-A3E7-140349E226D4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fragment_shader.glsl" />
-    <None Include="vertex_shader.glsl" />
+    <None Include="data_points_fshader.glsl" />
+    <None Include="data_points_vshader.glsl" />
+    <None Include="model_fshader.glsl" />
+    <None Include="model_points_fshader.glsl" />
+    <None Include="model_points_vshader.glsl" />
+    <None Include="model_vshader.glsl" />
+    <None Include="lines_fshader.glsl" />
+    <None Include="lines_vshader.glsl" />
   </ItemGroup>
 </Project>

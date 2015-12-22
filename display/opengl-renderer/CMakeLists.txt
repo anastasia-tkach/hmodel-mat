@@ -40,6 +40,8 @@ if(NOT OPENGP_FOUND)
     message(ERROR " OPENGP not found!")
 endif()
 
+include(ConfigureQt.cmake)
+
 #--- Common headers/libraries for all the exercises
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES})

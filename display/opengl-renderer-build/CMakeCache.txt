@@ -169,6 +169,21 @@ OPENGL_glu_LIBRARY:STRING=glu32
 //Path to a file.
 OpenGP_INCLUDE_DIRS:PATH=C:/Developer/include
 
+//The directory containing a CMake configuration file for Qt5Core.
+Qt5Core_DIR:PATH=C:/Developer/Qt/5.4/msvc2013_64_opengl/lib/cmake/Qt5Core
+
+//The directory containing a CMake configuration file for Qt5Gui.
+Qt5Gui_DIR:PATH=C:/Developer/Qt/5.4/msvc2013_64_opengl/lib/cmake/Qt5Gui
+
+//The directory containing a CMake configuration file for Qt5OpenGL.
+Qt5OpenGL_DIR:PATH=C:/Developer/Qt/5.4/msvc2013_64_opengl/lib/cmake/Qt5OpenGL
+
+//The directory containing a CMake configuration file for Qt5Widgets.
+Qt5Widgets_DIR:PATH=C:/Developer/Qt/5.4/msvc2013_64_opengl/lib/cmake/Qt5Widgets
+
+//The directory containing a CMake configuration file for Qt5Xml.
+Qt5Xml_DIR:PATH=C:/Developer/Qt/5.4/msvc2013_64_opengl/lib/cmake/Qt5Xml
+
 //Value Computed by CMake
 opengl-renderer_BINARY_DIR:STATIC=C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-build
 
@@ -181,7 +196,7 @@ opengl-renderer_SOURCE_DIR:STATIC=C:/Users/tkach/OneDrive/EPFL/Code/HModel/displ
 ########################
 
 //Stored GUID
-ALL_BUILD_GUID_CMAKE:INTERNAL=77DBB5F9-E461-4955-80F6-A64384C3956E
+ALL_BUILD_GUID_CMAKE:INTERNAL=A6C33D9E-0753-41EB-872D-7BCC8D260649
 //This is the directory where this CMakeCache.txt was created
 CMAKE_CACHEFILE_DIR:INTERNAL=c:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-build
 //Major version of cmake used to create the current loaded cache
@@ -302,17 +317,17 @@ OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
 //Stored GUID
-SG_Filter_CMake Rules_GUID_CMAKE:INTERNAL=7E20FF95-A491-48A6-B089-0C80FDDAAF37
+SG_Filter_CMake Rules_GUID_CMAKE:INTERNAL=43976464-4C53-4A80-8DC1-C94DC4AD4E21
 //Stored GUID
-SG_Filter_Header Files_GUID_CMAKE:INTERNAL=D51F0A59-8B5C-4B36-B1E8-27BE42DBEBE2
+SG_Filter_Header Files_GUID_CMAKE:INTERNAL=B3169F53-1BC2-4E26-BCB4-4E933FDDF1EB
 //Stored GUID
-SG_Filter_Object Files_GUID_CMAKE:INTERNAL=53E9843F-F76B-4C06-A330-6CB72142B49D
+SG_Filter_Object Files_GUID_CMAKE:INTERNAL=CAA2D907-037B-4F96-B2EC-60F7FB432E2C
 //Stored GUID
-SG_Filter_Resources_GUID_CMAKE:INTERNAL=4242DD69-C6F9-47A1-BD5F-A71A61D3F4EC
+SG_Filter_Resources_GUID_CMAKE:INTERNAL=47F33816-D9B8-4EAD-BA0C-86F880D56A0C
 //Stored GUID
-SG_Filter_Source Files_GUID_CMAKE:INTERNAL=EEC8B145-410D-435A-B152-FA226B2FF1FA
+SG_Filter_Source Files_GUID_CMAKE:INTERNAL=719D5ED0-A7DA-4FCC-A3E7-140349E226D4
 //Stored GUID
-ZERO_CHECK_GUID_CMAKE:INTERNAL=C1249580-8960-4AB6-8D82-75E94C05E6C1
+ZERO_CHECK_GUID_CMAKE:INTERNAL=83A9143D-A1AD-4FF6-81C8-79867DCFD7CC
 //Stored GUID
-opengl-renderer_GUID_CMAKE:INTERNAL=7C20A56A-0D25-4EF6-AF3A-A8DDA092A103
+opengl-renderer_GUID_CMAKE:INTERNAL=AC0A133F-EE90-42B6-A3DA-C27611C7B0C1
 
