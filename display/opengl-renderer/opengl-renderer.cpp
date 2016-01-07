@@ -25,7 +25,7 @@ int window_bottom = 0;
 int window_width = 1920;
 int window_height = 1080;
 
-string path = "C:\\Users\\tkach\\OneDrive\\EPFL\\Code\\HModel\\display\\opengl-renderer-build\\Input\\";
+string path = "C:\\Users\\tkach\\OneDrive\\EPFL\\Code\\HModel\\display\\opengl-renderer-vs\\Input\\";
 
 void get_input_matrix(string name, MatrixXd & input) {
 	FILE *fp = fopen((path + name + ".txt").c_str(), "r");
@@ -109,6 +109,9 @@ struct Camera {
 	Vector3f camera_up = Vector3f(0, 1, 0);
 	Vector3f world_up = Vector3f(0, 1, 0);
 
+	Vector3f up = Vector3f(0, 1, 0);
+	Vector3f direction = Vector3f(0, 0, 1);
+
 	Matrix4f projection;
 	Matrix4f view;
 	Matrix4f model;
@@ -137,6 +140,22 @@ struct Camera {
 
 			camera_center = d * (x + y + z);
 			euler_angles = Vector2f(theta, phi);
+
+			/*Vector3f camera_direction = (camera_center - image_center);
+			camera_up = up - camera_direction.dot(up) * camera_direction;
+			camera_up = camera_up / norm(camera_up);
+
+			if (camera_direction.dot(up) < 0) {
+				if (direction.dot(camera_up) < 0) {
+					camera_up = -camera_up;
+				}
+			}
+			else {
+				if (direction.dot(camera_up) > 0) {
+					camera_up = -camera_up;
+				}
+			}*/
+
 		}
 		else {
 			cursor_position = Vector2f(cursor_x, cursor_y);
@@ -162,6 +181,8 @@ struct Camera {
 
 		projection = Eigen::perspective(fovy, aspect, zNear, zFar);
 		view = Eigen::lookAt(camera_center, image_center, camera_up);
+		//cout << (camera_center - image_center).transpose() / (camera_center - image_center).norm() << endl;
+		//cout << view.col(0).transpose() << endl;
 		model = Matrix4f::Identity();
 
 		MVP = projection * view * model;
@@ -200,8 +221,7 @@ struct ShaderObject {
 		glUseProgram(0);
 	}
 
-	void send_vertices_to_shader() {
-		/*glUseProgram(program_id);
+	void send_vertices_to_shader(string vertices_name) {
 
 		glGenVertexArrays(1, &vertex_array);
 		glBindVertexArray(vertex_array);
@@ -209,28 +229,9 @@ struct ShaderObject {
 		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
 
-		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
-		glEnableVertexAttribArray(vpoint_id);
-		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
-		glBindVertexArray(0);
-		glUseProgram(0);
-		///
-		glUseProgram(program_id);
-
-		glGenVertexArrays(1, &vertex_array);
-		glBindVertexArray(vertex_array);
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
-
-		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
-		glEnableVertexAttribArray(vpoint_id);
-		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
-		glBindVertexArray(0);
-		glUseProgram(0);*/
-		///
+		GLuint id = glGetAttribLocation(program_id, vertices_name.c_str());
+		glEnableVertexAttribArray(id);
+		glVertexAttribPointer(id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
 	}
 };
 
@@ -257,22 +258,12 @@ struct Data :public ShaderObject {
 			points.push_back(data_points[i]);
 			points.push_back(model_points[i]);
 		}
-
 		get_shader_name(name);
+
 		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
 		if (!program_id) exit(EXIT_FAILURE);
 		glUseProgram(program_id);
-
-		glGenVertexArrays(1, &vertex_array);
-		glBindVertexArray(vertex_array);
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
-
-		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
-		glEnableVertexAttribArray(vpoint_id);
-		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
+		send_vertices_to_shader("vpoint");
 		glBindVertexArray(0);
 		glUseProgram(0);
 	}
@@ -285,19 +276,8 @@ struct Data :public ShaderObject {
 		get_shader_name(name);
 		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
 		if (!program_id) exit(EXIT_FAILURE);
-
 		glUseProgram(program_id);
-
-		glGenVertexArrays(1, &vertex_array);
-		glBindVertexArray(vertex_array);
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(points[0]) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
-
-		GLuint vpoint_id = glGetAttribLocation(program_id, "vpoint");
-		glEnableVertexAttribArray(vpoint_id);
-		glVertexAttribPointer(vpoint_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
-
+		send_vertices_to_shader("vpoint");
 		glBindVertexArray(0);
 		glUseProgram(0);
 	}
@@ -308,6 +288,7 @@ Data model_points;
 Data lines;
 
 struct Model :public ShaderObject {
+	GLuint texture;
 
 	vector<float> parse_radii(double * P, int N) {
 		vector<float> radii;
@@ -355,21 +336,11 @@ struct Model :public ShaderObject {
 	}
 
 	void setup_canvas() {
-		///--- Vertex coordinates
+
 		points = vector<Vector3f>(4, Vector3f::Zero());
 		points[0] = Vector3f(-1, -1, 0); points[1] = Vector3f(1, -1, 0);
 		points[2] = Vector3f(-1, 1, 0); points[3] = Vector3f(1, 1, 0);
-
-		///--- Vertex one vertex Array
-		glGenVertexArrays(1, &vertex_array);
-		glBindVertexArray(vertex_array);
-
-		glGenBuffers(1, &memory_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3f) * points.size(), (GLfloat *)points.data(), GL_STATIC_DRAW);
-		GLuint position_id = glGetAttribLocation(program_id, "position");
-		glEnableVertexAttribArray(position_id);
-		glVertexAttribPointer(position_id, 3, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+		send_vertices_to_shader("position");
 
 		/// Specify window bounds
 		glUniform1f(glGetUniformLocation(program_id, "window_left"), window_left);
@@ -408,6 +379,24 @@ struct Model :public ShaderObject {
 		glUniform3fv(glGetUniformLocation(program_id, "tangents_u3"), tangents_u3.size(), (GLfloat *)tangents_u3.data());
 	}
 
+	void setup_texture() {
+		///--- Texture
+		const GLfloat vtexcoord[] = { /*V1*/ -1, -1, /*V2*/ 1, -1, /*V3*/ -1, 1, /*V4*/ 1, 1 };
+		glGenBuffers(1, &memory_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(vtexcoord), vtexcoord, GL_STATIC_DRAW);
+		GLuint vtexcoord_id = glGetAttribLocation(program_id, "vtexcoord");
+		glEnableVertexAttribArray(vtexcoord_id);
+		glVertexAttribPointer(vtexcoord_id, 2, GL_FLOAT, DONT_NORMALIZE, ZERO_STRIDE, ZERO_BUFFER_OFFSET);
+
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glfwLoadTexture2D("floor.tga", 0);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glUniform1i(glGetUniformLocation(program_id, "tex"), 0);
+	}
+
 	void setup() {
 		vertex_shader_name = "model_vshader.glsl";
 		fragment_shader_name = "model_fshader.glsl";
@@ -415,7 +404,7 @@ struct Model :public ShaderObject {
 		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
 		if (!program_id) exit(EXIT_FAILURE);
 		glUseProgram(program_id);
-
+		
 		setup_canvas();
 		load_model();
 		
@@ -475,6 +464,7 @@ void init() {
 	glLineWidth(2);
 
 	model.setup();
+	model.setup_texture();
 	data_points.setup("P");
 	model_points.setup("M");
 	lines.setup(data_points.points, model_points.points, "L");
@@ -482,19 +472,21 @@ void init() {
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//model.setup();
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, model.texture);
 
 	model.call_shader(GL_TRIANGLE_STRIP); 
-	model_points.call_shader(GL_POINTS);
-	data_points.call_shader(GL_POINTS);
-	lines.call_shader(GL_LINES);
-
+	//model_points.call_shader(GL_POINTS);
+	//data_points.call_shader(GL_POINTS);
+	//lines.call_shader(GL_LINES);
 }
 
 void mouse_position_callback(int xpos, int ypos) {
 	camera.process_mouse_movement(xpos, ypos);
 }
 void scroll_callback(int offset) {
-	cout << offset << endl;
 	camera.process_mouse_scroll(offset);
 }
 void mouse_button_callback(int button, int) {

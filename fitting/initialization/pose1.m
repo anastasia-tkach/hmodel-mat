@@ -86,8 +86,11 @@ radii_map('palm_middle') = 0.35;
 centers_map('palm_index') = [-0.894; 1.226; -0.086];
 radii_map('palm_index') = 0.35;
 
-centers_map('palm_thumb') = [-0.802; 0.988; 0.091];
-radii_map('palm_thumb') = 0.3;
+% centers_map('palm_thumb') = [-0.802; 0.988; 0.091];
+% radii_map('palm_thumb') = 0.3;
+
+centers_map('palm_thumb') = [-0.823; 0.936; 0.245];
+radii_map('palm_thumb') = 0.2;
 
 %% Palm bottom
 centers_map('palm_left') = [0.251; 0.095; 0.853];

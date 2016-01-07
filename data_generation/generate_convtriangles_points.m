@@ -45,7 +45,7 @@ end
 
 distances = min_distances;
 
-valid_indices = abs(distances) < 0.005;
+valid_indices = abs(distances) < 0.05;
 valid_indices = find(valid_indices);
 valid_points = cell(length(valid_indices), 1);
 for i = 1:length(valid_indices)

@@ -86,15 +86,18 @@ radii_map('palm_middle') = 0.31;
 centers_map('palm_index') = [-1.154; 1.571; -0.764];
 radii_map('palm_index') = 0.31;
 
-centers_map('palm_thumb') = [-1.219; 1.12; -0.616];
-radii_map('palm_thumb') = 0.3;
+% centers_map('palm_thumb') = [-1.219; 1.12; -0.616];
+% radii_map('palm_thumb') = 0.3;
+
+centers_map('palm_thumb') = [-1.3; 1.142; -0.523];
+radii_map('palm_thumb') = 0.2;
 
 %% Palm bottom
 centers_map('palm_right') = [-0.133; -0.378; -0.609];
 radii_map('palm_right') = 0.57;
 
-centers_map('palm_left') = [];
-radii_map('palm_left') = 0;
+centers_map('palm_left') = [-0.845; 0.058; -0.105];
+radii_map('palm_left') = 0.5;
 
 %% Wrist
 centers_map('wrist_top_left') = [-0.685; -0.915; -0.348];

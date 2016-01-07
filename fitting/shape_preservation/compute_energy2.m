@@ -1,4 +1,4 @@
-function [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings)
+function [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings, display)
 D = settings.D;
 num_centers = length(poses{1}.centers);
 f2 = zeros(0, 1);
@@ -67,26 +67,27 @@ for p = 1:length(poses)
 end
 
 %% Display shape consistency
-for p = 1:length(poses)
-    poses{p}.edges_length = [];
-    count = 1;
-    for b = 1:length(solid_blocks)
-        indices = nchoosek(solid_blocks{b}, 2);
-        index1 = indices(:, 1);
-        index2 = indices(:, 2);
-        for l = 1:length(index1)
-            i = index1(l);
-            j = index2(l);
-            poses{p}.edges_length(count) = norm(poses{p}.centers{i} -  poses{p}.centers{j});
-            count = count + 1;
+if display
+    for p = 1:length(poses)
+        poses{p}.edges_length = [];
+        count = 1;
+        for b = 1:length(solid_blocks)
+            indices = nchoosek(solid_blocks{b}, 2);
+            index1 = indices(:, 1);
+            index2 = indices(:, 2);
+            for l = 1:length(index1)
+                i = index1(l);
+                j = index2(l);
+                poses{p}.edges_length(count) = norm(poses{p}.centers{i} -  poses{p}.centers{j});
+                count = count + 1;
+            end
         end
     end
+    figure; hold on;
+    for p = 1:length(poses)
+        stem(poses{p}.edges_length, 'filled', 'lineWidth', 2);
+        poses{p} = rmfield(poses{p}, 'edges_length');
+    end
+    ylim([0, 3]); drawnow;
 end
-figure; hold on;
-for p = 1:length(poses)
-    stem(poses{p}.edges_length, 'filled', 'lineWidth', 2);
-    poses{p} = rmfield(poses{p}, 'edges_length');
-end
-ylim([0, 3]); drawnow;
-
 

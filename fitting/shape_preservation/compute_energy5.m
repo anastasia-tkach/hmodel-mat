@@ -4,8 +4,7 @@ centers = pose.centers;
 if (settings.energy5 == false), return; end
 D = settings.D;
 
-factor = 1.3;
-
+factor = settings.block_safety_factor;
 num_constaints = 2;
 F  = zeros(num_constaints, 1);
 Jc = zeros(num_constaints, length(centers) * D);

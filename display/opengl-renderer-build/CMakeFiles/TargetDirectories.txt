@@ -1,3 +1,0 @@
-C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-build/CMakeFiles/ALL_BUILD.dir
-C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-build/CMakeFiles/ZERO_CHECK.dir
-C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-build/CMakeFiles/opengl-renderer.dir

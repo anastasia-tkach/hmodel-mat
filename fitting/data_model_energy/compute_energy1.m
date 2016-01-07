@@ -12,17 +12,10 @@ model_indices = pose.indices;
 data_points = pose.points;
 
 %% Compute jacobian
-switch settings.mode
-    case 'fitting'
-        [f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
-        pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
-    case 'tracking'
-        [f, Jc] = jacobian_tracking(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
-        pose.f1 = f; pose.Jc1 = Jc;
-end
+[f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
+pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 
 %% Display results
-
 
 if (display)
     if settings.D == 3

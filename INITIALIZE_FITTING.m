@@ -1,8 +1,8 @@
 close all; clear;
 data_path = '_data/my_hand/initialized/';
-pose_id = 5;
-pose5;
-skeleton7;
+pose_id = 2;
+pose2;
+skeleton8;
 
 
 %% Build the data structures
@@ -21,10 +21,10 @@ end
 
 %% Describe solid blocks
 named_solid_blocks_indices = {};
-named_solid_blocks_indices{end + 1} = {
-     {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'}, ...
-     {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'}, ...
-     {'wrist_top_left', 'wrist_top_right', 'palm_back'}};
+% named_solid_blocks_indices{end + 1} = {
+%     {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'}, ...
+%     {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'}, ...
+%     {'wrist_top_left', 'wrist_top_right', 'palm_back'}};
 % named_solid_blocks_indices{end + 1} = {{'ring_membrane', 'middle_membrane', 'palm_ring'}, ...
 %    {'palm_ring', 'palm_middle', 'middle_membrane'}};
 named_solid_blocks_indices{end + 1} = {
@@ -72,6 +72,8 @@ named_elastic_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
 named_elastic_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'};
 named_elastic_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
 named_elastic_blocks{end + 1} = {'thumb_membrane', 'palm_thumb', 'thumb_base'};
+named_elastic_blocks{end + 1} = {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'};
+named_elastic_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'};
 
 for i = 1:length(named_elastic_blocks)
     

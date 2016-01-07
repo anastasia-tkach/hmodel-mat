@@ -12,9 +12,9 @@ N = numel(x);
 P = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
 distances = zeros(N, 1);
 
-%figure; hold on;
+figure; hold on;
 
-figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+%figure('units','normalized','outerposition',[0 0 1 1]); hold on;
 set(gcf,'color','w');
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);
@@ -54,19 +54,20 @@ grid off; view([-1, -1, -1]); axis equal; lighting gouraud; axis off; material([
 view([1, 1, 1]); camlight;
 
 %% Display data
-
-
+data_color = [0.65, 0.1, 0.5];
+model_color = [0, 0.7, 1];
+lines_color = [0.6, 0.6, 0.6];
 if (display_data)
-    mypoints(points, [0.65, 0.1, 0.5]);
+    mypoints(points, data_color);
     if ~isempty(projections)
         back_projections = cell(size(projections));
         for i = 1:length(projections)
             if ~isempty(projections{i}), back_projections{i} = projections{i} - (points{i} - projections{i}); end
         end
-        mypoints(projections, [0, 0.7, 1]);
+        mypoints(projections, model_color);
         mylines(points, projections, [0.1, 0.8, 0.8]);
-        mypoints(back_projections, [0.6, 0.6, 0.6]);
-        mylines(back_projections, projections, [0.6, 0.6, 0.6]);
+        mypoints(back_projections, lines_color);
+        mylines(back_projections, projections, lines_color);
     end
 end
 

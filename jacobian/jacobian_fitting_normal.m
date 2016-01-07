@@ -47,43 +47,7 @@ for i = 1:num_points
         end
     end
     
-    %% Compute the cost function
-%     f(i) =  sqrt((p - q)' * (p - q));
-%     for l = 1:length(variables)
-%         variable = variables{l};
-%         switch variable
-%             case 'c1', dq.dv = dq.dc1; case 'r1', dq.dv = dq.dr1;
-%             case 'c2', dq.dv = dq.dc2; case 'r2', dq.dv = dq.dr2;
-%             case 'c3', dq.dv = dq.dc3; case 'r3', dq.dv = dq.dr3;
-%         end
-%         df.dv = - (p - q)' * dq.dv / sqrt((p - q)' * (p - q));
-%         switch variable
-%             case 'c1', df.dc1 = df.dv; case 'r1', df.dr1 = df.dv;
-%             case 'c2', df.dc2 = df.dv; case 'r2', df.dr2 = df.dv;
-%             case 'c3', df.dc3 = df.dv; case 'r3', df.dr3 = df.dv;
-%         end
-%     end
-%     
-%     %% Fill in the Jacobian
-%     if length(index) == 1
-%         Jc(i, D * index(1) - D + 1:D * index(1)) = df.dc1;
-%         Jr(i, index(1)) = df.dr1;
-%     end
-%     if length(index) == 2
-%         Jc(i, D * index(1) - D + 1:D * index(1)) = df.dc1;
-%         Jc(i, D * index(2) - D + 1:D * index(2)) = df.dc2;
-%         Jr(i, index(1)) = df.dr1;
-%         Jr(i, index(2)) = df.dr2;
-%     end
-%     if length(index) == 3
-%         Jc(i, D * abs(index(1)) - D + 1:D * abs(index(1))) = df.dc1;
-%         Jc(i, D * abs(index(2)) - D + 1:D * abs(index(2))) = df.dc2;
-%         Jc(i, D * abs(index(3)) - D + 1:D * abs(index(3))) = df.dc3;
-%         Jr(i, abs(index(1))) = df.dr1;
-%         Jr(i, abs(index(2))) = df.dr2;
-%         Jr(i, abs(index(3))) = df.dr3;
-%     end
-    
+  
     %% Fill in the Jacobian
     f(D * i - D + 1:D * i) = (q - p);
     if length(index) == 1

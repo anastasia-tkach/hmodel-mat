@@ -24,8 +24,11 @@ for v = 1:settings.D
 end
 
 %% Get closest data points
+[pose.model_indices, pose.projections, ~] = compute_projections(pose.model_points, pose.centers, blocks, radii);
+[pose.model_normals] = compute_model_normals_temp(pose.centers, blocks, radii, pose.model_points, pose.model_indices);
 pose.closest_data_points = cell(length(pose.model_points), 1);
 pose.closest_data_normals = cell(length(pose.model_points), 1);
+
 for i = 1:length(pose.model_points)
     p = pose.model_points{i};
     index = knnsearch(pose.kdtree, p', 'K', 1);
@@ -34,31 +37,48 @@ for i = 1:length(pose.model_points)
     %pose.closest_data_points{i} = p + (q - p)' * n * n;
     pose.closest_data_points{i} = q;
     pose.closest_data_normals{i} = n;
-end
 
+    if (n' * pose.model_normals{i}) < settings.discard_threshold
+        pose.model_points{i} = [];
+        pose.closest_data_points{i} = [];
+        pose.closest_data_normals{i} = [];
+        pose.model_normals{i} = [];
+        pose.model_indices{i} = [];
+    end
+end
+pose.model_points = pose.model_points(~cellfun('isempty', pose.model_points));
+pose.model_indices = pose.model_indices(~cellfun('isempty', pose.model_indices));
+pose.closest_data_points = pose.closest_data_points(~cellfun('isempty', pose.closest_data_points));
+pose.closest_data_normals = pose.closest_data_normals(~cellfun('isempty', pose.closest_data_normals));
+pose.model_normals = pose.model_normals(~cellfun('isempty', pose.model_normals));
 
 %% Compute Jacobian
-[pose.model_indices, pose.projections, ~] = compute_projections(pose.model_points, pose.centers, blocks, radii);
-
 centers = pose.centers;
 model_points = pose.model_points;
 data_points = pose.closest_data_points;
 model_indices = pose.model_indices;
 
 [f, Jc, Jr] = jacobian_fitting_normal(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
-% pose.f4 = f; pose.Jc4 = Jc; pose.Jr4 = Jr;
 
-[fn, Jcn, Jrn] = compute_normal_distance(centers, pose.closest_data_normals, f, Jc, Jr, settings.D);
+[fn, Jcn, Jrn] = compute_normal_distance(centers, pose.model_normals, f, Jc, Jr, settings.D);
+%[fn, Jcn, Jrn] = compute_normal_distance(centers, pose.closest_data_normals, f, Jc, Jr, settings.D);
 pose.f4 = fn; pose.Jc4 = Jcn; pose.Jr4 = Jrn;
 
 %% Display
+correspondences = cell(length(pose.closest_data_normals));
+others = cell(length(pose.closest_data_normals));
+for i = 1:length(pose.closest_data_normals)
+    correspondences{i} = pose.model_points{i} + pose.f4(i) * pose.model_normals{i};
+    others{i} = pose.model_points{i} + pose.f4(i) * pose.closest_data_normals{i};
+end
 if (display)
-    display_result(pose.centers, pose.points, pose.projections, blocks, radii, false, 1);
-    %mypoints(pose.points, [1, 0.5, 0]);
-    %myvectors(pose.points, pose.normals, 1, 'r');
-    mypoints(pose.closest_data_points, 'm');
-    %mypoints(pose.model_points, 'b');
-    mylines(pose.closest_data_points, pose.model_points, [0.1, 0.8, 0.8]);
+    data_color = [0.65, 0.1, 0.5];
+    model_color = [0, 0.7, 1];
+    display_result(pose.centers, [], [], blocks, radii, false, 0.7);   
+    mypoints(correspondences, data_color);
+    mypoints(pose.model_points, model_color);
+    mylines(pose.model_points, correspondences, [0.75, 0.75, 0.75]);
+    mylines(pose.model_points, others, [0.4, 0.4, 0.4]);
+    mypoints(pose.closest_data_points, 'k');
     drawnow;
 end
-

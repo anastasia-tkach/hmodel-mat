@@ -96,7 +96,7 @@ for v = 1:length(variables)
         
         if (index == 1)
             switch variable
-                case 'c1', Jv1.dc1 = dv1; Jv2.dc1 = dv2; Jv3.dc1 = dv3;
+                case 'c1', Jv1.dc1 = dv1; Jv2.dc1 = dv2; Jv3.dc1 = dv3; 
                 case 'c2', Jv1.dc2 = dv1; Jv2.dc2 = dv2; Jv3.dc2 = dv3;
                 case 'c3', Jv1.dc3 = dv1; Jv2.dc3 = dv2; Jv3.dc3 = dv3;
                 case 'r1', Jv1.dr1 = dv1; Jv2.dr1 = dv2; Jv3.dr1 = dv3;

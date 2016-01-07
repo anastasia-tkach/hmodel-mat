@@ -47,8 +47,17 @@ include_directories(${CMAKE_CURRENT_LIST_DIR})
 SET(COMMON_LIBS ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES} ${GLEW_LIBRARIES})
 
 ##--- Deploy / link rules
-execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/vertex_shader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/fragment_shader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/data_points_fshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/data_points_vshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/lines_fshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/lines_vshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/model_fshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/model_vshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/model_points_fshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+execute_process(COMMAND ln -f -s ${CMAKE_SOURCE_DIR}/model_points_vshader.glsl WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
  
-add_executable(opengl-renderer opengl-renderer.cpp vertex_shader.glsl fragment_shader.glsl)
+add_executable(opengl-renderer opengl-renderer.cpp data_points_fshader.glsl data_points_vshader.glsl lines_fshader.glsl lines_vshader.glsl model_fshader.glsl model_vshader.glsl model_points_fshader.glsl model_points_vshader.glsl)
 target_link_libraries(opengl-renderer ${COMMON_LIBS})

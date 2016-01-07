@@ -1,4 +1,4 @@
-function [v1, v2, v3, u1, u2, u3, gradients] = jacobian_tangent_plane_attachment(c1, c2, c3, r1, r2, r3, gradients)
+function [v1, v2, v3, u1, u2, u3, n1, n2, gradients] = jacobian_tangent_plane_attachment(c1, c2, c3, r1, r2, r3, gradients)
 
 D = length(c1);
 dr1 = zeros(1, D);
@@ -9,6 +9,9 @@ for var = 1:length(gradients)
     dc1 = gradients{var}.dc1;
     dc2 = gradients{var}.dc2;
     dc3 = gradients{var}.dc3;
+    if isfield(gradients{var}, 'dr1'), dr1 = gradients{var}.dr1; end
+    if isfield(gradients{var}, 'dr2'), dr2 = gradients{var}.dr2; end
+    if isfield(gradients{var}, 'dr3'), dr3 = gradients{var}.dr3; end
     
     % z12 = c1 + (c2 - c1) * r1 / (r1 - r2);
     [O1, dO1] = difference_derivative(c2, dc2, c1, dc1);
@@ -86,14 +89,18 @@ for var = 1:length(gradients)
         [v3, dv3] = sum_derivative(c3, dc3, O1, dO1);
         
         if (index == 1)
+            n1 = n;
             gradients{var}.dv1 = dv1;
             gradients{var}.dv2 = dv2;
             gradients{var}.dv3 = dv3;
+            gradients{var}.dn1 = dn;
         elseif (index == -1)
+            n2 = n;
             u1 = v1; u2 = v2; u3 = v3;
             gradients{var}.du1 = dv1;
             gradients{var}.du2 = dv2;
             gradients{var}.du3 = dv3;
+            gradients{var}.dn2 = dn;
         end
     end
 end

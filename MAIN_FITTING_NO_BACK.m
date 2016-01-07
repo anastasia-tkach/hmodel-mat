@@ -1,15 +1,16 @@
-%{
-TODO
-- Visualize length change
-- Visualize radius change
-- Change the topology back and add thumb membrane spheres
-- Try adding closeness to initial length 
-- Try ARAP with averaged edge length
-%}
-
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
+num_poses = 5;
+start_pose = 1;
+num_iters = 20;
+damping = 100; 
+w1 = 1; w2 = 1; w3 = 1;  w5 = 1000;
+settings.damping = damping;
+settings.w1 = w1; settings.w2 = w2; 
+settings.w4 = w4; settings.w5 = w5;
+settings.discard_threshold = 0.5;
+settings.block_safety_factor = 1.3;
 data_path = '_data/my_hand/initialized/';
 
 %% Load input
@@ -26,7 +27,7 @@ for k = start_pose:start_pose + num_poses - 1
     load([data_path, num2str(k), '_normals.mat']); poses{p}.normals = normals;
 end
 
-[poses, radii] = adjust_poses_scales(poses, blocks, true);
+%[poses, radii] = adjust_poses_scales(poses, blocks, true);
 [blocks] = reindex(radii, blocks);
 num_centers = length(radii); num_poses = length(poses);
 
@@ -37,6 +38,8 @@ for p = 1:length(poses)
     for i = 1:length(poses{p}.points), P(i, :) = poses{p}.points{i}'; end
     poses{p}.kdtree = createns(P, 'NSMethod','kdtree');
 end
+
+history{1}.poses = poses; history{1}.radii = radii;
 
 %% Optimizaion
 for iter = 1:num_iters
@@ -56,7 +59,7 @@ for iter = 1:num_iters
     end
     
     %% Shape consistency energy
-    [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings);
+    [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings, false);
     
     if (iter > num_iters), break; end
     
@@ -70,63 +73,62 @@ for iter = 1:num_iters
     I(D * num_centers * num_poses + 1:end, D * num_centers * num_poses + 1:end) = 5 * eye(num_centers, num_centers);
     
     %% Apply update
+    w4 = length(f1) / length(f4);
     LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w4 * (J4' * J4) +  w5 * (J5' * J5);
     rhs = w1 * J1' * f1 + w2 * J2' * f2 + w4 * J4' * f4 + w5 * J5' * f5;
     delta = -  LHS \ rhs;
     
+    if ~isreal(delta), error('complex parameters'), end;    
+    
     [valid_update, poses, radii, ~] = apply_update(poses, blocks, radii, delta, D);
     
     energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); energies(3) = w4 * (f4' * f4); energies(4) = w5 * (f5' * f5); disp(energies);
-    
+    history{iter + 1}.poses = poses; history{iter + 1}.radii = radii; history{iter + 1}.energies = energies;
     
 end
 
+%% Display
 for p = 1:length(poses)
     [poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
-    display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, true, 1);
-    % figure; axis off; axis equal; hold on; display_skeleton(poses{p}.centers, radii, blocks, poses{p}.points, false, []);
+    display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, false, 1);
+    %figure; axis off; axis equal; hold on; 
+    %display_skeleton(poses{p}.centers, radii, blocks, poses{p}.points, false, []);
 end
 
-results_path = '_data/my_hand/fitted_model/';
+%% Color code length change
+% display_edge_stretching(poses, blocks, history);
+
+%% Follow energies
+num_energies = 4;
+E = zeros(length(history)-1, num_energies);
+for h = 2:length(history)
+    for k = 1:num_energies
+        E(h - 1, k) = history{h}.energies(k);
+    end
+end
+figure; hold on; plot(2:length(history), E, 'lineWidth', 2);
+legend({'1', '2', '3', '4'});
+ylim([0, 200]);
+
+%% Final result - average distance
+total_fitting_error = 0;
+for p = 1:length(poses)
+    [~, projections, ~] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii); 
+    fitting_error = 0;
+    count = 0;
+    for i = 1:length(poses{p}.points)
+        if isempty(projections{i}), continue; end
+        fitting_error = fitting_error + norm(poses{p}.points{i} - projections{i});
+        count = count + 1;
+    end
+    total_fitting_error = total_fitting_error + fitting_error / count;    
+end
+total_fitting_error = total_fitting_error / length(poses);
+disp(['RESULT = ', num2str(total_fitting_error)]);
+
+%% Store the results
 centers = poses{2}.centers;
+results_path = '_data/my_hand/fitted_model/';
 save([results_path, 'centers.mat'], 'centers');
 save([results_path, 'radii.mat'], 'radii');
 save([results_path, 'blocks.mat'], 'blocks');
-
-%% Display change in length by pose
-solid_blocks_indices = solid_blocks;
-solid_blocks = cell(length(solid_blocks_indices), 1);
-for i = 1:length(solid_blocks_indices)
-    solid_blocks{i} = [];
-    for j = 1:length(solid_blocks_indices{i})
-        solid_blocks{i} = [solid_blocks{i}, blocks{solid_blocks_indices{i}(j)}];
-    end
-    solid_blocks{i} = unique(solid_blocks{i});
-end
-for p = 1:length(poses)
-    poses{p}.edges_length = [];
-    poses{p}.restpose_edges_length = [];
-    count = 1;
-    for b = 1:length(solid_blocks)
-        indices = nchoosek(solid_blocks{b}, 2);
-        index1 = indices(:, 1);
-        index2 = indices(:, 2);
-        for l = 1:length(index1)
-            i = index1(l);
-            j = index2(l);
-            poses{p}.edges_length(count) = norm(poses{p}.centers{i} -  poses{p}.centers{j});
-            poses{p}.restpose_edges_length(count) = norm(poses{p}.initial_centers{i} -  poses{p}.initial_centers{j});
-            count = count + 1;
-        end
-    end
-    figure; hold on;    
-    stem(poses{p}.edges_length, 'filled', 'lineWidth', 2);    
-    stem(poses{p}.restpose_edges_length, 'filled', 'lineWidth', 2);    
-    ylim([0, 3]); drawnow;
-end
-
-
-
-
-
-
