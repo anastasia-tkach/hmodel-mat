@@ -22,6 +22,7 @@ settings.view_axis = 'Z';
 
 settings.energy1 = true; 
 settings.energy2 = true; 
+settings.energy3 = true;
 settings.energy4 = true;
 settings.energy5 = true;
 

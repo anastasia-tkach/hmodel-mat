@@ -38,7 +38,7 @@ while (valid_update == false && count < 1)
                 if (has_tangent_cone == false)
                     
                     disp(['pose ', num2str(p), ', block ', num2str(b), ' - no tangent cone']);
-                    display_invalid_blocks(poses{p}.centers, radii, blocks, b);                    
+                    display_invalid_blocks(poses{p}.centers, radii, blocks, blocks(b));                    
                     invalid_blocks = [invalid_blocks; b];                    
                     valid_update = false;
                     
@@ -80,7 +80,7 @@ while (valid_update == false && count < 1)
                     if has_tangent_cone1 == false, disp(['pose ', num2str(p), ', block ', num2str(b), ' - no tangent cone for c1, c2']); end
                     if has_tangent_cone2 == false, disp(['pose ', num2str(p), ', block ', num2str(b), ' - no tangent cone for c2, c3']); end
                     if has_tangent_cone3 == false, disp(['pose ', num2str(p), ', block ', num2str(b), ' - no tangent cone for c1, c3']); end
-                    display_invalid_blocks(poses{p}.centers, radii, blocks, b);     
+                    display_invalid_blocks(poses{p}.centers, radii, blocks, blocks(b));     
                     invalid_blocks = [invalid_blocks; b];      
                     
                     valid_update = false;

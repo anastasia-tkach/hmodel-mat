@@ -381,7 +381,7 @@ struct Model :public ShaderObject {
 
 	void setup_texture() {
 		///--- Texture
-		const GLfloat vtexcoord[] = { /*V1*/ -1, -1, /*V2*/ 1, -1, /*V3*/ -1, 1, /*V4*/ 1, 1 };
+		const GLfloat vtexcoord[] = { /*V1*/ 0, 0, /*V2*/ 1, 0, /*V3*/ 0, 1, /*V4*/ 1, 1 };
 		glGenBuffers(1, &memory_buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, memory_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vtexcoord), vtexcoord, GL_STATIC_DRAW);
@@ -391,7 +391,7 @@ struct Model :public ShaderObject {
 
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
-		glfwLoadTexture2D("floor.tga", 0);
+		glfwLoadTexture2D("skin.tga", 0);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glUniform1i(glGetUniformLocation(program_id, "tex"), 0);
@@ -407,6 +407,7 @@ struct Model :public ShaderObject {
 		
 		setup_canvas();
 		load_model();
+		setup_texture();
 		
 		material.setup(program_id);
 		light.setup(program_id);

@@ -7,7 +7,7 @@ back = cross(up, right);
 
 %% Attached bottom
 centers_map('palm_attachment') = 0.5 * centers_map('thumb_base') + 0.5 * centers_map('palm_right');
-radii_map('palm_attachment') = 0.4;
+radii_map('palm_attachment') = 0.2;
 
 centers_map('palm_back') = 0.5 * centers_map('thumb_base') + 0.5 * centers_map('palm_right') + 0.3 * back;
 radii_map('palm_back') = 0.6;
@@ -89,6 +89,7 @@ named_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
 named_blocks{end + 1} = {'thumb_membrane', 'thumb_fold', 'thumb_base'};
 named_blocks{end + 1} = {'thumb_fold', 'palm_thumb', 'thumb_base'};
 named_blocks{end + 1} = {'thumb_additional', 'thumb_top'};
+named_blocks{end + 1} = {'palm_left', 'thumb_base'};
 
 %% Read mesh
 

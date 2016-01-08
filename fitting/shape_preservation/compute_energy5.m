@@ -12,9 +12,6 @@ Jr = zeros(num_constaints, length(centers));
 
 count = 1;
 for b = 1:length(blocks)
-    if b == 24
-        disp(' ');
-    end
     
     %% Tangent cone
     indices = nchoosek(blocks{b}, 2);

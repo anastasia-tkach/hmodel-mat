@@ -3,20 +3,26 @@ settings.mode = 'fitting';
 settings_default;
 num_poses = 5;
 start_pose = 1;
-num_iters = 20;
-damping = 100; 
-w1 = 1; w2 = 1; w3 = 1;  w5 = 1000;
+num_iters = 8;
+damping = 100;
+%{
+    From previou5s experience
+    - Do not set w2 high, it interferes with other energies
+    - Set w5 quite high
+%}
+w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000;
 settings.damping = damping;
-settings.w1 = w1; settings.w2 = w2; 
+settings.w1 = w1; settings.w2 = w2; settings.w3 = w3; 
 settings.w4 = w4; settings.w5 = w5;
 settings.discard_threshold = 0.5;
-settings.block_safety_factor = 1.3;
+settings.block_safety_factor = 1.05;
 data_path = '_data/my_hand/initialized/';
 
 %% Load input
-load([data_path, 'solid_blocks_indices.mat']);
+load([data_path, 'solid_blocks.mat']);
 load([data_path, 'blocks.mat']);
 load([data_path, 'named_blocks.mat']);
+load([data_path, 'smooth_blocks.mat']);
 poses = cell(num_poses, 1);
 
 for k = start_pose:start_pose + num_poses - 1
@@ -27,7 +33,7 @@ for k = start_pose:start_pose + num_poses - 1
     load([data_path, num2str(k), '_normals.mat']); poses{p}.normals = normals;
 end
 
-%[poses, radii] = adjust_poses_scales(poses, blocks, true);
+[poses, radii] = adjust_poses_scales(poses, blocks, false);
 [blocks] = reindex(radii, blocks);
 num_centers = length(radii); num_poses = length(poses);
 
@@ -51,6 +57,9 @@ for iter = 1:num_iters
         %% Data fitting energy
         poses{p} = compute_energy1(poses{p}, radii, blocks, settings, false);
         
+        %% Smoothness energy
+        [poses{p}.f3, poses{p}.Jc3, poses{p}.Jr3] = compute_energy3(poses{p}.centers, radii, blocks);
+        
         %% Silhouette energy
         poses{p} = compute_energy4(poses{p}, blocks, radii, settings, false);
         
@@ -59,12 +68,13 @@ for iter = 1:num_iters
     end
     
     %% Shape consistency energy
-    [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings, false);
+    [f2, J2] = compute_energy2(poses, solid_blocks, settings, false);
     
     if (iter > num_iters), break; end
     
     %% Assemble overall linear system
     [f1, J1] = assemble_energy(poses, '1', settings);
+    [f3, J3] = assemble_energy(poses, '3', settings);
     [f4, J4] = assemble_energy(poses, '4', settings);
     [f5, J5] = assemble_energy(poses, '5', settings);
     
@@ -74,15 +84,15 @@ for iter = 1:num_iters
     
     %% Apply update
     w4 = length(f1) / length(f4);
-    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w4 * (J4' * J4) +  w5 * (J5' * J5);
-    rhs = w1 * J1' * f1 + w2 * J2' * f2 + w4 * J4' * f4 + w5 * J5' * f5;
+    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w3 * (J3' * J3) + w4 * (J4' * J4) +  w5 * (J5' * J5);
+    rhs = w1 * J1' * f1 + w2 * J2' * f2 + w3 * J3' * f3 +  w4 * J4' * f4 + w5 * J5' * f5;
     delta = -  LHS \ rhs;
     
     if ~isreal(delta), error('complex parameters'), end;    
     
     [valid_update, poses, radii, ~] = apply_update(poses, blocks, radii, delta, D);
     
-    energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); energies(3) = w4 * (f4' * f4); energies(4) = w5 * (f5' * f5); disp(energies);
+    energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); energies(3) = w3 * (f3' * f3); energies(4) = w4 * (f4' * f4); energies(5) = w5 * (f5' * f5); disp(energies);
     history{iter + 1}.poses = poses; history{iter + 1}.radii = radii; history{iter + 1}.energies = energies;
     
 end
@@ -99,7 +109,7 @@ end
 % display_edge_stretching(poses, blocks, history);
 
 %% Follow energies
-num_energies = 4;
+num_energies = 5;
 E = zeros(length(history)-1, num_energies);
 for h = 2:length(history)
     for k = 1:num_energies
@@ -107,8 +117,7 @@ for h = 2:length(history)
     end
 end
 figure; hold on; plot(2:length(history), E, 'lineWidth', 2);
-legend({'1', '2', '3', '4'});
-ylim([0, 200]);
+legend({'1', '2', '3', '4', '5'});
 
 %% Final result - average distance
 total_fitting_error = 0;

@@ -1,17 +1,17 @@
-function [f2, J2] = compute_energy2(poses, solid_blocks_indices, blocks, settings, display)
+function [f2, J2] = compute_energy2(poses, solid_blocks, settings, display)
 D = settings.D;
 num_centers = length(poses{1}.centers);
 f2 = zeros(0, 1);
 J2 = zeros(0, settings.D * num_centers);
 
-solid_blocks = cell(length(solid_blocks_indices), 1);
-for i = 1:length(solid_blocks_indices)
-    solid_blocks{i} = [];
-    for j = 1:length(solid_blocks_indices{i})
-        solid_blocks{i} = [solid_blocks{i}, blocks{solid_blocks_indices{i}(j)}];
-    end
-    solid_blocks{i} = unique(solid_blocks{i});
-end
+% solid_blocks = cell(length(solid_blocks_indices), 1);
+% for i = 1:length(solid_blocks_indices)
+%     solid_blocks{i} = [];
+%     for j = 1:length(solid_blocks_indices{i})
+%         solid_blocks{i} = [solid_blocks{i}, blocks{solid_blocks_indices{i}(j)}];
+%     end
+%     solid_blocks{i} = unique(solid_blocks{i});
+% end
 
 N = D * num_centers * length(poses) + num_centers;
 f2 = zeros(2, 1);

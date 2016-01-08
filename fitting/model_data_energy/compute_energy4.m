@@ -38,7 +38,7 @@ for i = 1:length(pose.model_points)
     pose.closest_data_points{i} = q;
     pose.closest_data_normals{i} = n;
 
-    if (n' * pose.model_normals{i}) < settings.discard_threshold
+    if isempty(pose.model_normals{i}) || (n' * pose.model_normals{i}) < settings.discard_threshold
         pose.model_points{i} = [];
         pose.closest_data_points{i} = [];
         pose.closest_data_normals{i} = [];

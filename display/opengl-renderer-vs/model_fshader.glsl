@@ -348,8 +348,7 @@ void main() {
 	float d = distance(camera_center, i);
     if (d < RAND_MAX/3) {
 		color = compute_color_gouraud(i, normal);	
-		//color = mix(color_from_texture, color, vec3(0.1));	
-		//color = texture(tex,uv).rgb;
+		color = mix(texture(tex,uv).rgb, color, vec3(0.3));			
 		gl_FragDepth =  project(i);
 	}
     else {
