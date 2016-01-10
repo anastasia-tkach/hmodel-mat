@@ -1,4 +1,4 @@
-function [] = energy1_case3_analytical(p, c1, c2, c3, r1, r2, r3, index, D)
+function [] = jacobian_convtriangle_analytical(p, c1, c2, c3, r1, r2, r3, index, D)
 
 arguments = 'c1, c2, c3, r1, r2, r3';
 variables = {'c1', 'c2', 'c3', 'r1', 'r2', 'r3'};

@@ -61,11 +61,6 @@ named_blocks{end + 1} = {'thumb_bottom', 'thumb_base'};
 named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
 named_blocks{end + 1} = {'palm_right', 'palm_ring', 'palm_back'};
 named_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
-
-% named_blocks{end + 1} = {'palm_middle', 'palm_thumb', 'palm_back'};
-% named_blocks{end + 1} = {'palm_thumb', 'thumb_base', 'palm_back'}; 
-% named_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_thumb'};
-
 named_blocks{end + 1} = {'palm_middle', 'palm_left', 'palm_back'};
 named_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
 

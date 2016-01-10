@@ -1,4 +1,4 @@
-function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha)
+function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha, figure_mode)
 
 %% Generating the volumetric domain data:
 n = 55; color = double([234; 189; 157]./255);
@@ -12,9 +12,12 @@ N = numel(x);
 P = [reshape(x, N, 1), reshape(y, N, 1), reshape(z, N, 1)];
 distances = zeros(N, 1);
 
-figure; hold on;
-
-%figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+if strcmp(figure_mode, 'small')
+    figure; hold on;
+end
+if strcmp(figure_mode, 'big')
+    figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+end
 set(gcf,'color','w');
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);
@@ -50,8 +53,9 @@ isonormals(x, y, z, min_distances, h);
 
 set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', face_alpha);
 
-grid off; view([-1, -1, -1]); axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); camlight;
-view([1, 1, 1]); camlight;
+grid off; axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); 
+view([-1, -1, -1]); if ~strcmp(figure_mode, 'none'), camlight; end
+view([+1, +1, +1]); if ~strcmp(figure_mode, 'none'), camlight; end
 
 %% Display data
 data_color = [0.65, 0.1, 0.5];

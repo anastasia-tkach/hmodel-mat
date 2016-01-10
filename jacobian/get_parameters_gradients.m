@@ -4,6 +4,7 @@ gradients = cell(0, 1); %#ok<*AGROW>
 
 %% Sphere
 if length(index) == 1
+    if strcmp(mode, 'fitting'), gradient.dr1 = zeros(1, D); end
     %% c1
     attachment = attachments{index(1)};
     if isempty(attachment)
@@ -17,10 +18,17 @@ if length(index) == 1
             gradients{end + 1} = gradient;
         end
     end
+    %% r1
+    if strcmp(mode, 'fitting'),
+        gradient.dc1 = zeros(D, 1);  
+        gradients{end + 1} = gradient; gradients{end}.dr1 = 1; gradients{end}.index = index(1);
+    end
+    
 end
 
 %% Convolution segment
 if length(index) == 2
+    if strcmp(mode, 'fitting'), gradient.dr1 = zeros(1, D); gradient.dr2 = zeros(1, D); end
     %% c1
     attachment = attachments{index(1)};
     if isempty(attachment)
@@ -49,11 +57,19 @@ if length(index) == 2
             gradients{end + 1} = gradient;
         end
     end
+    %% r1 and r2
+    if strcmp(mode, 'fitting'),
+        gradient.dc1 = zeros(D, 1); gradient.dc2 = zeros(D, 1); 
+        gradient.dr1 = 0; gradient.dr2 = 0; 
+        gradients{end + 1} = gradient; gradients{end}.dr1 = 1; gradients{end}.index = index(1);
+        gradients{end + 1} = gradient; gradients{end}.dr2 = 1; gradients{end}.index = index(2);
+    end
 end
 
 %% Convolution triangle
 if length(index) == 3
     index = abs(index);
+    if strcmp(mode, 'fitting'), gradient.dr1 = zeros(1, D); gradient.dr2 = zeros(1, D); gradient.dr3 = zeros(1, D); end
     %% c1
     attachment = attachments{index(1)};
     if isempty(attachment)
@@ -99,13 +115,13 @@ if length(index) == 3
             gradients{end + 1} = gradient;
         end
     end
-    %% radii
-    if strcmp(mode, 'fitting')
+    %% r1, r2 and r3
+    if strcmp(mode, 'fitting'),
         gradient.dc1 = zeros(D, 1); gradient.dc2 = zeros(D, 1); gradient.dc3 = zeros(D, 1);
         gradient.dr1 = 0; gradient.dr2 = 0; gradient.dr3 = 0;
-        gradients{4} = gradient; gradients{4}.dr1 = 1; gradients{4}.index = index(1);
-        gradients{5} = gradient; gradients{5}.dr2 = 1; gradients{5}.index = index(2);
-        gradients{6} = gradient; gradients{6}.dr3 = 1; gradients{6}.index = index(3);
+        gradients{end + 1} = gradient; gradients{end}.dr1 = 1; gradients{end}.index = index(1);
+        gradients{end + 1} = gradient; gradients{end}.dr2 = 1; gradients{end}.index = index(2);
+        gradients{end + 1} = gradient; gradients{end}.dr3 = 1; gradients{end}.index = index(3);
     end
 end
 
