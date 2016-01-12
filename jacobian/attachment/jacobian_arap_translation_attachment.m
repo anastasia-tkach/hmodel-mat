@@ -6,7 +6,7 @@ Jc = zeros(num_points * D, length(centers) * D);
 
 %% Compute tangent points
 if D == 3
-    [tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments);
+    [tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments, 'tracking');
 end
 for i = 1:num_points
     
@@ -26,7 +26,7 @@ for i = 1:num_points
     end
     
     %% Compute gradients of the model point
-    gradients = get_parameters_gradients(index, attachments, length(q));
+    gradients = get_parameters_gradients(index, attachments, length(q), 'tracking');
     if length(index) == 1
         [q, gradients] = jacobian_sphere_attachment(q, centers{index(1)}, radii{index(1)}, gradients);       
     end

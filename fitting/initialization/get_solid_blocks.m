@@ -45,15 +45,6 @@ for i = 1:length(named_elastic_blocks)
     end    
 end
 
-%% Get phantom blocks
-phantom_blocks = cell(length(named_phantom_blocks), 1);
-for i = 1:length(named_phantom_blocks)    
-    for j = 1:length(named_phantom_blocks{i})    
-        key = named_phantom_blocks{i}(j);
-        phantom_blocks{i} = [phantom_blocks{i}, names_map(key{1})];
-    end
-end
-
 %% Merge solid and elastic blocks
 single_solid_blocks_indices = {};
 for i = 1:length(solid_indicator)
@@ -71,6 +62,16 @@ for i = 1:length(solid_blocks_indices)
     end
     solid_blocks{i} = unique(solid_blocks{i});
 end
+
+%% Get phantom blocks
+phantom_blocks = cell(length(named_phantom_blocks), 1);
+for i = 1:length(named_phantom_blocks)    
+    for j = 1:length(named_phantom_blocks{i})    
+        key = named_phantom_blocks{i}(j);
+        phantom_blocks{i} = [phantom_blocks{i}, names_map(key{1})];
+    end
+end
+
 
 %% Merge solid and phantom blocks
 solid_blocks = [solid_blocks; phantom_blocks];

@@ -24,7 +24,7 @@ for b = 1:length(blocks)
             continue;
         end
         
-        gradients = get_parameters_gradients([i1, i2], attachments, D);
+        gradients = get_parameters_gradients([i1, i2], attachments, D, 'tracking');
         [f, gradients] = jacobian_tangent_cone_existence_attachment(c1, c2, r1, r2, factor, gradients);
         
         F(count) = f;
@@ -58,7 +58,7 @@ for b = 1:length(blocks)
             if f > 0, continue; end
             
             %% Compute gradient
-            gradients = get_parameters_gradients([i1, i2, i3], attachments, D);
+            gradients = get_parameters_gradients([i1, i2, i3], attachments, D, 'tracking');
             [f, gradients] = jacobian_tangent_plane_existence_attachment(c1, c2, c3, r1, r2, r3, factor, gradients);
             
             F(count) = f;

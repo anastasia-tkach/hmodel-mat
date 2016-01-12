@@ -154,7 +154,7 @@ for i = 1:length(blocks)
     b = centers{index1}; c = centers{index2};
     e = limits_rotations{i} * restpose_edges{i};
     
-    gradients = get_parameters_gradients([index1, index2], attachments, D);
+    gradients = get_parameters_gradients([index1, index2], attachments, D, 'tracking');
     f3(D * (i - 1) + 1: D * i) = c - b - e;
     for l = 1:length(gradients)
         J3(D * (i - 1) + 1: D * i, D * (gradients{l}.index - 1) + 1:D * gradients{l}.index) = gradients{l}.dc2 - gradients{l}.dc1;

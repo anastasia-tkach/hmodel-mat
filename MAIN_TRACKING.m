@@ -1,68 +1,48 @@
 close all;
 clear;
+verbose = false;
+settings.mode = 'tracking';
 settings_default; display_data = true;
-data_path = 'tracking/test4/';
+input_path = '_my_hand/tracking_initialization/';
+semantics_path = '_my_hand/semantics/';
 skeleton = false; mode = 'my_hand';
 
 %% Weights
-damping = 1; num_iters = 10;
+damping = 1; num_iters = 7;
 w1 = 1; w2 = 10; w3 = 100; w4 = 10; w5 = 2; w6 = 100;
 
 %% Display initial model
-load([data_path, 'theta.mat']);
-load([data_path, 'data_points.mat']);
-
-figure; axis off; axis equal; hold on;
-segments = create_ik_model('hand');
-[segments, joints] = pose_ik_model(segments, theta, false, 'hand');
-[centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, 'hand');
-display_result(centers, [], [], blocks, radii, false, 0.8);
-mypoints(data_points, [0.65, 0.1, 0.5]);
-view([180, -90]); camlight; drawnow;
+load([input_path, 'theta.mat']);
+load([input_path, 'data_points.mat']);
+if verbose
+    figure; axis off; axis equal; hold on;
+    segments = create_ik_model('hand');
+    [segments, joints] = pose_ik_model(segments, theta, false, 'hand');
+    [centers, radii, blocks, ~, attachments] = make_convolution_model(segments, 'hand');
+    display_result(centers, [], [], blocks, radii, false, 0.8, 'big');
+    mypoints(data_points, [0.65, 0.1, 0.5]);
+    view([180, -90]); camlight; drawnow;
+end
 
 %% Load data
-load([data_path, 'radii.mat']); load([data_path, 'centers.mat']);
-load([data_path, 'blocks.mat']); [blocks] = reindex(radii, blocks);
+load([input_path, 'radii.mat']); load([input_path, 'centers.mat']);
+load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks);
 
-display_result(centers, [], [], blocks, radii, false, 0.9);
-mypoints(data_points, [0.65, 0.1, 0.5]);
-%display_skeleton(centers, radii, blocks, data_points, false);
-view([180, -90]); camlight; drawnow;
+if verbose
+    display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
+    mypoints(data_points, [0.65, 0.1, 0.5]);
+    %display_skeleton(centers, radii, blocks, data_points, false);
+    view([180, -90]); camlight; drawnow;
+end
 
-compute_attachments;
+load([semantics_path, 'named_elastic_blocks.mat']);
+load([semantics_path, 'named_solid_blocks.mat']);
+load([semantics_path, 'tracking/blocks.mat']);
+load([semantics_path, 'tracking/names_map.mat']);
+load([semantics_path, 'tracking/named_blocks.mat']);
+[attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = compute_attachments(centers, blocks, names_map, named_blocks, named_solid_blocks, named_elastic_blocks);
 names_map_keys = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back'};
 [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
-
-
-%% Reduce size
-%{
-centers = centers([20, 19, 26, 25]);
-radii = radii([20, 19, 26, 25]);
-solid_blocks = {} ;
-parents = {[2], []};
-blocks = {[1, 2], [1, 3, 4]};
-global_frame_indices = [1, 3, 4];
-attachments = cell(length(centers), 1);
-
-centers = centers([20, 26, 25]);
-radii = radii([20, 26, 25]);
-solid_blocks = {} ;
-parents = {[]};
-blocks = {[1, 2, 3]};
-global_frame_indices = [1, 2, 3];
-attachments = cell(length(centers), 1);
-
-data_points = generate_convtriangles_points(centers, blocks, radii, 400000);
-rotation_axis = randn(D, 1); rotation_angle = 0.6 * randn; translation_vector = 0.5 * randn(D, 1);
-save rotation_axis rotation_axis; save rotation_angle rotation_angle; save translation_vector translation_vector;
-load rotation_axis; load rotation_angle; load translation_vector;
-R = makehgtform('axisrotate', rotation_axis, rotation_angle);
-T = makehgtform('translate', translation_vector);
-for i = 1:length(centers)
-   centers{i} = transform(centers{i}, R);
-   centers{i} = transform(centers{i}, T);
-end
-%}
 
 %% Set up data structures
 data_bounding_box = compute_data_bounding_box(data_points);
@@ -104,7 +84,6 @@ for i = 1:length(blocks)-1
     end
 end
 
-
 % display_result(centers, [], [], blocks, radii, false, 0.8);
 % mypoints(data_points, [0.65, 0.1, 0.5]);
 % view([180, -90]); camlight; drawnow;
@@ -129,7 +108,7 @@ for iter = 1:5
     %[model_indices, model_points, ~] = compute_tracking_projections(data_points, centers, blocks, radii, [0; 0; 0]);
     
     %% Display
-    display_result(centers, data_points, model_points, blocks, radii, true, 0.7);
+    display_result(centers, data_points, model_points, blocks, radii, true, 0.7, 'big');
     mylines(data_points, model_points, [0.75, 0.75, 0.75]);
     view([180, -90]); camlight; drawnow;
     
@@ -203,7 +182,7 @@ for iter = 1:5
         [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, global_frame_indices);
         
         %energies(1) = w1 * (f1' * f1); energies(2) = 10^inner_iter * w2 * (f2' * f2); disp(energies);
-        %display_shape_preservation(centers, edge_indices, restpose_edges);        
+        %display_shape_preservation(centers, edge_indices, restpose_edges);
     end
     %}
 end
@@ -211,7 +190,7 @@ end
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 
-display_result(centers, data_points, model_points, blocks, radii, false, 0.8);
+display_result(centers, data_points, model_points, blocks, radii, false, 0.8, 'big');
 mypoints(data_points, [0.65, 0.1, 0.5]);
 view([180, -90]); camlight; drawnow;
 

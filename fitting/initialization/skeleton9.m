@@ -31,9 +31,6 @@ v = cross(back, u); v = v / norm(v);
 centers_map('thumb_membrane') = 0.7 * centers_map('thumb_bottom') + 0.3 * centers_map('thumb_middle');
 radii_map('thumb_membrane') = radii_map('thumb_middle');
 
-% centers_map('palm_thumb') = 0.5 * centers_map('index_base') + 0.5 * centers_map('thumb_base');
-% radii_map('palm_thumb') = 0.2;
-
 
 %% Blocks fingers
 named_blocks = {};
@@ -69,11 +66,6 @@ named_blocks{end + 1} = {'ring_base', 'palm_attachment'};
 named_blocks{end + 1} = {'middle_base', 'palm_attachment'};
 named_blocks{end + 1} = {'index_base', 'palm_attachment'};
 
-named_blocks{end + 1} = {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'};
-named_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'};
-named_blocks{end + 1} = {'wrist_top_left', 'wrist_top_right', 'palm_back'};
-%named_blocks{end + 1} = {'wrist_top_left', 'wrist_top_right', 'palm_attachment'};
-
 named_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'}; 
 named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
 named_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'}; 
@@ -86,6 +78,11 @@ named_blocks{end + 1} = {'thumb_fold', 'palm_thumb', 'thumb_base'};
 named_blocks{end + 1} = {'thumb_additional', 'thumb_top'};
 named_blocks{end + 1} = {'palm_left', 'thumb_base'};
 
+%% Wrist blocks
+named_blocks{end + 1} = {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'};
+named_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'};
+named_blocks{end + 1} = {'wrist_top_left', 'wrist_top_right', 'palm_back'};
+
 %% Read mesh
 
 names = keys(centers_map);
@@ -96,9 +93,9 @@ names_map_keys = {
     'index_top', 'index_middle', 'index_bottom', 'index_base', ...
     'thumb_top', 'thumb_middle', 'thumb_bottom', 'thumb_base', ...
     'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', ...
-    'palm_back', 'palm_attachment', 'palm_right', 'palm_left', ...
-    'wrist_top_left', 'wrist_top_right', 'wrist_bottom_left', 'wrist_bottom_right', ...
+    'palm_back', 'palm_attachment', 'palm_right', 'palm_left', ...    
     'pinky_membrane', 'ring_membrane', 'middle_membrane', 'index_membrane', 'thumb_membrane', 'thumb_additional', 'thumb_fold'...
+    'wrist_top_left', 'wrist_top_right', 'wrist_bottom_left', 'wrist_bottom_right'
     };
 names_map = containers.Map(names_map_keys, 1:length(names_map_keys));
 

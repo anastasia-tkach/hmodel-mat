@@ -1,5 +1,3 @@
-
-filename = [data_path, 'pose', num2str(pose_id), '.obj'];
 centers_map = containers.Map();
 radii_map = containers.Map();
 

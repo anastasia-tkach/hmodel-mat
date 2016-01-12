@@ -57,7 +57,6 @@ for i = 1:length(solid_blocks)
 end
 
 %% Rotations energy
-
 num_centers = length(centers);
 num_blocks = length(blocks);
 full_rotations = rotations;
@@ -65,7 +64,14 @@ k = 1;
 f2 = zeros(num_blocks * D, 1);
 J2 = zeros(num_blocks * D, num_centers * D);
 for i = 1:length(edge_indices)
+    
     for j = 1:length(edge_indices{i})
+        
+        if ismember(i, elastic_blocks)
+            k = k + 1;
+            continue; 
+        end
+        
         index1 = edge_indices{i}{j}(1);
         index2 = edge_indices{i}{j}(2);
         b = centers{index1}; c = centers{index2};
@@ -73,20 +79,17 @@ for i = 1:length(edge_indices)
         if ~isempty(parents{i})
             previous_parent_rotation = previous_rotations{edge_ids(parents{i})};
             parent_rotation = rotations{edge_ids(parents{i})};
-        else previous_parent_rotation = eye(D, D);  parent_rotation = eye(D, D);
+        else
+            previous_parent_rotation = eye(D, D);  
+            parent_rotation = eye(D, D);
         end
         
         full_rotations{k} = previous_parent_rotation' * parent_rotation * rotations{k};
         e = full_rotations{k} * restpose_edges{k};
-        
-        if ismember(i, elastic_blocks)
-            continue;
-            e = full_rotations{k} * norm(c - b) * restpose_edges{k}/norm(restpose_edges{k});
-        end
-        
+       
         %e = rotations{k} * restpose_edges{k};
         
-        gradients = get_parameters_gradients([index1, index2], attachments, D);        
+        gradients = get_parameters_gradients([index1, index2], attachments, D, 'tracking');        
        
         f2(D * (k - 1) + 1: D * k) = c - b - e;
         for l = 1:length(gradients)
