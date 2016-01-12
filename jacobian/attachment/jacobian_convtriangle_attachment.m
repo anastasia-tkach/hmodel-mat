@@ -1,7 +1,6 @@
 function [f, gradients] = jacobian_convtriangle_attachment(p, tangent_gradient, gradients, mode)
 
 D = length(p);
-dp = zeros(D, D);
 
 switch mode
     case 'v'
@@ -25,6 +24,7 @@ for var = 1:length(tangent_gradient.gradients)
             dv2 = tangent_gradient.gradients{var}.du2;
             dv3 = tangent_gradient.gradients{var}.du3;
     end
+    dp = zeros(size(dv1));
     
     % m = cross(v1 - v2, v1 - v3);
     [O1, dO1] = difference_derivative(v1, dv1, v2, dv2);

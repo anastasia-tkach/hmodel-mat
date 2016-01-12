@@ -1,3 +1,0 @@
-[centers, radii, blocks] = get_random_convtriangle();
-
-[centers, radii, blocks] = get_random_shre();

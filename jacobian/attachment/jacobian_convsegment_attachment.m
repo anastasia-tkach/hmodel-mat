@@ -1,14 +1,13 @@
 function [f, gradients] = jacobian_convsegment_attachment(p, c1, c2, r1, r2, gradients)
 
-D = length(p);
-dp = zeros(D, D);
-dr1 = zeros(1, D);
-dr2 = zeros(1, D);
-
 for var = 1:length(gradients)        
     
     dc1 = gradients{var}.dc1;
     dc2 = gradients{var}.dc2;
+    
+    dp = zeros(size(dc1));
+    dr1 = zeros(1, size(dc1, 2));
+    dr2 = zeros(1, size(dc2, 2));
     
     %% u = c2 - c1; v = p - c1;
     [u, du] = difference_derivative(c2, dc2, c1, dc1);

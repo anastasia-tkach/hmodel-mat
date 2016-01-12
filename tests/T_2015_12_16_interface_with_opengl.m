@@ -31,7 +31,7 @@ for i = 1:length(points)
 end
 
 [model_indices, model_points, ~] = compute_projections(points, centers, blocks, radii);
-display_result(centers, points, model_points, blocks, radii, true, 0.5);
+display_result(centers, points, model_points, blocks, radii, true, 0.5, 'big');
 
 %% Put data in matrix form
 D = 3;

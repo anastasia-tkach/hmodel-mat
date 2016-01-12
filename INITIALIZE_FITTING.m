@@ -85,9 +85,41 @@ named_smooth_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
 named_smooth_blocks{end + 1} = {'wrist_top_left', 'wrist_bottom_left', 'wrist_top_right'};
 named_smooth_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_bottom_right'};
 
+%% Tangent blocks-spheres pairs
+named_tangent_blocks = {};
+named_tangent_spheres = {};
+
+named_tangent_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
+named_tangent_spheres{end + 1} = 'pinky_base';
+
+named_tangent_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
+named_tangent_spheres{end + 1} = 'ring_base';
+
+named_tangent_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
+named_tangent_spheres{end + 1} = 'ring_base';
+
+named_tangent_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
+named_tangent_spheres{end + 1} = 'middle_base';
+
+named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
+named_tangent_spheres{end + 1} = 'middle_base';
+
+named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
+named_tangent_spheres{end + 1} = 'index_base';
+
+% named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
+% named_tangent_spheres{end + 1} = 'palm_thumb';
+
 %% Get unnamed blocks
 solid_blocks = get_solid_blocks(blocks, names_map, named_blocks, named_solid_blocks, named_elastic_blocks, named_phantom_blocks);
 smooth_blocks = get_smooth_blocks(blocks, named_blocks, named_smooth_blocks);
+tangent_blocks = get_smooth_blocks(blocks, named_blocks, named_tangent_blocks);
+tangent_spheres = zeros(length(named_tangent_spheres), 1);
+for i = 1:length(named_tangent_spheres)
+    key = named_tangent_spheres(i);
+    tangent_spheres(i) = names_map(key{1});
+end
+
 blocks = blocks';
 
 %% Get points and normals
@@ -113,6 +145,8 @@ save([data_path, num2str(pose_id), '_radii.mat'], 'radii');
 save([data_path, 'blocks.mat'], 'blocks');
 save([data_path, 'smooth_blocks.mat'], 'smooth_blocks');
 save([data_path, 'solid_blocks.mat'], 'solid_blocks');
+save([data_path, 'tangent_blocks.mat'], 'tangent_blocks');
+save([data_path, 'tangent_spheres.mat'], 'tangent_spheres');
 %save([data_path, 'solid_blocks_indices.mat'], 'solid_blocks_indices');
 save([data_path, 'names_map.mat'], 'names_map');
 save([data_path, 'named_blocks.mat'], 'named_blocks');

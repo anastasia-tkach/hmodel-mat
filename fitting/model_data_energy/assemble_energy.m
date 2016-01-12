@@ -10,22 +10,27 @@ for p = 1:length(poses)
             if settings.energy1 == false, F = 0; J = 0; return; end
             poses{p}.f = poses{p}.f1;
             poses{p}.Jc = poses{p}.Jc1;
-            poses{p}.Jr = poses{p}.Jr1; 
+            poses{p}.Jr = poses{p}.Jr1;
         case '3'
             if settings.energy3 == false, F = 0; J = 0; return; end
             poses{p}.f = poses{p}.f3;
             poses{p}.Jc = poses{p}.Jc3;
-            poses{p}.Jr = poses{p}.Jr3; 
+            poses{p}.Jr = poses{p}.Jr3;
         case '4'
             if settings.energy4 == false, F = 0; J = 0; return; end
             poses{p}.f = poses{p}.f4;
             poses{p}.Jc = poses{p}.Jc4;
-            poses{p}.Jr = poses{p}.Jr4; 
+            poses{p}.Jr = poses{p}.Jr4;
         case '5'
             if settings.energy5 == false, F = 0; J = 0; return; end
             poses{p}.f = poses{p}.f5;
             poses{p}.Jc = poses{p}.Jc5;
-            poses{p}.Jr = poses{p}.Jr5; 
+            poses{p}.Jr = poses{p}.Jr5;
+        case '6'
+            if settings.energy6 == false, F = 0; J = 0; return; end
+            poses{p}.f = poses{p}.f6;
+            poses{p}.Jc = poses{p}.Jc6;
+            poses{p}.Jr = poses{p}.Jr6;
     end
 end
 
@@ -43,7 +48,7 @@ F = zeros(total_num_points, 1);
 J = zeros(total_num_points, num_parameters);
 num_poses = length(poses);
 for p = 1:length(poses)
-    J(cumsum_num_points(p) + 1:cumsum_num_points(p + 1), D * num_centers * (p - 1) + 1:D * num_centers * p) = poses{p}.Jc;    
+    J(cumsum_num_points(p) + 1:cumsum_num_points(p + 1), D * num_centers * (p - 1) + 1:D * num_centers * p) = poses{p}.Jc;
     J(cumsum_num_points(p) + 1:cumsum_num_points(p + 1), D * num_centers * num_poses + 1:end) = poses{p}.Jr;
     F(cumsum_num_points(p) + 1:cumsum_num_points(p + 1)) = poses{p}.f;
 end

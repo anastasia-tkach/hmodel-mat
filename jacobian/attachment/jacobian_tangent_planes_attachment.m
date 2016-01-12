@@ -1,4 +1,4 @@
-function [tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments)
+function [tangent_gradients] = jacobian_tangent_planes_attachment(centers, blocks, radii, attachments, mode)
 if length(centers{1}) == 2, return; end
 
 tangent_gradients = cell(length(blocks), 1);
@@ -15,8 +15,8 @@ for i = 1:length(blocks)
         r2 = radii{blocks{i}(2)};
         r3 = radii{blocks{i}(3)};
         
-        gradients = get_parameters_gradients(blocks{i}, attachments, length(c1));
-        [v1, v2, v3, u1, u2, u3, gradients] = jacobian_tangent_plane_attachment(c1, c2, c3, r1, r2, r3, gradients);
+        gradients = get_parameters_gradients(blocks{i}, attachments, length(c1), mode);
+        [v1, v2, v3, u1, u2, u3, n1, n2, gradients] = jacobian_tangent_plane_attachment(c1, c2, c3, r1, r2, r3, gradients);
         
         tangent_gradients{i}.v1 = v1;
         tangent_gradients{i}.v2 = v2;
