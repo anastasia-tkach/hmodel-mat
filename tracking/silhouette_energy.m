@@ -1,10 +1,11 @@
-function [Fn, Jn] = silhouette_energy(centers, radii, blocks, points, data_bounding_box, settings)
+function [Fn, Jn, model_points] = silhouette_energy(centers, radii, blocks, points, data_bounding_box, settings)
 closing_radius = 2;
 D = settings.D;
 
-%% Render model and datas
+%% Render model and data
 [raytracing_matrix, camera_axis, camera_center] = ...
     get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
+
 [rendered_data, back_map_for_rendered_data, P] = ...
     render_tracking_data(points, camera_axis, camera_center, settings.view_axis, closing_radius, settings);
 
@@ -27,7 +28,7 @@ for k = 1:length(I), model_points{k} = squeeze(rendered_model(I(k), J(k), :)); e
 % mypoints(data_points_2D, [1, 0.7, 0.1]);
 
 % display_result(centers, points, [], blocks, radii, true, 0.5);
-mypoints(model_points, 'y');
+% mypoints(model_points, 'y');
 % mypoints(closest_data_points, [0.4, 0, 0.4]);
 % view([-180, -90]); camlight; drawnow;
 

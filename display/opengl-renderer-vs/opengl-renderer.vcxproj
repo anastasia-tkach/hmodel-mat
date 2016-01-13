@@ -307,6 +307,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_points_vshader.glsl" />
     <None Include="model_fshader.glsl" />
     <None Include="model_vshader.glsl" />
+    <None Include="outside_points_fshader.glsl" />
+    <None Include="outside_points_vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/ZERO_CHECK.vcxproj">

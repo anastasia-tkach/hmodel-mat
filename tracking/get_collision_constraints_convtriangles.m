@@ -52,7 +52,7 @@ end
 
 if max_penetration > 5e-2
     is_colliding = true;
-    disp(max_penetration);
+    %disp(max_penetration);
 else
     is_colliding = false; 
 end

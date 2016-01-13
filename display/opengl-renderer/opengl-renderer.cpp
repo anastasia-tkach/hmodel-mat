@@ -22,8 +22,9 @@ using namespace std;
 int D = 3;
 int window_left = 0;
 int window_bottom = 0;
-int window_width = 1920;
-int window_height = 1080;
+int window_width = 900;
+int window_height = 900;
+float timestamp = 0.0;
 
 string path = "C:\\Users\\tkach\\OneDrive\\EPFL\\Code\\HModel\\display\\opengl-renderer-vs\\Input\\";
 
@@ -102,9 +103,9 @@ struct Camera {
 	
 	float fovy = 45.0f;	
 	float aspect = window_width / (float)window_height;	
-	float zNear = 0.1f;
+	float zNear = 0.01f;
 	float zFar = 20.0f;
-	Vector3f camera_center = Vector3f(0, 0, 10);
+	Vector3f camera_center = Vector3f(0, 0, -8);
 	Vector3f image_center = Vector3f(0, 0, 0);
 	Vector3f camera_up = Vector3f(0, 1, 0);
 	Vector3f world_up = Vector3f(0, 1, 0);
@@ -123,8 +124,8 @@ struct Camera {
 	bool left_button_pressed = false;
 	bool right_button_pressed = false;
 	Vector2f cursor_position = Vector2f(window_height / 2, window_width / 2);
-	Vector2f euler_angles = Vector2f(-2.472, -0.789);
-	Vector2f initial_euler_angles = Vector2f(-2.472, -0.789);
+	Vector2f euler_angles = Vector2f(-6.411, -1.8);
+	Vector2f initial_euler_angles = Vector2f(-6.411, -1.8);
 	float cursor_sensitivity = 0.003f;
 
 	void process_mouse_movement(GLfloat cursor_x, GLfloat cursor_y) {
@@ -139,7 +140,7 @@ struct Camera {
 			Vector3f z = cos(theta) * sin(phi) * Vector3f::UnitZ();
 
 			camera_center = d * (x + y + z);
-			euler_angles = Vector2f(theta, phi);
+			euler_angles = Vector2f(theta, phi);			
 
 			/*Vector3f camera_direction = (camera_center - image_center);
 			camera_up = up - camera_direction.dot(up) * camera_direction;
@@ -246,6 +247,10 @@ struct Data :public ShaderObject {
 			vertex_shader_name = "model_points_vshader.glsl";
 			fragment_shader_name = "model_points_fshader.glsl";
 		}
+		if (!strcmp(name.c_str(), "O")) {
+			vertex_shader_name = "outside_points_vshader.glsl";
+			fragment_shader_name = "outside_points_fshader.glsl";
+		}
 		if (!strcmp(name.c_str(), "L")) {
 			vertex_shader_name = "lines_vshader.glsl";
 			fragment_shader_name = "lines_fshader.glsl";
@@ -253,11 +258,12 @@ struct Data :public ShaderObject {
 	}
 
 	void setup(std::vector<Vector3f> data_points, std::vector<Vector3f> model_points, string name) {
-		for (size_t i = 0; i < data_points.size(); i++) {
+		for (size_t i = 0; i < model_points.size(); i++) {
 			if (model_points[i][0] == 0 && model_points[i][1] == 0 && model_points[i][2] == 0) continue;
 			points.push_back(data_points[i]);
 			points.push_back(model_points[i]);
 		}
+		cout << points.size() << endl;
 		get_shader_name(name);
 
 		program_id = opengp::load_shaders(vertex_shader_name.c_str(), fragment_shader_name.c_str());
@@ -285,6 +291,7 @@ struct Data :public ShaderObject {
 
 Data data_points;
 Data model_points;
+Data outside_points;
 Data lines;
 
 struct Model :public ShaderObject {
@@ -468,19 +475,40 @@ void init() {
 	model.setup_texture();
 	data_points.setup("P");
 	model_points.setup("M");
+	outside_points.setup("O");
 	lines.setup(data_points.points, model_points.points, "L");
+}
+
+bool is_updated() {
+	string name = "timestamp";
+	float t = 0;
+	FILE *fp = fopen((path + name + ".txt").c_str(), "r");
+	fscanf(fp, "%f", &t);
+	fclose(fp);
+	bool updated = false;
+	if (t != timestamp) updated = true;
+	timestamp = t;
+	return updated;
 }
 
 void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//model.setup();
+	
+	if (is_updated()) {
+		model.setup();
+		data_points.setup("P");
+		model_points.setup("M");
+		outside_points.setup("O");
+		//lines.setup(data_points.points, model_points.points, "L");
+	}
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, model.texture);
 
-	model.call_shader(GL_TRIANGLE_STRIP); 
-	//model_points.call_shader(GL_POINTS);
-	//data_points.call_shader(GL_POINTS);
+	model.call_shader(GL_TRIANGLE_STRIP); 	
+	data_points.call_shader(GL_POINTS);
+	model_points.call_shader(GL_POINTS);
+	outside_points.call_shader(GL_POINTS);
 	//lines.call_shader(GL_LINES);
 }
 

@@ -12,7 +12,7 @@ blocks = [blocks1; blocks2];
 
 %}
 
-data_path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\_data\my_hand\fitted_model\';
+data_path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\_my_hand\fitting_result\';
 load([data_path, 'radii.mat']);
 load([data_path, 'blocks.mat']); [blocks] = reindex(radii, blocks);
 load([data_path, 'centers.mat']);

@@ -1,7 +1,6 @@
 #version 330 core
 out vec3 color;
 
-uniform sampler2D tex;
 uniform float window_left;
 uniform float window_bottom;
 uniform float window_height;
@@ -32,6 +31,10 @@ uniform vec3 Ia, Id, Is;
 uniform vec3 ka, kd, ks;
 uniform float p;
 uniform vec3 light_pos;
+
+// Texture
+in vec2 uv;
+uniform sampler2D tex;
 
 float project(vec3 point){
 	vec4 point_gl =  MVP * vec4(point, 1.0);
@@ -332,7 +335,6 @@ vec3 ray_model_intersection(vec3 p, vec3 d, inout vec3 min_normal) {
     return min_i;
 }
 
-
 void main() {
     const int RAND_MAX = 32767;
 	vec2 pixel = vec2(gl_FragCoord.x, gl_FragCoord.y);
@@ -342,10 +344,11 @@ void main() {
     vec3 normal = vec3(0, 0, 0);
 
 	vec3 i = ray_model_intersection(camera_center, ray_direction, normal);
-    
+	    
 	float d = distance(camera_center, i);
     if (d < RAND_MAX/3) {
-		color = compute_color_gouraud(i, normal);		
+		color = compute_color_gouraud(i, normal);	
+		color = mix(texture(tex,uv).rgb, color, vec3(0.3));			
 		gl_FragDepth =  project(i);
 	}
     else {

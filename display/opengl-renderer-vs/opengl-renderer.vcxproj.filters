@@ -15,6 +15,12 @@
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_points_vshader.glsl" />
     <None Include="model_fshader.glsl" />
     <None Include="model_vshader.glsl" />
+    <None Include="outside_points_fshader.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="outside_points_vshader.glsl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

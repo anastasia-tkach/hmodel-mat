@@ -1,14 +1,20 @@
+fileexe_path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\Release\';
+cd(fileexe_path);
+system_command_string = [fileexe_path, 'opengl-renderer.exe', ' &'];
+status = system (system_command_string);
+
 close all;
 clear;
 verbose = false;
 settings.mode = 'tracking';
 settings_default; display_data = true;
+settings.opengl = true;
 input_path = '_my_hand/tracking_initialization/';
 semantics_path = '_my_hand/semantics/';
 skeleton = false; mode = 'my_hand';
 
 %% Weights
-damping = 1; num_iters = 7;
+damping = 1; num_iters = 2;
 w1 = 1; w2 = 10; w3 = 100; w4 = 10; w5 = 2; w6 = 100;
 
 %% Display initial model
@@ -28,19 +34,19 @@ end
 load([input_path, 'radii.mat']); load([input_path, 'centers.mat']);
 load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks);
 
-if verbose
-    display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
+if settings.opengl
+    display_opengl(centers, data_points, [], [], blocks, radii, false, 1);
+else
+    display_result(centers, data_points, [], blocks, radii, true, 0.9, 'big');
     mypoints(data_points, [0.65, 0.1, 0.5]);
     %display_skeleton(centers, radii, blocks, data_points, false);
     view([180, -90]); camlight; drawnow;
 end
 
-load([semantics_path, 'named_elastic_blocks.mat']);
-load([semantics_path, 'named_solid_blocks.mat']);
 load([semantics_path, 'tracking/blocks.mat']);
 load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
-[attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = compute_attachments(centers, blocks, names_map, named_blocks, named_solid_blocks, named_elastic_blocks);
+[attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
 names_map_keys = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back'};
 [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 
@@ -89,7 +95,7 @@ end
 % view([180, -90]); camlight; drawnow;
 
 %% Optimizaion
-for iter = 1:5
+for iter = 1:num_iters
     [blocks] = reindex(radii, blocks);
     
     %% Compute model_points
@@ -107,17 +113,12 @@ for iter = 1:5
     end
     %[model_indices, model_points, ~] = compute_tracking_projections(data_points, centers, blocks, radii, [0; 0; 0]);
     
-    %% Display
-    display_result(centers, data_points, model_points, blocks, radii, true, 0.7, 'big');
-    mylines(data_points, model_points, [0.75, 0.75, 0.75]);
-    view([180, -90]); camlight; drawnow;
-    
     %% Solve with gradients
     [f1, J1] = jacobian_arap_translation_attachment(centers, radii, blocks, model_points, model_indices, data_points, attachments, D);
     [f2, J2, previous_rotations, parents, edge_ids] = jacobian_arap_ik_rotation_attachment(centers, blocks, edge_indices, restpose_edges, solid_blocks, elastic_blocks, D, previous_rotations, attachments, parents);
     [f3, J3] = collisions_energy(centers, radii, blocks, attachments, adjacency_matrix, settings);
     [f4, J4] = jacobian_joint_limits_new(centers, blocks, restpose_edges, previous_rotations, limits, parents, attachments, global_frame_indices, names_map, D);
-    [f5, J5] = silhouette_energy(centers, radii, blocks, data_points, data_bounding_box, settings);
+    [f5, J5, outside_points] = silhouette_energy(centers, radii, blocks, data_points, data_bounding_box, settings);
     [f6, J6] = existence_energy(centers, radii, blocks, attachments, settings);
     I = eye(D * length(centers), D * length(centers));
     w2 = 1.5 * w2;
@@ -125,9 +126,22 @@ for iter = 1:5
     rhs = w1 * (J1' * f1) + w2 * (J2' * f2) +  w3 * (J3' * f3) + w4* (J4' * f4) + w5 * (J5' * f5) +  w6 * (J6' * f6);
     delta = -  LHS \ rhs;
     
+    %% Display
+    if settings.opengl
+        display_opengl(centers, data_points, model_points, outside_points, blocks, radii, false, 1);
+    else
+        display_result(centers, data_points, model_points, blocks, radii, true, 0.7, 'big');
+        mylines(data_points, model_points, [0.75, 0.75, 0.75]);
+        mypoints(outside_points, 'y');
+        view([180, -90]); camlight; drawnow;
+    end
+    
     for o = 1:length(centers), centers{o} = centers{o} + delta(D * o - D + 1:D * o); end
     
-    display_shape_preservation(centers, edge_indices, restpose_edges);
+    energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); energies(3) = w3 * (f3' * f3);
+    energies(4) = w4 * (f4' * f4); energies(5) = w5 * (f5' * f5); energies(6) = w6 * (f6' * f6); disp(energies);
+    
+    %display_shape_preservation(centers, edge_indices, restpose_edges);
     
     %% Fixed correspondences
     %{
@@ -190,9 +204,17 @@ end
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, names_map_keys);
 
-display_result(centers, data_points, model_points, blocks, radii, false, 0.8, 'big');
-mypoints(data_points, [0.65, 0.1, 0.5]);
-view([180, -90]); camlight; drawnow;
+% display_result(centers, data_points, model_points, blocks, radii, false, 0.8, 'big');
+% mypoints(data_points, [0.65, 0.1, 0.5]);
+% view([180, -90]); camlight; drawnow;
+
+if settings.opengl
+    display_opengl(centers, [], [], [], blocks, radii, false, 1);
+else
+    display_result(centers, data_points, model_points, blocks, radii, false, 0.8, 'big');
+    mypoints(data_points, [0.65, 0.1, 0.5]);
+    view([180, -90]); camlight; drawnow;
+end
 
 
 
