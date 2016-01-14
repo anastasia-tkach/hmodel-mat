@@ -1,5 +1,11 @@
 function [centers] = find_htrack_model_nonrigid(centers, radii, blocks, htrack_centers, theta, names_map, named_blocks, key_points_names, verbose, D)
 
+
+%% Compute attachments
+[attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
+[attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, 'my_hand', global_frame_indices, names_map, key_points_names);
+
+%% Restpose edges
 restpose_edges = cell(length(blocks), 1);
 k = 1;
 for i = 1:length(blocks)
@@ -26,13 +32,10 @@ for i = 1:length(key_points_names)
     hmodel_indices = [hmodel_indices, names_map(key_points_names{i})];
 end
 
+%[centers, axis_projections, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'my_hand', global_frame_indices, names_map, key_points_names);
 figure; axis off; axis equal; hold on;
 segments = create_ik_model('hand'); pose_ik_model(segments, theta, true, 'hand');
 display_skeleton(centers, [], blocks, [], false, []);
-
-%% Compute attachments
-[attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
-[attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, 'my_hand', global_frame_indices, names_map, key_points_names);
 
 %% Run ARAP
 damping = 0.1; w1 = 1; w2 = 1;

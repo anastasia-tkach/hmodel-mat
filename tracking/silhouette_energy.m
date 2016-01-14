@@ -27,11 +27,6 @@ for k = 1:length(I), model_points{k} = squeeze(rendered_model(I(k), J(k), :)); e
 % mypoints(model_points_2D, [0, 0.7, 1]);
 % mypoints(data_points_2D, [1, 0.7, 0.1]);
 
-% display_result(centers, points, [], blocks, radii, true, 0.5);
-% mypoints(model_points, 'y');
-% mypoints(closest_data_points, [0.4, 0, 0.4]);
-% view([-180, -90]); camlight; drawnow;
-
 %% Move behind the data silhouette
 attachments = cell(length(centers), 1);
 [F, J] = jacobian_arap_translation_attachment(centers, radii, blocks, ...
@@ -46,9 +41,33 @@ for i = 1:length(model_points)
     normals{i} = (q - m) / norm(q - m);
 end
 
-Fn = zeros(length(normals), 1); Jn = zeros(length(normals), D * length(centers));
-for i = 1:length(normals)
-    if isempty(normals{i}), continue; end
-    Fn(i) = normals{i}' * F(D * (i - 1) + 1:D * i);
-    Jn(i, :) = normals{i}' * J(D * (i - 1) + 1:D * i, :);
+%% Normal distance
+[Fn, Jn, ~] = compute_normal_distance(centers, normals, F, J, [], D);
+
+%% Display
+
+if ~settings.verbose, return; end
+
+correspondences = cell(length(closest_data_points));
+for i = 1:length(model_points)
+    if isempty(normals{i}) || isempty(model_points{i}), continue; end
+    correspondences{i} = model_points{i} + Fn(i) * normals{i};
 end
+
+camera_directions = cell(length(model_points), 1);
+for i = 1:length(model_points)
+    if isempty(model_points{i}), continue; end
+    camera_directions{i} = camera_center - model_points{i};
+    camera_directions{i} = camera_directions{i} / norm(camera_directions{i});
+end
+
+display_result(centers, points, [], blocks, radii, true, 0.5, 'big');
+mypoints(model_points, 'y');
+mypoints(correspondences, 'k');
+mypoints(closest_data_points, [0.4, 0, 0.4]);
+mylines(closest_data_points, model_points, 'g');
+mylines(model_points, correspondences, 'r');
+myvectors(closest_data_points, camera_directions, 5, 'c');
+myvectors(correspondences, camera_directions, 5, 'c');
+view([-180, -90]); camlight; drawnow;
+

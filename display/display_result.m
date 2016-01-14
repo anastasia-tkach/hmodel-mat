@@ -16,7 +16,7 @@ if strcmp(figure_mode, 'small')
     figure; hold on;
 end
 if strcmp(figure_mode, 'big')
-    figure('units','normalized','outerposition',[0 0 1 1]); hold on;
+    figure('units','normalized','outerposition',[0.0 0.085 1 0.873]); hold on;
 end
 set(gcf,'color','w');
 
@@ -70,48 +70,8 @@ if (display_data)
         end
         mypoints(projections, model_color);
         mylines(points, projections, [0.1, 0.8, 0.8]);
-        mypoints(back_projections, lines_color);
-        mylines(back_projections, projections, lines_color);
+        %mypoints(back_projections, lines_color);
+        %mylines(back_projections, projections, lines_color);
     end
 end
 
-%% Set the axis limits
-% if (~isfield(pose, 'limits'))
-%     limits.xlim = xlim; limits.ylim = ylim; limits.zlim = zlim;
-% else
-%     xlim(limits.xlim); ylim(limits.ylim); zlim(limits.zlim);
-% end
-% set(gcf,'color','w');
-
-%% Old Display Data
-% if isfield(pose, 'indices');
-%     k = 0;
-%     P = zeros(length(points), 3);
-%     Q = zeros(length(points), 3);
-%     L = zeros(length(points)*3, 3);
-%     for i = 1:skip:length(points)
-%         if ~isempty(indices{i})
-%             k = k + 1;
-%             P(k, :) =  points{i}';
-%             Q(k, :) = projections{i}';
-%             L(3 * (k - 1) + 1, :) = points{i}';
-%             L(3 * (k - 1) + 2, :) = projections{i}';
-%             L(3 * (k - 1) + 3, :) = [NaN, NaN, NaN];
-%         end
-%     end
-%     if (k > 0)
-%         P = P(1:k, :); Q = Q(1:k, :); L = L(1:3*k, :);
-%         scatter3(Q(:, 1), Q(:, 2), Q(:, 3), 10, [0.1, 0.8, 0.8], 'filled', 'o');
-%         scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
-%         line(L(1:3*k, 1), L(1:3*k, 2), L(1:3*k, 3), 'lineWidth', 2, 'color', [0.1, 0.8, 0.8]);
-%     end
-% else
-%     k = 0;
-%     P = zeros(length(points), 3);
-%     for i = 1:skip:length(points)
-%         k = k + 1;
-%         P(k, :) =  points{i}';
-%     end
-%     P = P(1:k, :);
-%     scatter3(P(:, 1), P(:, 2), P(:, 3), 10, 'filled', 'o', 'm');
-% end

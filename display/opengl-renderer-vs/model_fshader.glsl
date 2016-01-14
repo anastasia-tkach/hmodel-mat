@@ -14,7 +14,7 @@ uniform mat4 model;
 uniform mat4 view;
 
 //Model
-const int num_blocks = 37;
+const int num_blocks = 34;
 const int num_centers = 40;
 uniform vec3 centers[num_centers];
 uniform float radii[num_centers];

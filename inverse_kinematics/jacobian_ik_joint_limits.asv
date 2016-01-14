@@ -1,0 +1,28 @@
+function [] = jacobian_ik_joint_limits()
+epsilon = 1.192092896e-07;
+
+J = zeros(length(joints), length(joints));
+F = zeros(length(joints), 1);
+
+for i = 1:lenght(joints)
+    t = joints{i}.value;
+    if t > joints{i}.max
+        F(i) = joints{i}.max - t - epsilon;        
+        J(i,i) = 1;
+    
+    elseif(theta_0[i]<qmin)        
+        rhs(i)=(qmin-theta_0[i])+std::numeric_limits<Scalar>::epsilon();
+        LHS(i,i) = 1;
+        
+    else
+        
+        LHS(i,i) = 0;
+        rhs(i) = 0;
+    end
+    
+end
+
+
+float qmin = mapping.getMin(i);
+float qmax = mapping.getMax(i);
+

@@ -476,7 +476,7 @@ void init() {
 	data_points.setup("P");
 	model_points.setup("M");
 	outside_points.setup("O");
-	lines.setup(data_points.points, model_points.points, "L");
+	//lines.setup(data_points.points, model_points.points, "L");
 }
 
 bool is_updated() {

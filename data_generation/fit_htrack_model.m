@@ -1,7 +1,7 @@
 clear
-data_path = '_data/htrack_model/joint_limits_hand/';
+data_path = '_data/htrack_model/';
 mode = 'hand';
-skeleton = true;
+skeleton = false;
 
 %% Get model
 segments = create_ik_model(mode);

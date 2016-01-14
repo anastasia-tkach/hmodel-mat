@@ -1,4 +1,4 @@
-function [centers, htrack_centers] = aling_htrack_hmodel_frames(centers, htrack_centers, names_map, key_points_names, verbose, D)
+function [centers, htrack_centers] = aling_htrack_hmodel_frames(centers, radii, blocks, theta, htrack_centers, names_map, key_points_names, verbose, D)
 
 points = cell(length(key_points_names), 1);
 for i = 1:length(key_points_names)

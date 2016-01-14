@@ -1,16 +1,17 @@
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-num_poses = 4;
+num_poses = 2;
 start_pose = 1;
-num_iters = 8;
+num_iters = 5;
 damping = 100;
 %{
     From previou5s experience
     - Do not set w2 high, it interferes with other energies
     - Set w5 quite high
 %}
-w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000; w6 = 1;
+%w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000; w6 = 1;
+w1 = 1; w2 = 1; w3 = 3;  w4 = 1; w5 = 1000; w6 = 10;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3; 
 settings.w4 = w4; settings.w5 = w5;
@@ -118,15 +119,7 @@ end
 % display_edge_stretching(poses, blocks, history);
 
 %% Follow energies
-num_energies = 6;
-E = zeros(length(history)-1, num_energies);
-for h = 2:length(history)
-    for k = 1:num_energies
-        E(h - 1, k) = history{h}.energies(k);
-    end
-end
-figure; hold on; plot(2:length(history), E, 'lineWidth', 2);
-legend({'1', '2', '3', '4', '5', '6'});
+display_energies(history, 'fitting');
 
 %% Final result - average distance
 total_fitting_error = 0;
@@ -145,9 +138,9 @@ total_fitting_error = total_fitting_error / length(poses);
 disp(['RESULT = ', num2str(total_fitting_error)]);
 
 %% Store the results
-centers = poses{4}.centers;
-points = poses{4}.points;
-save([output_path, 'centers.mat'], 'centers');
-save([output_path, 'points.mat'], 'points');
-save([output_path, 'radii.mat'], 'radii');
-save([output_path, 'blocks.mat'], 'blocks');
+% centers = poses{4}.centers;
+% points = poses{4}.points;
+% save([output_path, 'centers.mat'], 'centers');
+% save([output_path, 'points.mat'], 'points');
+% save([output_path, 'radii.mat'], 'radii');
+% save([output_path, 'blocks.mat'], 'blocks');

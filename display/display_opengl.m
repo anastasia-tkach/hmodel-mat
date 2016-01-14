@@ -1,5 +1,7 @@
 function [] = display_opengl(centers, points, model_points, outside_points, blocks, radii, display_points, face_alpha)
 
+[blocks] = reindex(radii, blocks);
+
 path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\Input\';
 
 scaling_factor = 27;

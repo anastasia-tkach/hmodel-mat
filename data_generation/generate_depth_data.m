@@ -1,9 +1,9 @@
 clear
-data_path = '_data/htrack_model/silhouette/';
+data_path = '_data/htrack_model/';
 
 mode = 'hand';
 settings.fov = 15;
-downscaling_factor = 3;
+downscaling_factor = 6;
 settings.H = 480/downscaling_factor;
 settings.W = 636/downscaling_factor;
 settings.D = 3;
@@ -16,7 +16,8 @@ closing_radius = 10;
 segments = create_ik_model(mode);
 
 [centers, radii, blocks, solid_blocks, attachments] = make_convolution_model(segments, mode);
-display_result_convtriangles(centers, [], [], blocks, radii, true); campos([10, 160, -1500]); camlight;
+%display_result(centers, [], [], blocks, radii, false, 1, 'big'); campos([10, 160, -1500]); camlight;
+
 
 %% Save data
 save([data_path, 'solid_blocks.mat'], 'solid_blocks');
@@ -28,10 +29,10 @@ model_centers = centers;
 
 %% Create posed data
 theta = zeros(26, 1);
-theta(1) = 300;
-theta(2) = -100;
-
-%theta([9, 13, 17, 21, 25]) = -pi/4;
+theta(1) = 0; % left/right
+theta(2) = 0; % + up/ - down
+theta(3) = 0; % - forwards/ + backwards
+theta([9, 13, 17, 21, 25]) = -pi/4;
 %theta(1) = 0; theta(3) = 0; theta(4:5) = pi/9;
 %theta(24:26) = -pi/6; 
 %theta(16:18) = -pi/6;
@@ -50,7 +51,7 @@ for k = 1:length(I), points{k} = squeeze(rendered_model(I(k), J(k), :)); end
 save([data_path, 'points.mat'], 'points');
 
 %% Display
-display_result_convtriangles(model_centers, [], [], blocks, radii, false);
+display_result(model_centers, [], [], blocks, radii, false, 1, 'big');
 mypoints(points, 'm');
 view([-180, -90]); camlight;
 

@@ -98,6 +98,7 @@ attachments_map('palm_index') = {'index_bottom', 'index_base'};
 
 attachments_map('thumb_base') = {'palm_middle', 'palm_left', 'palm_index'};
 attachments_map('palm_thumb') = {'palm_middle', 'palm_left', 'palm_index'};
+attachments_map('thumb_additional') = {'thumb_middle', 'thumb_top'};
 
 attachments_map('palm_attachment') = {'palm_right', 'palm_back', 'palm_left'};
 
@@ -126,3 +127,6 @@ parents_map('thumb_bottom thumb_base') = {'palm_right', 'palm_back', 'palm_ring'
 
 %% Global frame
 named_global_frame_block = {'palm_ring', 'palm_middle', 'palm_back'};
+
+%% Palm centers names
+palm_centers_names = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_thumb', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back'};

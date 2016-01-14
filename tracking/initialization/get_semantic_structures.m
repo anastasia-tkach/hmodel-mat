@@ -1,4 +1,4 @@
-function [attachments, global_frame_indices, solid_blocks, elastic_blocks, parents] = compute_attachments(centers, blocks, names_map, named_blocks)
+function [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks)
 
 %% Get named blocks
 SEMANTICS;

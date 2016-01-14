@@ -1,4 +1,4 @@
-function [centers, radii] = find_htrack_hmodel_transformation(centers, radii, beta, names_map, verbose, D)
+function [centers, radii] = find_htrack_hmodel_transformation(centers, radii, blocks, beta, names_map, verbose, D)
 
 %% Manual scaling
 scaling_factor = 27;

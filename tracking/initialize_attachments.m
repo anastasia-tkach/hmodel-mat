@@ -1,12 +1,12 @@
 function [attachments, frames] = initialize_attachments...
-    (centers, radii, blocks, attached_points, attachments, mode, global_frame_indices, names_map, names_map_keys)
+    (centers, radii, blocks, attached_points, attachments, mode, global_frame_indices, names_map, palm_centers_names)
 
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 axis_projections = cell(length(attached_points), 1);
 
 %% Compute attachment weights
 %frames = compute_model_frames(centers, blocks, global_frame_indices);
-frames = compute_model_frames(centers, blocks, mode, global_frame_indices, names_map, names_map_keys);
+frames = compute_model_frames(centers, blocks, mode, global_frame_indices, names_map, palm_centers_names);
 for i = 1:length(attachments)
 
     if isempty(attachments{i}), continue; end

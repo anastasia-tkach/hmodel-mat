@@ -4,6 +4,7 @@ Fn = zeros(length(data_normals), 1);
 Jcn = zeros(length(data_normals), D * length(centers));
 Jrn = zeros(length(data_normals), length(centers));
 for i = 1:length(data_normals)
+    if isempty(data_normals{i}), continue; end
     Fn(i) = - data_normals{i}' * F(D * (i - 1) + 1:D * i);
     Jcn(i, :) = - data_normals{i}' * Jc(D * (i - 1) + 1:D * i, :);
     if ~isempty(Jr)

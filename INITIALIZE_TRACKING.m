@@ -26,14 +26,14 @@ segments = create_ik_model('hand');
 [segments, joints] = pose_ik_model(segments, theta, verbose, 'hand');
 [htrack_centers, htrack_radii, htrack_blocks, ~, ~] = make_convolution_model(segments, 'hand');
 
-[centers, radii] = find_htrack_hmodel_transformation(centers, radii, beta, names_map, verbose, D);
+[centers, radii] = find_htrack_hmodel_transformation(centers, radii, blocks, beta, names_map, verbose, D);
 
 %% Compute principal axis of the palm
 key_points_names = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back', 'palm_left'};
-[centers, htrack_centers] = aling_htrack_hmodel_frames(centers, htrack_centers, names_map, key_points_names, verbose, D);
+[centers, htrack_centers] = aling_htrack_hmodel_frames(centers, radii, blocks, theta, htrack_centers, names_map, key_points_names, verbose, D);
 
 %% Find non-rigid fitting
-[centers] = find_htrack_model_nonrigid(centers, radii, blocks, htrack_centers, theta, names_map, named_blocks, key_points_names, verbose, D);
+[centers] = find_htrack_model_nonrigid(centers, radii, blocks, htrack_centers, theta, names_map, named_blocks, key_points_names, false, D);
 
 %% Get sensor points
 [data_points] = get_sensor_points(sensor_path, K);
