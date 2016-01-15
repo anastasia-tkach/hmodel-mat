@@ -49,8 +49,7 @@ for a = 1:length(smooth_blocks)
                 second_smooth_blocks{count + 1}.index{var} = tangent_gradients{b}.gradients{var}.index;
             end
             count = count + 2;
-        end
-        if dot(tangent_gradients{a}.n1, tangent_gradients{b}.n2) > discard_threshold
+        elseif dot(tangent_gradients{a}.n1, tangent_gradients{b}.n2) > discard_threshold
             second_smooth_blocks{count}.n = tangent_gradients{b}.n2;
             second_smooth_blocks{count + 1}.n = tangent_gradients{b}.n1;
             for var = 1:length(tangent_gradients{b}.gradients)

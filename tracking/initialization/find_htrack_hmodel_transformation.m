@@ -28,6 +28,14 @@ for i = 1:length(htrack_indices)
     q{i} = centers{hmodel_indices(i)};
 end
 
+if verbose
+    display_result(centers, [], [], blocks, radii, false, 0.3, 'none');
+    display_skeleton(centers, radii, blocks, [], false, []);
+    mypoints(p, 'r');
+    mypoints(q, 'b');
+    view([180, -90]); camlight; drawnow; 
+end
+
 [M, scaling] = find_rigid_transformation(p, q, true);
 for i = 1:length(centers)
     centers{i} = transform(centers{i}, M);

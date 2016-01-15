@@ -54,8 +54,14 @@ isonormals(x, y, z, min_distances, h);
 set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', face_alpha);
 
 grid off; axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); 
-view([-1, -1, -1]); if ~strcmp(figure_mode, 'none'), camlight; end
-view([+1, +1, +1]); if ~strcmp(figure_mode, 'none'), camlight; end
+view([-1, -1, -1]); 
+if ~strcmp(figure_mode, 'none')
+    camlight; 
+end
+view([+1, +1, +1]);
+if ~strcmp(figure_mode, 'none')
+    camlight; 
+end
 
 %% Display data
 data_color = [0.65, 0.1, 0.5];
@@ -70,8 +76,8 @@ if (display_data)
         end
         mypoints(projections, model_color);
         mylines(points, projections, [0.1, 0.8, 0.8]);
-        %mypoints(back_projections, lines_color);
-        %mylines(back_projections, projections, lines_color);
+        mypoints(back_projections, lines_color);
+        mylines(back_projections, projections, lines_color);
     end
 end
 

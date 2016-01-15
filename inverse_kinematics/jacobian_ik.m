@@ -10,7 +10,7 @@ for k = 1:num_model_points
     %n = data_normals{k};
     
     if isempty(m) || norm(m - d) == 0, continue; end
-    n = (m - d) / norm(m - d);
+    n = (m - d) / norm(m - d); % model normal
     
     j = zeros(3, length(joints));
     

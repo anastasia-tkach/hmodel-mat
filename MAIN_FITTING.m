@@ -1,9 +1,9 @@
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-num_poses = 2;
+num_poses = 5;
 start_pose = 1;
-num_iters = 5;
+num_iters = 10;
 damping = 100;
 %{
     From previou5s experience
@@ -11,7 +11,7 @@ damping = 100;
     - Set w5 quite high
 %}
 %w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000; w6 = 1;
-w1 = 1; w2 = 1; w3 = 3;  w4 = 1; w5 = 1000; w6 = 10;
+w1 = 1; w2 = 1; w3 = 1;  w4 = 1; w5 = 1000; w6 = 0;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3; 
 settings.w4 = w4; settings.w5 = w5;

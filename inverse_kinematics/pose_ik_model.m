@@ -5,7 +5,6 @@ switch mode
     case 'hand'
         joints = joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 11, 13, 14, 16, 15, 17, 18, 20, 19, 21, 22, 24, 23, 25, 26];
-        %order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 11, 13, 14, 16, 15, 17, 18, 20, 19, 21, 22, 24, 23, 25, 27, 26, 28];
     case 'palm_finger'
         joints = palm_finger_joints_parameters(t);
         order = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10];
@@ -30,11 +29,9 @@ for i = order
     end
     switch joints{i}.type
         case 'R'
-            T = segment.local * makehgtform('axisrotate', joints{i}.axis_vector, joints{i}.value);
-            %T = makehgtform('axisrotate', joints{i}.axis, joints{i}.value) * segment.local;
+            T = segment.local * makehgtform('axisrotate', joints{i}.axis_vector, joints{i}.value);            
         case 'T'
             T = segment.local * makehgtform('translate', joints{i}.axis_vector * joints{i}.value);
-            %T = makehgtform('translate', joints{i}.axis * joints{i}.value) * segment.local;
     end
     segments{joints{i}.segment_id}.local = T;
     segments = update_transform(segments, joints{i}.segment_id);

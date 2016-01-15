@@ -19,7 +19,7 @@ pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 
 if (display)
     if settings.D == 3
-        display_result(pose.centers, pose.points, pose.projections, blocks, radii, true, 1); drawnow;%mypoints(pose.points, 'm'); drawnow;
+        display_result(pose.centers, pose.points, pose.projections, blocks, radii, true, 1, 'big'); drawnow;%mypoints(pose.points, 'm'); drawnow;
         set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);
     else
         display_result_2D(pose, blocks, radii, true); drawnow;

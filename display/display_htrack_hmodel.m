@@ -25,7 +25,7 @@ if settings.opengl
 else
     if settings.verbose 
         display_result(centers, data_points, [], blocks, radii, true, 0.9, 'big');
-        mypoints(data_points, [0.65, 0.1, 0.5]);
+        %mypoints(data_points, [0.65, 0.1, 0.5]);
         view([180, -90]); camlight; drawnow;
     end
 end

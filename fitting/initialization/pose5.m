@@ -1,4 +1,3 @@
-close all;
 centers_map = containers.Map();
 radii_map = containers.Map();
 
@@ -78,7 +77,7 @@ centers_map('palm_pinky') = [-0.382; 1.263; -0.15];
 radii_map('palm_pinky') = 0.35;
 
 centers_map('palm_ring') = [-0.029; 1.416; -0.251];
-radii_map('palm_ring') = 0.35;
+radii_map('palm_ring') = 0.5;
 
 centers_map('palm_middle') = [0.498; 1.567; -0.379];
 radii_map('palm_middle') = 0.35;
@@ -86,13 +85,16 @@ radii_map('palm_middle') = 0.35;
 centers_map('palm_index') = [0.957; 1.613; -0.195];
 radii_map('palm_index') = 0.35;
 
-% centers_map('palm_thumb') = [1.093; 1.386; -0.223];
-% radii_map('palm_thumb') = 0.3;
-
+%% Palm bottom
 centers_map('palm_thumb') = [1.175; 1.465; -0.168];
 radii_map('palm_thumb') = 0.2;
 
-%% Palm bottom
+centers_map('palm_side') = [-0.435; 1.277; -0.111];
+radii_map('palm_side') = 0.35;
+
+centers_map('palm_center') = [0.346; 1.156; -0.223];
+radii_map('palm_center') = 0.4;
+
 centers_map('palm_right') = [-0.201; 0.306; -0.501];
 radii_map('palm_right') = 0.55;
 
