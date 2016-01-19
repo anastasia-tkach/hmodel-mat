@@ -24,7 +24,7 @@ for v = 1:settings.D
 end
 
 %% Get closest data points
-[pose.model_indices, pose.projections, ~] = compute_projections(pose.model_points, pose.centers, blocks, radii);
+[pose.model_indices, pose.projections, block_indices] = compute_projections(pose.model_points, pose.centers, blocks, radii);
 [pose.model_normals] = compute_model_normals_temp(pose.centers, blocks, radii, pose.model_points, pose.model_indices);
 pose.closest_data_points = cell(length(pose.model_points), 1);
 pose.closest_data_normals = cell(length(pose.model_points), 1);
@@ -44,6 +44,7 @@ for i = 1:length(pose.model_points)
         pose.closest_data_normals{i} = [];
         pose.model_normals{i} = [];
         pose.model_indices{i} = [];
+        block_indices{i} = [];
     end
 end
 pose.model_points = pose.model_points(~cellfun('isempty', pose.model_points));
@@ -51,6 +52,7 @@ pose.model_indices = pose.model_indices(~cellfun('isempty', pose.model_indices))
 pose.closest_data_points = pose.closest_data_points(~cellfun('isempty', pose.closest_data_points));
 pose.closest_data_normals = pose.closest_data_normals(~cellfun('isempty', pose.closest_data_normals));
 pose.model_normals = pose.model_normals(~cellfun('isempty', pose.model_normals));
+block_indices = block_indices(~cellfun('isempty', block_indices));
 
 %% Compute Jacobian
 centers = pose.centers;
@@ -58,7 +60,7 @@ model_points = pose.model_points;
 data_points = pose.closest_data_points;
 model_indices = pose.model_indices;
 
-[f, Jc, Jr] = jacobian_fitting_normal(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
+[f, Jc, Jr] = jacobian_fitting_normal(centers, radii, blocks, model_points, model_indices, block_indices, data_points, settings);
 
 [fn, Jcn, Jrn] = compute_normal_distance(centers, pose.model_normals, f, Jc, Jr, settings.D);
 %[fn, Jcn, Jrn] = compute_normal_distance(centers, pose.closest_data_normals, f, Jc, Jr, settings.D);

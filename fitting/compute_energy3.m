@@ -1,9 +1,14 @@
-function [F, Jc, Jr] = compute_energy3(centers, radii, smooth_blocks)
+function [F, Jc, Jr] = compute_energy3(centers, radii, smooth_blocks, settings)
+
+disp('loading fist skip blocks');
+load('_my_hand/semantics/fist_skip_blocks_indices');
 
 D = length(centers{1});
 
 tangent_gradients = cell(length(smooth_blocks), 1);
 for i = 1:length(smooth_blocks)
+    
+    if settings.p == 5 && ismember(i, fist_skip_blocks_indices), continue; end
     
     if length(smooth_blocks{i}) == 3
         c1 = centers{smooth_blocks{i}(1)}; c2 = centers{smooth_blocks{i}(2)}; c3 = centers{smooth_blocks{i}(3)};
@@ -24,7 +29,11 @@ first_smooth_blocks = cell(0, 1);
 second_smooth_blocks = cell(0, 1);
 count = 1;
 for a = 1:length(smooth_blocks)
+    
     for b = a + 1:length(smooth_blocks)
+        
+        if settings.p == 5 && (ismember(a, fist_skip_blocks_indices) || ismember(b, fist_skip_blocks_indices)), continue; end
+        
         if sum(ismember(smooth_blocks{a}, smooth_blocks{b})) ~= 2, continue; end
         
         if dot(tangent_gradients{a}.n1, tangent_gradients{b}.n1) < discard_threshold && ...

@@ -10,7 +10,7 @@ for p = 1:num_poses
     if p == 3, pose3; end
     if p == 4, pose4; end
     if p == 5, pose5; end
-    skeleton10;
+    skeleton9;
     
     %% Build the data structures
     for i = 1:length(named_blocks)
@@ -32,12 +32,13 @@ for p = 1:num_poses
     %return
 
     %% Get named blocks
-    SEMANTICS2;
+    SEMANTICS;
     
     %% Get unnamed blocks
     solid_blocks = get_solid_blocks(blocks, names_map, named_blocks, named_solid_blocks, named_elastic_blocks, named_phantom_blocks);
     smooth_blocks = get_smooth_blocks(blocks, named_blocks, named_smooth_blocks);
     tangent_blocks = get_smooth_blocks(blocks, named_blocks, named_tangent_blocks);
+    fist_skip_blocks_indices = get_special_blocks_indices(named_blocks, named_fist_skip_blocks);
     tangent_spheres = zeros(length(named_tangent_spheres), 1);
     for i = 1:length(named_tangent_spheres)
         key = named_tangent_spheres(i);
@@ -76,6 +77,7 @@ for p = 1:num_poses
     save([semantics_path, 'solid_blocks.mat'], 'solid_blocks');
     save([semantics_path, 'tangent_blocks.mat'], 'tangent_blocks');
     save([semantics_path, 'tangent_spheres.mat'], 'tangent_spheres');
+    save([semantics_path, 'fist_skip_blocks_indices.mat'], 'fist_skip_blocks_indices');
     %save([data_path, 'solid_blocks_indices.mat'], 'solid_blocks_indices');
     
     save([semantics_path, 'named_elastic_blocks.mat'], 'named_elastic_blocks');

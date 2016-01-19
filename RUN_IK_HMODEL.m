@@ -1,227 +1,80 @@
-%% Htrack
-clear; close all; clc;
+close all; clear; clc;
+settings.mode = 'tracking';
+settings_default;
+skeleton = false; mode = 'hand';
 D = 3; verbose = false;
-num_parameters = 26;
 
-%% Hmodel
+%% Hmodel5
 input_path = '_my_hand/fitting_result/';
 semantics_path = '_my_hand/semantics/';
 sensor_path = 'C:/Users/tkach/Desktop/training/';
 output_path = '_my_hand/tracking_initialization/';
-mode = 'my_hand';
+data_path = '_data/hmodel/';
 load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
 load([input_path, 'centers.mat']);
 load([input_path, 'radii.mat']);
 load([semantics_path, 'tracking/blocks.mat']);
 
-%% Load htrack data
-[beta, ~] = load_htrack_data(sensor_path, output_path, 1, D);
+damping = 50;
+w1 = 1; w4 = 10e4;
+num_iters = 7;
+num_parameters = 26;
+
+%% Load data
+load([data_path, 'points.mat']); data_points = points;
+%load([data_path, 'normals.mat']); data_normals = normals;
+
+%% Initialize
+[centers, radii] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, num_parameters);
+[blocks, named_blocks, names_map] = remove_wrist(semantics_path);
+[attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
+[attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, mode, global_frame_indices, names_map, palm_centers_names);
+
+segments = initialize_ik_hmodel(centers, names_map);
 theta = zeros(num_parameters, 1);
-gamma = beta;
-for i = 1:length(beta)/D
-    gamma(D * (i - 1) + 1:D * i) = beta(D * (i - 1) + 1:D * i) - beta(1:3);
-end
-segments = create_ik_model('hand');
-[segments, joints] = pose_ik_model(segments, theta, verbose, 'hand');
-[htrack_centers, htrack_radii, htrack_blocks, ~, ~] = make_convolution_model(segments, 'hand');
-[centers, radii] = find_htrack_hmodel_transformation(centers, radii, blocks, gamma, names_map, verbose, D);
-key_points_names = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back', 'palm_left'};
-[centers, htrack_centers] = aling_htrack_hmodel_frames(centers, radii, blocks, theta, htrack_centers, names_map, key_points_names, verbose, D);
+[centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
 
-% display_result(centers, [], [], blocks, radii, true, 1, 'big');
-% display_result(htrack_centers, [], [], htrack_blocks, htrack_radii, true, 0.8, 'none');
-% campos([10, 160, -1500]); camlight; drawnow;
-
-%% Compute initial transformation for Htrack
-
-theta = zeros(num_parameters, 1);
-theta([9, 10, 13, 14, 17, 18, 21, 22, 25, 26]) = -pi/3;
-segments = create_ik_model('hand');
-for i = 1:length(segments)
-    if i == 1 || i == 2 || i == 5 || i == 8 || i == 11 || i == 14, continue; end
-    segments{i}.local(1:3, 1:3) = eye(3, 3);
-end
-[segments, ~] = pose_ik_model(segments, theta, verbose, 'hand');
-[htrack_centers, htrack_radii, htrack_blocks, ~, ~] = make_convolution_model(segments, 'hand');
-htrack_centers{25} = 0.5 * htrack_centers{23} + 0.5 * htrack_centers{24}; htrack_radii{25} = 0.5 * htrack_radii{23} + 0.5 * htrack_radii{24};
-htrack_names_map = containers.Map();
-htrack_names_map('HandPinky4') = 1; htrack_names_map('HandPinky3') = 2; htrack_names_map('HandPinky2') = 3; htrack_names_map('HandPinky1') = 4;
-htrack_names_map('HandRing4') = 5; htrack_names_map('HandRing3') = 6; htrack_names_map('HandRing2') = 7; htrack_names_map('HandRing1') = 8;
-htrack_names_map('HandMiddle4') = 9; htrack_names_map('HandMiddle3') = 10; htrack_names_map('HandMiddle2') = 11; htrack_names_map('HandMiddle1') = 12;
-htrack_names_map('HandIndex4') = 13; htrack_names_map('HandIndex3') = 14; htrack_names_map('HandIndex2') = 15; htrack_names_map('HandIndex1') = 16;
-htrack_names_map('HandThumb4') = 17; htrack_names_map('HandThumb3') = 18; htrack_names_map('HandThumb2') = 19; htrack_names_map('HandThumb1') = 20;
-htrack_names_map('Hand') = 25;
-
-%display_result(htrack_centers, [], [], htrack_blocks, htrack_radii, true, 0.5, 'big');
-%mypoints(htrack_centers(1:5), 'r');
-%campos([10, 160, -1500]); camlight; drawnow;
-
-%% Compute palm frame
-[palm_frame, palm_translation] = compute_principle_axis(htrack_centers(21:24), false);
-
-%% Compute thumb frame
-thumb_joints = {htrack_centers{htrack_names_map('HandThumb1')}, htrack_centers{htrack_names_map('HandThumb2')}, ...
-    htrack_centers{htrack_names_map('HandThumb3')}, htrack_centers{htrack_names_map('HandThumb4')}};
-[thumb_frame, thumb_translation] = compute_principle_axis(thumb_joints, false);
-n = thumb_frame(:, 3);
-u = htrack_centers{htrack_names_map('HandThumb2')} - htrack_centers{htrack_names_map('HandThumb1')};
-v = cross(n, u);
-n = cross(v, u);
-thumb_frame(:, 1) = v/norm(v); thumb_frame(:, 2) = u/norm(u); thumb_frame(:, 3) = n / norm(n);
-
-%% Align frames
-if thumb_frame(:, 1)' * palm_frame(:, 1) < 0
-    palm_frame(:, 1) = - palm_frame(:, 1);    
-end
-if thumb_frame(:, 2)' * palm_frame(:, 2) < 0
-    palm_frame(:, 2) = - palm_frame(:, 2);    
-end
-palm_frame(:, 3) = cross(palm_frame(:, 1), palm_frame(:, 2));
-
-%% Display
-% myvector(htrack_centers{htrack_names_map('Hand')}, palm_frame(:, 1), 20, 'r');
-% myvector(htrack_centers{htrack_names_map('Hand')}, palm_frame(:, 2), 20, 'g');
-% myvector(htrack_centers{htrack_names_map('Hand')}, palm_frame(:, 3), 20, 'b');
-
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 1), 20, 'r');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 2), 20, 'g');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 3), 20, 'b');
-
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 1), 20, 'r');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 2), 20, 'g');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, thumb_frame(:, 3), 20, 'b');
-
-% R = find_svd_rotation(palm_frame, thumb_frame); % thumb_frame = R' * palm_frame
-% correct_frame = segments{2}.local(1:D, 1:D)' * palm_frame;
-
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, correct_frame(:, 1), 20, 'm');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, correct_frame(:, 2), 20, 'y');
-% myvector(htrack_centers{htrack_names_map('HandThumb1')}, correct_frame(:, 3), 20, 'c');
-
-%% Rest-pose model
-segments = create_ik_model('hand');
-for i = 1:length(segments)
-    if i == 1 || i == 2 || i == 5 || i == 8 || i == 11 || i == 14, continue; end
-    segments{i}.local(1:3, 1:3) = eye(3, 3);
-end
-initial_segments = segments;
-[segments, ~] = pose_ik_model(segments, zeros(num_parameters, 1), verbose, 'hand');
-[htrack_centers, htrack_radii, htrack_blocks, ~, ~] = make_convolution_model(segments, 'hand');
-up = [0; 1; 0];
-htrack_centers{25} = 0.5 * htrack_centers{23} + 0.5 * htrack_centers{24}; htrack_radii{25} = 0.5 * htrack_radii{23} + 0.5 * htrack_radii{24};
-for i = 1:length(segments)
-    segments{i}.local = eye(D + 1, D + 1);
-end
-
-%% Compute local transformation
-for i = 1:length(segments)
-    
-    p = segments{i}.parent_id;
-    c = segments{i}.children_ids;
-    
-    if isempty(p), continue; end
-    
-    if isempty(c)
-        child_name = segments{i}.end_name;
+%% Run
+for iter = 1:num_iters
+    %% Create model-data correspondences
+    if skeleton
+        [data_model_indices, model_points, block_indices] = compute_skeleton_projections(points, centers, blocks);
     else
-        child_name = segments{c}.name;
+        [data_model_indices, model_points, block_indices] = compute_projections(data_points, centers, blocks, radii);
     end
-    v = htrack_centers{htrack_names_map(child_name)} - htrack_centers{htrack_names_map(segments{i}.name)};
-    if length(segments{i}.kinematic_chain) == 8
-        R = vrrotvec2mat(vrrotvec(up, v));
-        if strcmp(segments{i}.name, 'HandThumb1')
-            R = find_svd_rotation(palm_frame, thumb_frame);
-        end
-    elseif length(segments{i}.kinematic_chain) > 8
-        u = htrack_centers{htrack_names_map(segments{i}.name)} - htrack_centers{htrack_names_map(segments{p}.name)};
-        R = vrrotvec2mat(vrrotvec(u, v));
-    end
-    segments{i}.local(1:D, 1:D) = R;
     
-    segments = update_transform(segments, i);
-    
-    t = htrack_centers{htrack_names_map(segments{i}.name)} - htrack_centers{htrack_names_map(segments{p}.name)};
-    T = segments{p}.global(1:D, 1:D)' * t;
-    segments{i}.local(1:D, D + 1) = T;
-end
-for i = 1:length(segments), disp(segments{i}.name); disp([initial_segments{i}.local segments{i}.local]); end
-
-%% Recompute centers positions
-[segments, ~] = pose_ik_model(segments, theta, verbose, 'hand');
-for i = 1:length(segments)
-    htrack_centers{htrack_names_map(segments{i}.name)} = segments{i}.global(1:D, D + 1);
-    if isfield(segments{i}, 'end_name')
-        htrack_centers{htrack_names_map(segments{i}.end_name)} = ...
-            htrack_centers{htrack_names_map(segments{i}.name)} + segments{i}.global(1:D, 1:D) * segments{i}.length * up;
-    end
-end
-
-% display_result(htrack_centers, [], [], htrack_blocks, htrack_radii, true, 0.5, 'big');
-% mypoints(htrack_centers(1:5), 'r');
-% campos([10, 160, -1500]); camlight; drawnow;
-
-%% Compute initial transformations for Hmodel
-
-% for i = 1:length(centers)
-%     centers{i}  = centers{i} - centers{names_map('palm_back')};
-% end
-
-theta = zeros(num_parameters, 1);
-display_result(centers, [], [], blocks, radii, true, 1, 'big');
-campos([10, 160, -1500]); drawnow;
-
-up = [0; 1; 0];
-segments = hmodel_segments_parameters();
-for i = 1:length(segments)
-    segments{i}.local = eye(D + 1, D + 1);
-end
-%% Compute local transformation
-for i = 1:length(segments)
-    
-    p = segments{i}.parent_id;
-    c = segments{i}.children_ids;
-    
-    if isempty(p), continue; end
-    
-    if isempty(c)
-        child_name = segments{i}.end_name;
+    if skeleton
+        figure; axis equal; axis off; hold on; set(gcf,'color','white');
+        mylines(model_points, data_points, [0.75, 0.75, 0.75]);
+        for j = 1:length(blocks), c1 = centers{blocks{j}(1)};  c2 = centers{blocks{j}(2)};
+            scatter3(c1(1), c1(2), c1(3), 100, [0.1, 0.4, 0.7], 'o', 'filled'); scatter3(c2(1), c2(2), c2(3), 100, [0.1, 0.4, 0.7], 'o', 'filled');
+            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', [0.1, 0.4, 0.7], 'lineWidth', 6);
+        end; mypoints(data_points, [0.9, 0.3, 0.5]);view(90, 0); drawnow;
     else
-        child_name = segments{c}.name;
+        display_result(centers, data_points, model_points, blocks, radii, true, 1, 'big');
+        %figure; hold on; axis equal; axis off;
+        %display_skeleton(centers, radii, blocks, [], false, []);
+        %view([-90, 0]); camlight; drawnow;       
+                
+        campos([10, 160, -1500]); camlight; drawnow;        
     end
-    v = centers{names_map(child_name)} - centers{names_map(segments{i}.name)};
-    if length(segments{i}.kinematic_chain) == 8
-        R = vrrotvec2mat(vrrotvec(up, v));
-        %if strcmp(segments{i}.name, 'HandThumb1')
-           % R = find_svd_rotation(palm_frame, thumb_frame);
-        %end
-    elseif length(segments{i}.kinematic_chain) > 8
-        u = centers{names_map(segments{i}.name)} - centers{names_map(segments{p}.name)};
-        R = vrrotvec2mat(vrrotvec(u, v));
-    end
-    segments{i}.local(1:D, 1:D) = R;
     
-    segments = update_transform(segments, i);
+    %% Solve IK & apply
+    [F1, J1] = jacobian_ik(segments, joints, model_points, data_points, get_segment_indcies_hmodel(block_indices), settings);
+    [F4, J4] = jacobian_ik_joint_limits(joints);
     
-    t = centers{names_map(segments{i}.name)} - centers{names_map(segments{p}.name)};
-    T = segments{p}.global(1:D, 1:D)' * t;
-    segments{i}.local(1:D, D + 1) = T;
+    %% Solve for IK
+    I = eye(length(theta), length(theta));
+    
+    LHS = w1 * (J1' * J1) + w4 * (J4' * J4) + damping * I;
+    RHS = w1 * J1' * F1 + w4 * J4' * F4;
+    delta_theta = LHS \ RHS;
+    energies(1) = w1 * F1' * F1; energies(2) = w4 * F4' * F4; history{iter + 1}.energies = energies; disp(energies);
+   
+    theta = theta + delta_theta;
+    [centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
+    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, palm_centers_names);
+    [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, palm_centers_names);
 end
-for i = 1:length(segments), disp(segments{i}.name); disp([initial_segments{i}.local segments{i}.local]); end
-
-%% Recompute centers positions
-for i = 1:length(segments)
-    if ~isfield(segments{i}, 'end_name'), continue; end    
-    segments{i}.length = norm(centers{names_map(segments{i}.name)} - centers{names_map(segments{i}.end_name)});
-end
-[segments, ~] = pose_ik_model(segments, theta, verbose, 'hand');
-for i = 1:length(segments)
-    centers{names_map(segments{i}.name)} = segments{i}.global(1:D, D + 1);
-    if isfield(segments{i}, 'end_name')
-        centers{names_map(segments{i}.end_name)} = ...
-            centers{names_map(segments{i}.name)} + segments{i}.global(1:D, 1:D) * segments{i}.length * up;
-    end
-end
-
-display_result(centers, [], [], blocks, radii, true, 1, 'big');
-campos([10, 160, -1500]); drawnow;
+display_energies(history, 'IK');

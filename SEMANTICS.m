@@ -125,6 +125,16 @@ parents_map('thumb_top thumb_middle') = {'thumb_middle', 'thumb_bottom'};
 parents_map('thumb_middle thumb_bottom') = {'thumb_bottom', 'thumb_base'};
 parents_map('thumb_bottom thumb_base') = {'palm_right', 'palm_back', 'palm_ring'};
 
+%% Blocks to skip in fist
+named_fist_skip_blocks = {}; 
+
+named_fist_skip_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'}; 
+named_fist_skip_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
+named_fist_skip_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'}; 
+named_fist_skip_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
+named_fist_skip_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; 
+named_fist_skip_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
+
 %% Global frame
 named_global_frame_block = {'palm_ring', 'palm_middle', 'palm_back'};
 

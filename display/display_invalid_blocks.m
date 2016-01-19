@@ -29,5 +29,8 @@ for i = 1:length(invalid_blocks)
         scatter3(c2(1), c2(2), c2(3), 50, valid_color, 'o', 'filled');
         line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', invalid_color, 'lineWidth', 6);
     end
+    for j = 1:length(invalid_blocks{i})
+         draw_sphere(centers{invalid_blocks{i}(j)}, radii{invalid_blocks{i}(j)}, 'c');
+    end
 end
 drawnow;

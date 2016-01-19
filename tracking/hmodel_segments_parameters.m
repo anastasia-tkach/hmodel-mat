@@ -12,6 +12,9 @@ segments{i}.children_ids = [2, 5, 8, 11, 14];
 segments{i}.kinematic_chain = [1, 2, 3, 4, 5, 6];
 segments{i}.local = eye(4, 4);
 segments{i}.global = segments{i}.local;
+segments{i}.rigid_names = {'palm_back', 'palm_attachment', 'palm_right', 'palm_back', 'palm_left', ...
+    'thumb_base', 'index_base', 'middle_base', 'ring_base', 'pinky_base', 'thumb_fold', ...
+    'palm_thumb', 'thumb_base'};
 
 %% segment 2
 i = i + 1;
@@ -31,6 +34,7 @@ segments{i}.kinematic_chain = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 i = i + 1;
 segments{i}.name = 'thumb_middle';
 segments{i}.end_name = 'thumb_top';
+segments{i}.additional_name = 'thumb_additional';
 segments{i}.parent_id = 3;
 segments{i}.children_ids = [];
 segments{i}.kinematic_chain = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

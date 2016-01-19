@@ -29,10 +29,12 @@ model_centers = centers;
 
 %% Create posed data
 theta = zeros(26, 1);
-theta(1) = 7; % left/right
+theta(1) = 0; % left/right
 theta(2) = 0; % + up/ - down
 theta(3) = 0; % - forwards/ + backwards
-theta([9, 13, 17, 21, 25]) = -pi/4;
+theta(5) = 0;
+theta(5) = 0;
+theta([24]) = -pi/8;
 %theta(1) = 0; theta(3) = 0; theta(4:5) = pi/9;
 %theta(24:26) = -pi/6; 
 %theta(16:18) = -pi/6;

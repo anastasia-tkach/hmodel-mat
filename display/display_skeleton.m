@@ -4,13 +4,13 @@ D = length(centers{1});
 if isempty(edge_color), edge_color = [0.1, 0.4, 0.7]; end
 
 %figure; axis off; axis equal; hold on;
-% for i = 1:length(centers)
-%     draw_sphere(centers{i}, radii{i}, 'c');
-% end
+for i = 1:36
+    draw_sphere(centers{i}, radii{i}, 'c');
+end
 if display_data, mypoints(points, 'b'); end
 for i = 1:length(blocks)
     
-    if length(blocks{i}) == 2 && i > 15, continue; end
+    %if length(blocks{i}) == 2 && i > 15, continue; end
     
     indices = nchoosek(blocks{i}, 2);
     index1 = indices(:, 1); index2 = indices(:, 2);

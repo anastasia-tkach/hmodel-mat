@@ -12,7 +12,7 @@ model_indices = pose.indices;
 data_points = pose.points;
 
 %% Compute jacobian
-[f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, model_indices, data_points, settings.D);
+[f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, model_indices, pose.block_indices, data_points, settings);
 pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 
 %% Display results

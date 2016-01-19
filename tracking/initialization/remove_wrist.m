@@ -10,6 +10,6 @@ named_blocks(end - num_wrist_blocks + 1:end) = [];
 wrist_blocks_names = {'wrist_top_left', 'wrist_top_right', 'wrist_bottom_left', 'wrist_bottom_right'};
 remove(names_map, wrist_blocks_names);
 
-save([semantics_path, 'tracking/blocks.mat'], 'blocks');
-save([semantics_path, 'tracking/names_map.mat'], 'names_map');
-save([semantics_path, 'tracking/named_blocks.mat'], 'named_blocks');
+% save([semantics_path, 'tracking/blocks.mat'], 'blocks');
+% save([semantics_path, 'tracking/names_map.mat'], 'names_map');
+% save([semantics_path, 'tracking/named_blocks.mat'], 'named_blocks');

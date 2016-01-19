@@ -76,8 +76,8 @@ if (display_data)
         end
         mypoints(projections, model_color);
         mylines(points, projections, [0.1, 0.8, 0.8]);
-        mypoints(back_projections, lines_color);
-        mylines(back_projections, projections, lines_color);
+        %mypoints(back_projections, lines_color);
+        %mylines(back_projections, projections, lines_color);
     end
 end
 

@@ -80,7 +80,7 @@ centers_map('palm_ring') = [-0.216; -0.49; 0.458];
 radii_map('palm_ring') = 0.35;
 
 centers_map('palm_middle') = [-0.548; -0.201; 0.584];
-radii_map('palm_middle') = 0.5;
+radii_map('palm_middle') = 0.4;
 
 centers_map('palm_index') = [-0.995; 0.053; 0.27];
 radii_map('palm_index') = 0.35;

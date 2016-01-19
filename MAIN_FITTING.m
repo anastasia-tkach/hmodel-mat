@@ -3,7 +3,7 @@ settings.mode = 'fitting';
 settings_default;
 num_poses = 5;
 start_pose = 1;
-num_iters = 10;
+num_iters = 7;
 damping = 100;
 %{
     From previou5s experience
@@ -11,12 +11,12 @@ damping = 100;
     - Set w5 quite high
 %}
 %w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000; w6 = 1;
-w1 = 1; w2 = 1; w3 = 1;  w4 = 1; w5 = 1000; w6 = 0;
+w1 = 1; w2 = 1; w3 = 1;  w4 = 1; w5 = 1000; w6 = 2;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3; 
 settings.w4 = w4; settings.w5 = w5;
 settings.discard_threshold = 0.5;
-settings.block_safety_factor = 1.05;
+settings.block_safety_factor = 1.3;
 
 input_path = '_my_hand/fitting_initialization/';
 output_path = '_my_hand/fitting_result/';
@@ -38,7 +38,8 @@ for k = start_pose:start_pose + num_poses - 1
     load([input_path, num2str(k), '_normals.mat']); poses{p}.normals = normals;
 end
 
-[poses, radii] = adjust_poses_scales(poses, blocks, false);
+%[poses, radii] = adjust_poses_scales(poses, blocks, false);
+%radii = poses{5}.radii;
 [blocks] = reindex(radii, blocks);
 num_centers = length(radii); num_poses = length(poses);
 
@@ -59,11 +60,12 @@ for iter = 1:num_iters
     [blocks] = reindex(radii, blocks);
     
     for p = 1:num_poses
+        settings.p = p;
         %% Data fitting energy
         poses{p} = compute_energy1(poses{p}, radii, blocks, settings, false);
         
         %% Smoothness energy
-        [poses{p}.f3, poses{p}.Jc3, poses{p}.Jr3] = compute_energy3(poses{p}.centers, radii, blocks);
+        [poses{p}.f3, poses{p}.Jc3, poses{p}.Jr3] = compute_energy3(poses{p}.centers, radii, blocks, settings);
         
         %% Silhouette energy
         poses{p} = compute_energy4(poses{p}, blocks, radii, settings, false);

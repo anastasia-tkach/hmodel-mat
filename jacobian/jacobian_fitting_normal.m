@@ -1,4 +1,9 @@
-function [f, Jc, Jr] = jacobian_fitting_normal(centers, radii, blocks, model_points, model_indices, data_points, D)
+function [f, Jc, Jr] = jacobian_fitting_normal(centers, radii, blocks, model_points, model_indices, block_indices, data_points, settings)
+
+D = settings.D;
+
+disp('loading fist skip blocks');
+load('_my_hand/semantics/fist_skip_blocks_indices');
 
 num_points = length(model_points);
 f = zeros(num_points, 1);
@@ -12,6 +17,8 @@ for i = 1:num_points
     q = model_points{i};
     p = data_points{i};
     index =  model_indices{i};
+    
+    if settings.p == 5 && any(ismember(block_indices{i}, fist_skip_blocks_indices)), continue; end
     if isempty(index) || isempty(p), continue; end
     
     %% Determine current block
@@ -50,11 +57,12 @@ for i = 1:num_points
   
     %% Fill in the Jacobian
     f(D * i - D + 1:D * i) = (q - p);
+   
     if length(index) == 1
         Jc(D * i - D + 1:D * i, D * index(1) - D + 1:D * index(1)) = dq.dc1;
         Jr(D * i - D + 1:D * i, index(1)) = dq.dr1;
     end
-    if length(index) == 2
+    if length(index) == 2%
         Jc(D * i - D + 1:D * i, D * index(1) - D + 1:D * index(1)) = dq.dc1;
         Jc(D * i - D + 1:D * i, D * index(2) - D + 1:D * index(2)) = dq.dc2;
         Jr(D * i - D + 1:D * i, index(1)) = dq.dr1;

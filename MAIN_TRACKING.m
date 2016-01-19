@@ -5,21 +5,39 @@ settings_default;
 settings.opengl = false; 
 settings.skeleton = false;
 settings.verbose = false;
+camera_center = [0; 0; 0];
 
 input_path = '_my_hand/tracking_initialization/';
 semantics_path = '_my_hand/semantics/';
 mode = 'my_hand';
 
 %% Weights
-damping = 100; num_iters = 50;
-w1 = 1; w2 = 10; w3 = 100; w4 = 10; w5 = 2; w6 = 100;
-%w1 = 0; w2 = 0; w3 = 0; w4 = 10; w5 = 0; w6 = 0;
+damping = 100; num_iters = 20;
+w1 = 1; w2 = 10; w3 = 100; w4 = 100; w5 = 0; w6 = 100;
+%w1 = 0; w2 = 0; w3 = 0; w4 = 10; w5 = 2; w6 = 0;
 
 load([input_path, 'data_points.mat']);
 load([input_path, 'centers.mat']); load([input_path, 'radii.mat']); 
 load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks);
 load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% COMPARISON %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+input_path = '_my_hand/fitting_result/';
+semantics_path = '_my_hand/semantics/';
+sensor_path = 'C:/Users/tkach/Desktop/training/';
+output_path = '_my_hand/tracking_initialization/';
+data_path = '_data/hmodel/';
+load([semantics_path, 'tracking/names_map.mat']);
+load([semantics_path, 'tracking/named_blocks.mat']);
+load([input_path, 'centers.mat']);
+load([input_path, 'radii.mat']);
+load([data_path, 'points.mat']); data_points = points;
+[blocks, named_blocks, names_map] = remove_wrist(semantics_path);
+[centers, radii] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, 26);
+camera_center = [0; 0; -300];
+[blocks] = reindex(radii, blocks);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% Display
 display_htrack_hmodel(centers, radii, blocks, data_points, input_path, settings);
@@ -38,9 +56,21 @@ for iter = 1:num_iters
     [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, mode, global_frame_indices, names_map, palm_centers_names);
     [model_indices, model_points, ~] = compute_projections(data_points, centers, blocks, radii);
     model_normals = compute_model_normals_temp(centers, blocks, radii, model_points, model_indices);
+    
+    %for i = 1:length(model_points)
+    %    camera_rays{i} = ([0; 0; 0] - model_points{i}) / norm([0; 0; 0] - model_points{i});
+    %end
+    %display_result(centers, data_points, model_points, blocks, radii, true, 1, 'big');
+    %mylines(data_points, model_points, [0.75, 0.75, 0.75]);
+    %mypoint(camera_center, 'k'); drawnow;
+    %myline(centers{names_map('palm_back')}, camera_center, 'k');
+    %myvectors(model_points, model_normals, 10, 'g');
+    %myvectors(model_points, camera_rays, 10, 'r');
+    %view([180, -90]); camlight; drawnow;
+    
     for i = 1:length(model_points)
         if isempty(model_points{i}), continue; end
-        camera_ray = ([0; 0; 0] - model_points{i}) / norm([0; 0; 0] - model_points{i});
+        camera_ray = (camera_center - model_points{i}) / norm(camera_center - model_points{i});
         if camera_ray' * model_normals{i} < 0
             model_points{i} = [];
             model_indices{i} = [];
@@ -65,12 +95,12 @@ for iter = 1:num_iters
     if settings.opengl
         display_opengl(centers, data_points, model_points, outside_points, blocks, radii, false, 1);
     else
-        if settings.verbose 
-            display_result(centers, data_points, model_points, blocks, radii, true, 0.7, 'big');
+        %if settings.verbose 
+            display_result(centers, data_points, model_points, blocks, radii, true, 1, 'big');
             mylines(data_points, model_points, [0.75, 0.75, 0.75]);
             mypoints(outside_points, 'y');
             view([180, -90]); camlight; drawnow;
-        end
+        %end
         if settings.skeleton
             figure; hold on; axis off; axis equal;
             display_skeleton(centers, radii, blocks, data_points, false, []); drawnow;

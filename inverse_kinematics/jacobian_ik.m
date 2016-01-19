@@ -10,13 +10,16 @@ for k = 1:num_model_points
     %n = data_normals{k};
     
     if isempty(m) || norm(m - d) == 0, continue; end
-    n = (m - d) / norm(m - d); % model normal
+    n = (d - m) / norm(m - d); % model normal
     
     j = zeros(3, length(joints));
     
     segment = segments{segment_indices(k)};
     for l = 1:length(segment.kinematic_chain)
         joint_id = segment.kinematic_chain(l);
+        if joint_id == 24
+            disp(' ');
+        end
         segment_id = joints{joint_id}.segment_id;
         switch joints{joint_id}.axis
             case 'X'
@@ -38,19 +41,6 @@ for k = 1:num_model_points
                 j(:, joint_id) = v;
         end
     end
-    
-    %% indexes of rotation-type dependencies
-    %for l = 1:length(S.kinematic_chain{segment_indices(k)})
-    %    i = S.kinematic_chain{segment_indices(k)}(l);
-    %    v = S.axis(i, :);
-    %
-    %    if i > settings.num_translations
-    %        p = S.global_translation(i, :)';
-    %        j(:, i) = cross(v, m - p)';
-    %    else
-    %        j(:, i) = v;
-    %    end
-    %end
     
     %% accumulate sides
     J(k, :) = n' * j;

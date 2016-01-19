@@ -77,7 +77,7 @@ centers_map('palm_pinky') = [-0.382; 1.263; -0.15];
 radii_map('palm_pinky') = 0.35;
 
 centers_map('palm_ring') = [-0.029; 1.416; -0.251];
-radii_map('palm_ring') = 0.5;
+radii_map('palm_ring') = 0.35;
 
 centers_map('palm_middle') = [0.498; 1.567; -0.379];
 radii_map('palm_middle') = 0.35;
