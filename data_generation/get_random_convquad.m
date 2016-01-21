@@ -2,7 +2,7 @@ function [centers, radii, blocks] = get_random_convquad()
 D = 3;
 while(true)
     c1 = rand(D, 1); c2 = rand(D, 1); c3 = rand(D, 1); c4 = rand(D, 1);
-    r1 = 0.1 * rand(1, 1); r2 = 0.1 * rand(1, 1); r3 = 0.1 * rand(1, 1); r4 = 0.1 * rand(1, 1);
+    r1 = 0.3 * rand(1, 1); r2 = 0.3 * rand(1, 1); r3 = 0.3 * rand(1, 1); r4 = 0.3 * rand(1, 1);
     
     blocks = {[1, 2, 3], [2, 3, 4]};
     radii = {r1, r2, r3, r4};
