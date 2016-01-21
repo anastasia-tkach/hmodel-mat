@@ -22,21 +22,22 @@ end
 
 %% Display
 figure; hold on; axis off; axis equal;
+set(gcf,'color','w');
 for i = 1:length(centers)
-    draw_circle(centers{i}, radii{i}, 'c');
+    draw_circle(centers{i}, radii{i}, 'b');
 end
 for i = 1:length(segments)
-    myline(segments{i}.t1, segments{i}.t2, 'g');
+    myline(segments{i}.t1, segments{i}.t2, 'b');
 end
 for i = 1:length(points)
     if points{i}.type1 == 1 && points{i}.type2 == 1
-        mypoint(points{i}.value, 'm');
+        mypoint(points{i}.value, 'y');
     end
     if points{i}.type1 == 1 && points{i}.type2 == 2
         mypoint(points{i}.value, 'y');
     end
     if points{i}.type1 == 2 && points{i}.type2 == 2
-        mypoint(points{i}.value, 'r');
+        mypoint(points{i}.value, 'y');
     end
 end
 
@@ -47,7 +48,7 @@ for i = 1:length(points)
     if points{i}.value(2) > max_y
         max_y = points{i}.value(2);
         k = i;
-    end    
+    end
 end
 disp('top points can be inside');
 mypoint(points{k}.value, 'b');
@@ -68,44 +69,47 @@ if points{k}.type1 == 1 && points{k}.type2 == 2
     beta1 = myatan2(v, true);
     beta2 =  myatan2(-v, true);
     while beta1 < alpha
-            beta1 = beta1 + 2 * pi; 
+        beta1 = beta1 + 2 * pi;
     end
     while beta2 < alpha
-            beta2 = beta2 + 2 * pi; 
+        beta2 = beta2 + 2 * pi;
     end
     delta1 =  beta1 - alpha;
     delta2 =  beta2 - alpha;
     if delta2 < delta1
-        disp('circle')     
-        i = poins{k}.i1;
+        disp('circle')
+        i = points{k}.i1;
         type = 1;
         u = -v;
     else
         disp('segment');
-        i = poins{k}.i2;
+        i = points{k}.i2;
         type = 2;
         u = v;
     end
 end
 
-mypoint(points{k}.value, 'm');
-
 %% Walk
 
 if type == 1
-    min_delta = Inf;
-    v = points{k}.value - centers{i};
-    alpha = myatan2(v, true);
-    for j = 1:length(circle{i}.points)
-        u = points{circle{i}.points{j}}.value - centers{c};
-        beta = myatan2(u, true);
-        delta =  beta - alpha;
-        if delta > - epsilon && delta < epsilon, continue; end
-        if delta < min_delta            
-            min_delta = delta;
-            k_next = j;
-        end
-    end    
+    draw_circle(centers{i}, radii{i}, 'g');
+    k = find_closest_on_circle(circles, centers, points, i, k);
+    v = find_init_direction(points{k}, segments);
+    mypoint(points{k}.value, 'k');
+    %myvector(points{k}.value, v, 1, 'g');
 end
-
-
+if type == 2    
+    v = find_init_direction(points{k}, segments); 
+    min_delta = Inf;
+    for j = 1:length(segments{i}.points)
+        u = points{segments{i}.points(j)}.value - points{k}.value;
+        delta = norm(u);
+        if u' * v < 0, continue; end
+        if delta > - epsilon && delta < epsilon, continue; end        
+        if delta < min_delta
+            min_delta = delta;
+            k = segments{i}.points(j);
+        end
+    end 
+    mypoint(points{k}.value, 'g');
+end

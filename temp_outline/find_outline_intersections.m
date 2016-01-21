@@ -1,6 +1,8 @@
 function [points, circles, segments] = find_outline_intersections(centers, radii, blocks)
 
 %% Circle-segment tangency
+circles = cell(length(centers), 1);
+for i = 1:length(circles), circles{i}.points = []; end
 segments = cell(0, 1);
 points = cell(0, 1);
 count = 1;
@@ -14,45 +16,50 @@ for i = 1:length(blocks)
     points{count}.type1 = 1;
     points{count}.i2 = (count + 1)/2;
     points{count}.type2 = 2;
+    circles{blocks{i}(1)}.points = [circles{blocks{i}(1)}.points, count];
     count = count + 1;
+    
     points{count}.value = l2;
     points{count}.i1 = blocks{i}(2);
     points{count}.type1 = 1;
     points{count}.i2 = count/2;
     points{count}.type2 = 2;
-    
-    segments{count/2}.t1 = l1;
-    segments{count/2}.t2 = l2;
-    segments{count/2}.indices = [blocks{i}(1), blocks{i}(2)];
-    segments{count/2}.points = [];
+    circles{blocks{i}(2)}.points = [circles{blocks{i}(2)}.points, count];
     count = count + 1;
     
+    k = (count - 1)/2;
+    segments{k}.t1 = l1;
+    segments{k}.t2 = l2;
+    segments{k}.indices = [blocks{i}(1), blocks{i}(2)];
+    segments{k}.points = [count - 2, count - 1];    
+        
     %% Store r1/r2
     points{count}.value = r1;
     points{count}.i1 = blocks{i}(1);
     points{count}.type1 = 1;
     points{count}.i2 = (count + 1)/2;
     points{count}.type2 = 2;
+    circles{blocks{i}(1)}.points = [circles{blocks{i}(1)}.points, count];
     count = count + 1;
+    
     points{count}.value = r2;
     points{count}.i1 = blocks{i}(2);
     points{count}.type1 = 1;
     points{count}.i2 = count/2;
     points{count}.type2 = 2;
-    
-    segments{count/2}.t1 = r1;
-    segments{count/2}.t2 = r2;
-    segments{count/2}.indices = [blocks{i}(1), blocks{i}(2)];
-    segments{count/2}.points = [];
+    circles{blocks{i}(2)}.points = [circles{blocks{i}(2)}.points, count];
     count = count + 1;
+    
+    k = (count - 1)/2;
+    segments{k}.t1 = r1;
+    segments{k}.t2 = r2;
+    segments{k}.indices = [blocks{i}(1), blocks{i}(2)];
+    segments{k}.points = [count - 2, count - 1];
 end
 
 %% Circle-circle intersections
-circles = cell(length(centers), 1);
-for i = 1:length(centers)
-    if ~isfield(circles{i}, 'points'), circles{i}.points = []; end
-    for j = i + 1:length(centers)
-        if ~isfield(circles{j}, 'points'), circles{j}.points = []; end
+for i = 1:length(centers)    
+    for j = i + 1:length(centers)       
         [t1, t2] = intersect_circle_circle(centers{i}, radii{i}, centers{j}, radii{j});
         if isempty(t1), continue; end
         points{count}.value = t1;
