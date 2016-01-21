@@ -40,7 +40,7 @@ for i = 1:length(points)
     end
 end
 
-%% Find the top point
+%% Find start
 max_y = -Inf;
 k = 0;
 for i = 1:length(points)
@@ -76,10 +76,36 @@ if points{k}.type1 == 1 && points{k}.type2 == 2
     delta1 =  beta1 - alpha;
     delta2 =  beta2 - alpha;
     if delta2 < delta1
-        disp('circle')        
+        disp('circle')     
+        i = poins{k}.i1;
+        type = 1;
+        u = -v;
     else
         disp('segment');
+        i = poins{k}.i2;
+        type = 2;
+        u = v;
     end
 end
 
 mypoint(points{k}.value, 'm');
+
+%% Walk
+
+if type == 1
+    min_delta = Inf;
+    v = points{k}.value - centers{i};
+    alpha = myatan2(v, true);
+    for j = 1:length(circle{i}.points)
+        u = points{circle{i}.points{j}}.value - centers{c};
+        beta = myatan2(u, true);
+        delta =  beta - alpha;
+        if delta > - epsilon && delta < epsilon, continue; end
+        if delta < min_delta            
+            min_delta = delta;
+            k_next = j;
+        end
+    end    
+end
+
+
