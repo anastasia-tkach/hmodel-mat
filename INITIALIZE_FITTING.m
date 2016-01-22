@@ -1,5 +1,5 @@
 close all; clear;
-
+w = warning ('off','all');
 num_poses = 5;
 for p = 1:num_poses
     output_path = '_my_hand/fitting_initialization/';
@@ -36,14 +36,13 @@ for p = 1:num_poses
     
     %% Get unnamed blocks
     solid_blocks = get_solid_blocks(blocks, names_map, named_blocks, named_solid_blocks, named_elastic_blocks, named_phantom_blocks);
-    smooth_blocks = get_smooth_blocks(blocks, named_blocks, named_smooth_blocks);
-    tangent_blocks = get_smooth_blocks(blocks, named_blocks, named_tangent_blocks);
+    smooth_blocks = get_special_blocks(blocks, named_blocks, named_smooth_blocks);
+    tangent_blocks = get_special_blocks(blocks, named_blocks, named_tangent_blocks);
+    palm_blocks = get_special_blocks(blocks, named_blocks, named_palm_blocks);
+    fingers_blocks = get_special_blocks(blocks, named_blocks, named_fingers_blocks);
     fist_skip_blocks_indices = get_special_blocks_indices(named_blocks, named_fist_skip_blocks);
-    tangent_spheres = zeros(length(named_tangent_spheres), 1);
-    for i = 1:length(named_tangent_spheres)
-        key = named_tangent_spheres(i);
-        tangent_spheres(i) = names_map(key{1});
-    end
+    tangent_centers = get_special_spheres(names_map, named_tangent_centers);
+    fingers_base_centers = get_special_spheres(names_map, named_fingers_base_centers);
     
     blocks = blocks';
     
@@ -75,8 +74,11 @@ for p = 1:num_poses
     
     save([semantics_path, 'smooth_blocks.mat'], 'smooth_blocks');
     save([semantics_path, 'solid_blocks.mat'], 'solid_blocks');
+    save([semantics_path, 'palm_blocks.mat'], 'palm_blocks');
+    save([semantics_path, 'fingers_blocks.mat'], 'fingers_blocks');
+    save([semantics_path, 'fingers_base_centers.mat'], 'fingers_base_centers');
     save([semantics_path, 'tangent_blocks.mat'], 'tangent_blocks');
-    save([semantics_path, 'tangent_spheres.mat'], 'tangent_spheres');
+    save([semantics_path, 'tangent_centers.mat'], 'tangent_centers');
     save([semantics_path, 'fist_skip_blocks_indices.mat'], 'fist_skip_blocks_indices');
     %save([data_path, 'solid_blocks_indices.mat'], 'solid_blocks_indices');
     

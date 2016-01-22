@@ -2,7 +2,7 @@ function [points, circles, segments] = find_outline_intersections(centers, radii
 
 %% Circle-segment tangency
 circles = cell(length(centers), 1);
-for i = 1:length(circles), circles{i}.points = []; end
+%for i = 1:length(circles), circles{i}.points = []; end
 segments = cell(0, 1);
 points = cell(0, 1);
 count = 1;
@@ -16,7 +16,10 @@ for i = 1:length(blocks)
     points{count}.type1 = 1;
     points{count}.i2 = (count + 1)/2;
     points{count}.type2 = 2;
+    if ~isfield(circles{blocks{i}(1)}, 'points'), circles{blocks{i}(1)}.points = []; end
     circles{blocks{i}(1)}.points = [circles{blocks{i}(1)}.points, count];
+    circles{blocks{i}(1)}.center = centers{blocks{i}(1)}(1:2);
+    circles{blocks{i}(1)}.radius = radii{blocks{i}(1)};
     count = count + 1;
     
     points{count}.value = l2;
@@ -24,7 +27,10 @@ for i = 1:length(blocks)
     points{count}.type1 = 1;
     points{count}.i2 = count/2;
     points{count}.type2 = 2;
+    if ~isfield(circles{blocks{i}(2)}, 'points'), circles{blocks{i}(2)}.points = []; end
     circles{blocks{i}(2)}.points = [circles{blocks{i}(2)}.points, count];
+    circles{blocks{i}(2)}.center = centers{blocks{i}(2)}(1:2);
+    circles{blocks{i}(2)}.radius = radii{blocks{i}(2)};
     count = count + 1;
     
     k = (count - 1)/2;
@@ -40,6 +46,8 @@ for i = 1:length(blocks)
     points{count}.i2 = (count + 1)/2;
     points{count}.type2 = 2;
     circles{blocks{i}(1)}.points = [circles{blocks{i}(1)}.points, count];
+    circles{blocks{i}(1)}.center = centers{blocks{i}(1)}(1:2);
+    circles{blocks{i}(1)}.radius = radii{blocks{i}(1)};
     count = count + 1;
     
     points{count}.value = r2;
@@ -48,6 +56,8 @@ for i = 1:length(blocks)
     points{count}.i2 = count/2;
     points{count}.type2 = 2;
     circles{blocks{i}(2)}.points = [circles{blocks{i}(2)}.points, count];
+    circles{blocks{i}(2)}.center = centers{blocks{i}(2)}(1:2);
+    circles{blocks{i}(2)}.radius = radii{blocks{i}(2)};
     count = count + 1;
     
     k = (count - 1)/2;
@@ -58,9 +68,11 @@ for i = 1:length(blocks)
 end
 
 %% Circle-circle intersections
-for i = 1:length(centers)    
-    for j = i + 1:length(centers)       
-        [t1, t2] = intersect_circle_circle(centers{i}, radii{i}, centers{j}, radii{j});
+for i = 1:length(circles)    
+    if ~isstruct(circles{i}), continue; end;
+    for j = i + 1:length(circles)    
+        if ~isstruct(circles{j}), continue; end;
+        [t1, t2] = intersect_circle_circle(circles{i}.center, circles{i}.radius, circles{j}.center, circles{j}.radius);
         if isempty(t1), continue; end
         points{count}.value = t1;
         points{count}.i1 = i;
@@ -84,10 +96,11 @@ for i = 1:length(centers)
 end
 
 %% Circle-segment intersecitons
-for i = 1:length(centers)
+for i = 1:length(circles)
+    if ~isstruct(circles{i}), continue; end
     for j = 1:length(segments)
         if ismember(i, segments{j}.indices), continue; end
-        [t1, t2] = intersect_circle_segment(segments{j}.t1, segments{j}.t2, centers{i}, radii{i});
+        [t1, t2] = intersect_circle_segment(segments{j}.t1, segments{j}.t2, circles{i}.center, circles{i}.radius);
         if ~isempty(t1),
             points{count}.value = t1;
             points{count}.i1 = i;

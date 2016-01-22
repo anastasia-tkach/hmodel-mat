@@ -15,8 +15,8 @@ v = v/norm(v);
 % myvector(o, v, r, 'k');
 
 num_points = 50;
-v1 = t1 - c(1:2);
-v2 = t2 - c(1:2);
+v1 = t1(1:2) - c(1:2);
+v2 = t2(1:2) - c(1:2);
 % alpha = myatan2(v1);
 % beta = myatan2(v2);
 alpha = atan2(v1(1), v1(2));

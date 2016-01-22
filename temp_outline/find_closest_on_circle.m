@@ -1,12 +1,12 @@
-function [k_next, type_next, i_next, v_next] = find_closest_on_circle(circles, centers, segments, points, i, k)
+function [k_next, type_next, i_next, v_next] = find_closest_on_circle(circles, segments, points, i, k)
 
 %% Find next point
 epsilon = 1e-9;
 min_delta = Inf;
-v = points{k}.value - centers{i};
+v = points{k}.value - circles{i}.center;
 alpha = myatan2(v);
 for j = 1:length(circles{i}.points)
-    u = points{circles{i}.points(j)}.value - centers{i};
+    u = points{circles{i}.points(j)}.value - circles{i}.center;
     beta = myatan2(u);
     if beta < alpha, beta = beta + 2 * pi; end
     delta =  beta - alpha;

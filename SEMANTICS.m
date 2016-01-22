@@ -59,25 +59,25 @@ named_smooth_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_b
 
 %% Tangent blocks-spheres pairs
 named_tangent_blocks = {};
-named_tangent_spheres = {};
+named_tangent_centers = {};
 
 named_tangent_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
-named_tangent_spheres{end + 1} = 'pinky_base';
+named_tangent_centers{end + 1} = 'pinky_base';
 
 named_tangent_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
-named_tangent_spheres{end + 1} = 'ring_base';
+named_tangent_centers{end + 1} = 'ring_base';
 
 named_tangent_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
-named_tangent_spheres{end + 1} = 'ring_base';
+named_tangent_centers{end + 1} = 'ring_base';
 
 named_tangent_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
-named_tangent_spheres{end + 1} = 'middle_base';
+named_tangent_centers{end + 1} = 'middle_base';
 
 named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
-named_tangent_spheres{end + 1} = 'middle_base';
+named_tangent_centers{end + 1} = 'middle_base';
 
 named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
-named_tangent_spheres{end + 1} = 'index_base';
+named_tangent_centers{end + 1} = 'index_base';
 
 % named_tangent_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
 % named_tangent_spheres{end + 1} = 'palm_thumb';
@@ -134,6 +134,31 @@ named_fist_skip_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_rin
 named_fist_skip_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
 named_fist_skip_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; 
 named_fist_skip_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
+
+%% Hand parts blocks
+named_palm_blocks = {};
+named_palm_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
+named_palm_blocks{end + 1} = {'palm_right', 'palm_ring', 'palm_back'};
+named_palm_blocks{end + 1} = {'palm_ring', 'palm_middle', 'palm_back'};
+named_palm_blocks{end + 1} = {'palm_middle', 'palm_left', 'palm_back'};
+named_palm_blocks{end + 1} = {'palm_index', 'palm_middle', 'palm_left'};
+
+named_palm_blocks{end + 1} = {'pinky_membrane', 'ring_membrane', 'palm_pinky'}; 
+named_palm_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'ring_membrane'};
+named_palm_blocks{end + 1} = {'ring_membrane', 'middle_membrane', 'palm_ring'}; 
+named_palm_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
+named_palm_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; 
+named_palm_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
+
+named_fingers_blocks = {};
+named_fingers_blocks{end + 1} = {{'pinky_top', 'pinky_middle'}, {'pinky_middle', 'pinky_bottom'}, {'pinky_bottom', 'pinky_base'}};
+named_fingers_blocks{end + 1} = {{'ring_top', 'ring_middle'}, {'ring_middle', 'ring_bottom'}, {'ring_bottom', 'ring_base'}};
+named_fingers_blocks{end + 1} = {{'middle_top', 'middle_middle'}, {'middle_middle', 'middle_bottom'}, {'middle_bottom', 'middle_base'}};
+named_fingers_blocks{end + 1} = {{'index_top', 'index_middle'}, {'index_middle', 'index_bottom'}, {'index_bottom', 'index_base'}};
+named_fingers_blocks{end + 1} = {{'thumb_additional', 'thumb_top'}, {'thumb_top', 'thumb_middle'}, {'thumb_middle', 'thumb_bottom'}, {'thumb_bottom', 'thumb_base'}, ...
+    {'thumb_membrane', 'thumb_fold', 'thumb_base'}, {'thumb_fold', 'palm_thumb', 'thumb_base'}, {'palm_left', 'thumb_base'}};
+
+named_fingers_base_centers = {'pinky_base', 'ring_base', 'middle_base', 'index_base', 'palm_left'};
 
 %% Global frame
 named_global_frame_block = {'palm_ring', 'palm_middle', 'palm_back'};

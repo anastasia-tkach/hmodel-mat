@@ -1,4 +1,4 @@
-function [outline, segments] = find_planar_outline(centers, blocks, radii)
+function [outline] = find_planar_outline(centers, blocks, radii, verbose)
 
 epsilon = 1e-9;
 
@@ -12,7 +12,6 @@ for i = 1:length(blocks3D)
         blocks{end + 1} = [index1(j), index2(j)];
     end
 end
-for i = 1:length(centers),  centers{i} = centers{i}(1:2); end
 
 %% Find intersections
 [points, circles, segments] = find_outline_intersections(centers, radii, blocks);
@@ -20,19 +19,20 @@ for i = 1:length(centers),  centers{i} = centers{i}(1:2); end
 %% Find start
 up = [0; 1];
 max_y = -Inf;
-for j = 1:length(centers)
-    if centers{j}(2) + radii{j} > max_y
-        max_y = centers{j}(2) + radii{j};
-        p = centers{j} + radii{j} * up;
+for j = 1:length(circles)
+    if isempty(circles{j}), continue; end
+    if circles{j}.center(2) + circles{j}.radius > max_y
+        max_y = circles{j}.center(2) + circles{j}.radius;
+        p = circles{j}.center + circles{j}.radius * up;
         i = j;
     end
 end
 min_delta = Inf;
-v = p - centers{i};
+v = p - circles{i}.center;
 alpha_before = myatan2(v);
 for j = 1:length(circles{i}.points)
     alpha = alpha_before;
-    u = points{circles{i}.points(j)}.value - centers{i};
+    u = points{circles{i}.points(j)}.value - circles{i}.center;
     beta = myatan2(u);
     if alpha < beta,
         alpha = alpha + 2 * pi;
@@ -54,13 +54,11 @@ while first || k ~= k_start;
     outline{count}.start = points{k}.value;
     %% Circle
     if type == 1
-        outline{count}.indices = i;
-        outline{count}.t1 = points{k}.value;
-        [k, type, i, v] = find_closest_on_circle(circles, centers, segments, points, i, k);
-        outline{count}.t2 = points{k}.value;
+        outline{count}.indices = i;        
+        [k, type, i, v] = find_closest_on_circle(circles, segments, points, i, k);
         %% Sement
     else
-        if (centers{segments{i}.indices(1)} - centers{segments{i}.indices(2)})' * v > 0
+        if (circles{segments{i}.indices(1)}.center - circles{segments{i}.indices(2)}.center)' * v > 0
             outline{count}.indices = segments{i}.indices;
             outline{count}.t1 = segments{i}.t1;
             outline{count}.t2 = segments{i}.t2;
@@ -77,11 +75,16 @@ while first || k ~= k_start;
     if count == 100, break; end
 end
 
-%% Display
+
+
+%% Display planar outline
+if ~verbose, return; end
+
 figure; hold on; axis off; axis equal;
 set(gcf,'color','w');
-for i = 1:length(centers)
-    draw_circle(centers{i}, radii{i}, 'c');
+for i = 1:length(circles)
+    if ~isstruct(circles{i}), continue; end
+    draw_circle(circles{i}.center, circles{i}.radius, 'c');
 end
 for i = 1:length(segments)
     myline(segments{i}.t1, segments{i}.t2, 'c');
@@ -91,6 +94,7 @@ for i = 1:length(outline)
     if length(outline{i}.indices) == 2
         myline(outline{i}.start, outline{i}.end, 'm');
     else
-        draw_circle_sector(centers{outline{i}.indices}, radii{outline{i}.indices}, outline{i}.start, outline{i}.end, 'm')
+        draw_circle_sector(circles{outline{i}.indices}.center, circles{outline{i}.indices}.radius, outline{i}.start, outline{i}.end, 'm')
     end
 end
+

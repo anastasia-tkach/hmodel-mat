@@ -17,7 +17,6 @@ if any(isnan(t2)) || ~is_point_on_segment(p, q, t2), t2 = []; end
 % mypoint(t1, 'm');
 % mypoint(t2, 'm');
 
-
 end
 
 function [result] = is_point_on_segment(a, b, c)
