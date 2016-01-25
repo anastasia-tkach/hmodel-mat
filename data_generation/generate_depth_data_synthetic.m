@@ -2,9 +2,9 @@ function [data_points] = generate_depth_data_synthetic(centers, radii, blocks)
 
 D = 3; 
 settings.fov = 15;
-downscaling_factor = 6;
+downscaling_factor = 16;
 settings.H = 480/downscaling_factor;
-settings.W = 636/downscaling_factor;
+settings.W = 640/downscaling_factor;
 settings.D = D;
 settings.sparse_data = false;
 settings.RAND_MAX = 32767;
@@ -15,7 +15,10 @@ settings.view_axis = 'Z';
 %% Shift the data w.r.t. model
 rotation_axis = randn(D, 1);
 rotation_angle = 0.2 * randn;
-translation_vector = 10 + 0.5 * rand * [0; 0; 1];
+% hand model
+% translation_vector = 10 + 0.5 * rand * [0; 0; 1];
+% syntetic
+translation_vector = 0.5 * rand * [0; 0; 1];
 R = makehgtform('axisrotate', rotation_axis, rotation_angle);
 T = makehgtform('translate', translation_vector);
 for i = 1:length(centers)
