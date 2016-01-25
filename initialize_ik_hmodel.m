@@ -32,15 +32,22 @@ for i = 1:length(segments)
         u = centers{names_map(segments{i}.name)} - centers{names_map(segments{p}.name)};
         R = vrrotvec2mat(vrrotvec(u, v));
     end
-    segments{i}.local(1:D, 1:D) = R;    
+    segments{i}.local(1:D, 1:D) = R;     
     segments{i}.global = segments{segments{i}.parent_id}.global * segments{i}.local;
     
     t = centers{names_map(segments{i}.name)} - centers{names_map(segments{p}.name)};
     T = segments{p}.global(1:D, 1:D)' * t;
-    segments{i}.local(1:D, D + 1) =  T;
+    segments{i}.local(1:D, D + 1) =  T;  
 end
 
 %% Update all transforms
+
+% for i = 1:length(segments)  
+%     if length(segments{i}.kinematic_chain) > 8
+%         segments{i}.local(1:D, 1:D) = eye(D, D);
+%     end
+% end
+
 segments = update_transform(segments, 1);
 
 %% Compute length

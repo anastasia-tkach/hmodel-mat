@@ -21,5 +21,5 @@ z0 = - (radius.^2 - rho.^2).^0.5;
 z = z0 + center(3);
 mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', face_alpha);
 
-hold on; axis equal; grid off; camlight; lighting gouraud;
+hold on; axis equal; grid off; lighting gouraud;
 

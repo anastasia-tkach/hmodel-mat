@@ -1,4 +1,4 @@
-function [centers, radii] = find_htrack_hmodel_transformation(centers, radii, blocks, beta, names_map, verbose, D)
+function [centers, radii, M, scaling] = find_htrack_hmodel_transformation(centers, radii, blocks, beta, names_map, verbose, D)
 
 %% Manual scaling
 scaling_factor = 27;
@@ -48,3 +48,5 @@ if verbose
     display_skeleton(centers, radii, blocks, [], false, []);
     view([180, -90]); camlight; drawnow; 
 end
+
+scaling = scaling * scaling_factor;

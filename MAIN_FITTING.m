@@ -1,9 +1,9 @@
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-num_poses = 5;
-start_pose = 1;
-num_iters = 7;
+num_poses = 2;
+start_pose = 4;
+num_iters = 20;
 damping = 100;
 %{
     From previou5s experience
@@ -11,7 +11,7 @@ damping = 100;
     - Set w5 quite high
 %}
 %w1 = 1; w2 = 1; w3 = 0.3;  w4 = 1; w5 = 1000; w6 = 1;
-w1 = 1; w2 = 1; w3 = 1;  w4 = 1; w5 = 1000; w6 = 2;
+w1 = 1; w2 = 0.15; w3 = 0.5;  w4 = 1; w5 = 100; w6 = 2;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3; 
 settings.w4 = w4; settings.w5 = w5;
@@ -26,7 +26,7 @@ semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'solid_blocks.mat']);
 load([semantics_path, 'fitting/blocks.mat']);
 load([semantics_path, 'smooth_blocks.mat']);
-load([semantics_path, 'tangent_spheres.mat']);
+load([semantics_path, 'tangent_centers.mat']);
 load([semantics_path, 'tangent_blocks.mat']);
 poses = cell(num_poses, 1);
 
@@ -74,7 +74,7 @@ for iter = 1:num_iters
         poses{p} = compute_energy5(poses{p}, radii, blocks, settings);
         
         %% Tangency energy
-        [poses{p}.f6, poses{p}.Jc6, poses{p}.Jr6] = compute_energy6(centers, radii, tangent_blocks, tangent_spheres, false);
+        [poses{p}.f6, poses{p}.Jc6, poses{p}.Jr6] = compute_energy6(centers, radii, tangent_blocks, tangent_centers, false);
     end
     
     %% Shape consistency energy
@@ -95,6 +95,7 @@ for iter = 1:num_iters
     
     %% Apply update
     w4 = length(f1) / length(f4);
+    %w2 = w2 * 2;
     LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w3 * (J3' * J3) + w4 * (J4' * J4) +  w5 * (J5' * J5) +  w6 * (J6' * J6);
     rhs = w1 * J1' * f1 + w2 * J2' * f2 + w3 * J3' * f3 +  w4 * J4' * f4 + w5 * J5' * f5 + w6 * J6' * f6;
     delta = -  LHS \ rhs;
@@ -140,9 +141,16 @@ total_fitting_error = total_fitting_error / length(poses);
 disp(['RESULT = ', num2str(total_fitting_error)]);
 
 %% Store the results
-% centers = poses{4}.centers;
-% points = poses{4}.points;
-% save([output_path, 'centers.mat'], 'centers');
-% save([output_path, 'points.mat'], 'points');
+% centers = poses{1}.centers;
+% points = poses{1}.points;
+% save([output_path, '4_centers.mat'], 'centers');
+% save([output_path, '4_points.mat'], 'points');
+% save([output_path, 'radii.mat'], 'radii');
+% save([output_path, 'blocks.mat'], 'blocks');
+% 
+% centers = poses{2}.centers;
+% points = poses{2}.points;
+% save([output_path, '5_centers.mat'], 'centers');
+% save([output_path, '5_points.mat'], 'points');
 % save([output_path, 'radii.mat'], 'radii');
 % save([output_path, 'blocks.mat'], 'blocks');

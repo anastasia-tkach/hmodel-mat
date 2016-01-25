@@ -12,13 +12,13 @@ output_path = '_my_hand/tracking_initialization/';
 data_path = '_data/hmodel/';
 load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
-load([input_path, 'centers.mat']);
-load([input_path, 'radii.mat']);
+% load([input_path, 'centers.mat']);
+% load([input_path, 'radii.mat']);
 load([semantics_path, 'tracking/blocks.mat']);
 
 damping = 50;
 w1 = 1; w4 = 10e4;
-num_iters = 7;
+num_iters = 15;
 num_parameters = 26;
 
 %% Load data
@@ -26,15 +26,19 @@ load([data_path, 'points.mat']); data_points = points;
 %load([data_path, 'normals.mat']); data_normals = normals;
 
 %% Initialize
-[centers, radii] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, num_parameters);
-[blocks, named_blocks, names_map] = remove_wrist(semantics_path);
+% [centers, radii] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, num_parameters);
+% [blocks, named_blocks, names_map] = remove_wrist(semantics_path);
+load([output_path, 'segments.mat']);
+load([output_path, 'centers.mat']);
+load([output_path, 'radii.mat']);
+load([output_path, 'theta.mat']);
 [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blocks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
 [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, mode, global_frame_indices, names_map, palm_centers_names);
 
-segments = initialize_ik_hmodel(centers, names_map);
-theta = zeros(num_parameters, 1);
+% segments = initialize_ik_hmodel(centers, names_map);
+% theta = zeros(num_parameters, 1);
 [centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
-
+display_result(centers, [], [], blocks, radii, false, 1, 'big');
 %% Run
 for iter = 1:num_iters
     %% Create model-data correspondences

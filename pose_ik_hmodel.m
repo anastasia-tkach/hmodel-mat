@@ -1,4 +1,4 @@
-function [centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments)
+function [centers, joints, segments] = pose_ik_hmodel(theta, centers, names_map, segments)
 
 D = 3;
 up = [0; 1; 0];
@@ -10,6 +10,7 @@ up = [0; 1; 0];
 % end
 
 [segments, joints] = pose_ik_model(segments, theta, false, 'hand');
+
 for i = 1:length(segments)
     centers{names_map(segments{i}.name)} = segments{i}.global(1:D, D + 1);
     if isfield(segments{i}, 'end_name')

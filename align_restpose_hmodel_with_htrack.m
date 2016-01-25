@@ -1,4 +1,4 @@
-function [centers, radii] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, num_parameters)
+function [centers, radii, M, scaling] = align_restpose_hmodel_with_htrack(centers, radii, blocks, names_map, num_parameters)
 
 D = 3;
 verbose = false;
@@ -12,6 +12,6 @@ for i = 1:length(beta)/D, gamma(D * (i - 1) + 1:D * i) = beta(D * (i - 1) + 1:D 
 segments = create_ik_model('hand');
 [segments, ~] = pose_ik_model(segments, theta, verbose, 'hand');
 [htrack_centers, ~, ~, ~, ~] = make_convolution_model(segments, 'hand');
-[centers, radii] = find_htrack_hmodel_transformation(centers, radii, blocks, gamma, names_map, verbose, D);
+[centers, radii, M, scaling] = find_htrack_hmodel_transformation(centers, radii, blocks, gamma, names_map, verbose, D);
 key_points_names = {'palm_pinky', 'palm_ring', 'palm_middle', 'palm_index', 'palm_back', 'palm_attachment', 'palm_right', 'palm_back', 'palm_left'};
 [centers, ~] = aling_htrack_hmodel_frames(centers, radii, blocks, theta, htrack_centers, names_map, key_points_names, verbose, D);

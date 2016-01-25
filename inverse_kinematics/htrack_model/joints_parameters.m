@@ -62,8 +62,8 @@ theta{i}.value = t(i);
 theta{i}.type = 'R';
 theta{i}.axis = 'Z';
 theta{i}.segment_id = 2;
-theta{i}.min = -0.3;
-theta{i}.max = 0.3;
+theta{i}.min = -0.6;
+theta{i}.max = 0.6;
 
 %% 8: Thumb1 flexion (7)
 i = i + 1;
@@ -134,8 +134,8 @@ theta{i}.value = t(i);
 theta{i}.type = 'R';
 theta{i}.axis = 'Z';
 theta{i}.segment_id = 11;
-theta{i}.min = -0.3;
-theta{i}.max = 0.3;
+theta{i}.min = -0.6;
+theta{i}.max = 0.6;
 
 %% 16: Middle1 flexion (15)
 i = i + 1;
@@ -170,8 +170,8 @@ theta{i}.value = t(i);
 theta{i}.type = 'R';
 theta{i}.axis = 'Z';
 theta{i}.segment_id = 8;
-theta{i}.min = -0.3;
-theta{i}.max = 0.3;
+theta{i}.min = -0.6;
+theta{i}.max = 0.6;
 
 %% 20: Ring1 flexion (19)
 i = i + 1;
@@ -206,8 +206,8 @@ theta{i}.value = t(i);
 theta{i}.type = 'R';
 theta{i}.axis = 'Z';
 theta{i}.segment_id = 5;
-theta{i}.min = -0.3;
-theta{i}.max = 0.3;
+theta{i}.min = -0.6;
+theta{i}.max = 0.6;
 
 %% 24: Pinky1 flexion (23)
 i = i + 1;

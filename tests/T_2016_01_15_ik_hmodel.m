@@ -10,6 +10,7 @@ output_path = '_my_hand/tracking_initialization/';
 mode = 'my_hand';
 load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
+save([semantics_path, 'palm_blocks.mat']);
 load([input_path, 'centers.mat']);
 load([input_path, 'radii.mat']);
 load([semantics_path, 'tracking/blocks.mat']);

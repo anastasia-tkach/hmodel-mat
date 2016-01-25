@@ -24,10 +24,10 @@ named_elastic_blocks{end + 1} = {'wrist_bottom_left', 'wrist_top_right', 'wrist_
 
 %% Phantom blocks
 named_phantom_blocks = {};
-named_phantom_blocks{end + 1} = {'pinky_base', 'palm_pinky', 'pinky_membrane'};
-named_phantom_blocks{end + 1} = {'ring_base', 'palm_ring', 'ring_membrane'};
-named_phantom_blocks{end + 1} = {'middle_base', 'palm_middle', 'middle_membrane'};
-named_phantom_blocks{end + 1} = {'index_base', 'palm_index', 'index_membrane'};
+named_phantom_blocks{end + 1} = {'pinky_base', 'palm_pinky'};
+named_phantom_blocks{end + 1} = {'ring_base', 'palm_ring'};
+named_phantom_blocks{end + 1} = {'middle_base', 'palm_middle'};
+named_phantom_blocks{end + 1} = {'index_base', 'palm_index'};
 
 named_phantom_blocks{end + 1} = {'thumb_bottom', 'thumb_membrane'};
 
@@ -35,8 +35,7 @@ named_phantom_blocks{end + 1} = {'palm_index', 'palm_left', 'palm_thumb'};
 
 named_phantom_blocks{end + 1} = {'palm_index', 'palm_left', 'palm_thumb'};
 
-named_phantom_blocks{end + 1} = {'palm_attachment', 'palm_right'};
-named_phantom_blocks{end + 1} = {'palm_attachment', 'palm_left'};
+named_phantom_blocks{end + 1} = {'palm_attachment', 'palm_left', 'palm_right'};
 named_phantom_blocks{end + 1} = {'palm_attachment', 'palm_back'};
 
 %% Smooth blocks
@@ -91,16 +90,16 @@ attachments_map('middle_membrane') = {'middle_bottom', 'middle_base'};
 attachments_map('index_membrane') = {'index_bottom', 'index_base'};
 attachments_map('thumb_membrane') = {'thumb_bottom', 'thumb_middle'};
 
-attachments_map('palm_pinky') = {'pinky_bottom', 'pinky_base'};
-attachments_map('palm_ring') = {'ring_bottom', 'ring_base'};
-attachments_map('palm_middle') = {'middle_bottom', 'middle_base'};
-attachments_map('palm_index') = {'index_bottom', 'index_base'};
-
 attachments_map('thumb_base') = {'palm_middle', 'palm_left', 'palm_index'};
 attachments_map('palm_thumb') = {'palm_middle', 'palm_left', 'palm_index'};
 attachments_map('thumb_additional') = {'thumb_middle', 'thumb_top'};
 
 attachments_map('palm_attachment') = {'palm_right', 'palm_back', 'palm_left'};
+
+attachments_map('palm_pinky') = {'pinky_bottom', 'pinky_base'};
+attachments_map('palm_ring') = {'ring_bottom', 'ring_base'};
+attachments_map('palm_middle') = {'middle_bottom', 'middle_base'};
+attachments_map('palm_index') = {'index_bottom', 'index_base'};
 
 %% Parents
 parents_map = containers.Map();

@@ -1,7 +1,7 @@
 function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha, figure_mode)
 
 %% Generating the volumetric domain data:
-n = 55; color = double([234; 189; 157]./255);
+n = 60; color = double([234; 189; 157]./255);
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);
@@ -50,7 +50,6 @@ end
 min_distances = reshape(min_distances, size(x));
 h = patch(isosurface(x, y, z, min_distances,0));
 isonormals(x, y, z, min_distances, h);
-
 set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', face_alpha);
 
 grid off; axis equal; lighting gouraud; axis off; material([0.4, 0.6, 0.1, 5, 1.0]); 
@@ -78,6 +77,25 @@ if (display_data)
         mylines(points, projections, [0.1, 0.8, 0.8]);
         %mypoints(back_projections, lines_color);
         %mylines(back_projections, projections, lines_color);
+    end
+end
+
+return
+
+%% Specify surface types
+for i = 1:length(blocks)
+    if length(blocks{i}) == 3
+        v1 = tangent_points{i}.v1; v2 = tangent_points{i}.v2; v3 = tangent_points{i}.v3;
+        u1 = tangent_points{i}.u1; u2 = tangent_points{i}.u2; u3 = tangent_points{i}.u3;
+        draw_triangle(v1, v2, v3, 'y');  
+        draw_triangle(u1, u2, u3, 'y');  
+    end 
+end
+for i = 1:length(blocks)
+    for j = 1:length(blocks{i})
+        c1 = centers{blocks{i}(j)};
+        r1 = radii{blocks{i}(j)};
+        draw_sphere(c1, r1, 'g');  
     end
 end
 

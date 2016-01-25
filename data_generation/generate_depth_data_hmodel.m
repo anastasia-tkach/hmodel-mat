@@ -3,7 +3,7 @@ D = 3; verbose = false;
 num_parameters = 26;
 
 %% Hmodel
-input_path = '_my_hand/fitting_result/';
+input_path = '_my_hand/tracking_initialization/';
 semantics_path = '_my_hand/semantics/';
 sensor_path = 'C:/Users/tkach/Desktop/training/';
 output_path = '_my_hand/tracking_initialization/';
@@ -12,6 +12,7 @@ load([semantics_path, 'tracking/names_map.mat']);
 load([semantics_path, 'tracking/named_blocks.mat']);
 load([input_path, 'centers.mat']);
 load([input_path, 'radii.mat']);
+load([input_path, 'theta.mat']);
 load([semantics_path, 'tracking/blocks.mat']);
 
 
@@ -36,7 +37,7 @@ segments = initialize_ik_hmodel(centers, names_map);
 model_centers = centers;
 
 %% Set theta
-theta = zeros(26, 1);
+%theta = zeros(26, 1);
 %theta(1) = 7; % left/right
 theta(2) = 0; % + up/ - down
 theta(3) = 0; % - forwards/ + backwards

@@ -17,15 +17,16 @@ load([semantics_path, 'fingers_blocks.mat']);
 load([semantics_path, 'fingers_base_centers.mat']);
 blocks = palm_blocks;
 
-data_points = generate_depth_data_synthetic(centers, radii, blocks);
+% data_points = generate_depth_data_synthetic(centers, radii, blocks);
 %init_data_points = data_points;
-%data_points = init_data_points(1:200);
+data_points = init_data_points([361:361, 377:377]);
 
 camera_ray = [0; 0; 1];
 camera_center = [0; 0; 0];
 
 %% Compute projections and normals
-display_result(centers, data_points, model_points, blocks, radii, false, 0.5, 'small');
+display_result(centers, data_points, model_points, blocks, radii, false, 0.1, 'small');
+return
 
 [model_indices, model_points, block_indices, axis_projections, is_best_projection] = compute_projections_front(data_points, centers, blocks, radii, camera_ray);
 model_normals = compute_model_normals_temp(centers, blocks, radii, model_points, model_indices);
@@ -55,12 +56,13 @@ for i = 1:length(suboptimal_indices)
 end
 
 %% Display
-%display_result(centers, data_points, model_points, blocks, radii, true, 1, 'small');
+%display_result(centers, data_points, model_points, blocks, radii, true, 0.7, 'small');
 data_color = [0.65, 0.1, 0.5];
 model_color = [0, 0.7, 1];
 mypoints(data_points, data_color);
 mypoints(model_points, model_color);
 mylines(data_points, model_points, [0.1, 0.8, 0.8]);
+return
 for i = 1:length(outline)
     if length(outline{i}.indices) == 2
         myline(outline{i}.start, outline{i}.end, 'y');
