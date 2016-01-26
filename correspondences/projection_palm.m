@@ -60,7 +60,7 @@ for i = 1:length(blocks)
 end
 unique_indices = find(unique_indicator);
 
-
+%% COMPUTE PROJECTION
 RAND_MAX = 32767;
 epsilon = 10e-9;
 num_points = length(data_points);
@@ -73,14 +73,6 @@ is_best_projection = ones(num_points, 1);
 for i = 1:num_points
     
     p = data_points{i};
-    
-    all_projections = cell(length(blocks), 1);
-    all_distances = inf * ones(length(blocks), 1);
-    all_indices = cell(length(blocks), 1);
-    all_block_indices = zeros(length(blocks), 1);
-    all_axis_projections = cell(length(blocks), 1);
-    all_insideness = zeros(length(blocks), 1);    
-    
     min_distance = inf;
     min_front_facing_distance = inf;
     
@@ -95,13 +87,14 @@ for i = 1:num_points
             end
             n = tangent_points{j}.n;
             distance = (p - v1)' * n;
-            q = p - n * distance;
+            q = p - n * distance;            
             if (is_point_in_triangle(q, v1, v2, v3));
                 index = blocks{j};
                 is_inside = false;
             else
                 q = [inf; inf; inf];                
             end
+            %mypoint(q, 'r');
         end
         
         if length(blocks{j}) == 2
@@ -109,7 +102,7 @@ for i = 1:num_points
             r1 = radii{blocks{j}(1)}; r2 = radii{blocks{j}(2)};
             index1 = blocks{j}(1); index2 = blocks{j}(2);
             [index, q, s, is_inside] = projection_convsegment(p, c1, c2, r1, r2, index1, index2);
-            
+            %mypoint(q, 'g');
             %% Shadowing by a triangle
             if ~isempty(tangent_points) && ~isempty(tangent_points{j})
                 for l = 1:length(tangent_points{j}.triangles)
@@ -142,32 +135,28 @@ for i = 1:num_points
             end
             n = q - s;
         end
-        all_projections{j} = q;
-        all_axis_projections{j} = s;
-        all_distances(j) = norm(p - q);
+        
+        distance = norm(p - q);
         if is_inside == 1
-            all_distances(j) = - norm(p - q);
-            if isinf(all_distances(j)), all_distances(j) = inf; end
+            distance = - norm(p - q);
+            if isinf(distance), distance = inf; end
         end
-        all_indices{j} = index;
-        all_block_indices(j) = j;
-        all_insideness(j) = is_inside;
         
         %% Find min distance
-        if all_distances(j) < min_distance, min_distance = all_distances(j); end
+        if distance < min_distance, min_distance = distance; end
         
         %% Check if front facing
-        if camera_ray' * n > 0 ,
-            all_distances(j) = inf;
+        if camera_ray' * n > 0,
             continue;
         end
         
-        if all_distances(j) < min_front_facing_distance
-            min_front_facing_distance = all_distances(j);
+        if distance < min_front_facing_distance
+            min_front_facing_distance = distance;
             indices{i} = index;
-            projections{i} = q;
-            block_indices{i} = j;            
+            projections{i} = q;        
         end
+        
+        %disp([num2str(j), ': ', num2str(q')]);
     end
     % TODO deal with the case when inside of 2 blocks, no need to compute
     % insideness matrix, just look and all_insideness

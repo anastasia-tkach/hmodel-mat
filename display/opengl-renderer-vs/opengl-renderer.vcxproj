@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{625CF9DF-A160-4E7B-A2C4-9B57BCE0EABE}</ProjectGUID>
+    <ProjectGUID>{AF3627C4-EB69-417C-AF56-56FE68367A25}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>opengl-renderer</ProjectName>
@@ -68,13 +68,13 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">opengl-renderer.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">opengl-renderer</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">opengl-renderer.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">opengl-renderer</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">opengl-renderer.dir\RelWithDebInfo\</IntDir>
@@ -87,17 +87,21 @@
     <ClCompile>
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -109,9 +113,10 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+      <AdditionalOptions> /machine:x64 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;glu32.lib;opengl32.lib;C:\Developer\lib\GLFW.lib;C:\Developer\lib\glew32s.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/Debug/opengl-renderer.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/Debug/opengl-renderer.pdb</ProgramDataBaseFile>
@@ -128,16 +133,20 @@
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>Release/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -149,6 +158,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;glu32.lib;opengl32.lib;C:\Developer\lib\GLFW.lib;C:\Developer\lib\glew32s.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -168,16 +178,20 @@
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
       <DebugInformationFormat>
       </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -189,6 +203,7 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;glu32.lib;opengl32.lib;C:\Developer\lib\GLFW.lib;C:\Developer\lib\glew32s.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -208,16 +223,19 @@
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
       <CompileAs>CompileAsCpp</CompileAs>
-      <ExceptionHandling>
-      </ExceptionHandling>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <DebugInformationFormat>
-      </DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
-      <PreprocessorDefinitions>GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;GLEW_STATIC;HEADERONLY;USE_EIGEN;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>C:\Developer\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore;C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL;C:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml;C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
@@ -229,9 +247,10 @@
       <ProxyFileName>%(Filename)_p.c</ProxyFileName>
     </Midl>
     <Link>
+      <AdditionalOptions> /machine:x64 /debug %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib;glu32.lib;opengl32.lib;C:\Developer\lib\GLFW.lib;C:\Developer\lib\glew32s.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/RelWithDebInfo/opengl-renderer.lib</ImportLibrary>
       <ProgramDataBaseFile>C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/RelWithDebInfo/opengl-renderer.pdb</ProgramDataBaseFile>
@@ -300,20 +319,23 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\opengl-renderer.cpp" />
+    <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\data_points_fshader.glsl" />
+    <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\data_points_vshader.glsl" />
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\lines_fshader.glsl" />
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\lines_vshader.glsl" />
+    <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_fshader.glsl" />
+    <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_vshader.glsl" />
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_points_fshader.glsl" />
     <None Include="C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer\model_points_vshader.glsl" />
-    <None Include="model_fshader.glsl" />
-    <None Include="model_vshader.glsl" />
-    <None Include="outside_points_fshader.glsl" />
-    <None Include="outside_points_vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/ZERO_CHECK.vcxproj">
-      <Project>494BBC9B-34D5-4589-80CE-BE9D271F1556</Project>
+      <Project>8DE18CA4-4EA6-4BAF-98B4-915342D0CD9A</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\opengl-renderer\Convolution_renderer.h" />
+    <ClInclude Include="..\opengl-renderer\opengl-renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

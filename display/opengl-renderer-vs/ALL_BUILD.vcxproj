@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{61EF21AB-7828-4990-AFFB-F0200ECFA827}</ProjectGUID>
+    <ProjectGUID>{D5F13BDF-4829-4277-B482-80E60D97FD27}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>ALL_BUILD</ProjectName>
@@ -163,10 +163,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/ZERO_CHECK.vcxproj">
-      <Project>494BBC9B-34D5-4589-80CE-BE9D271F1556</Project>
+      <Project>E8D94CF0-8686-4030-8C6E-44C266C6942A</Project>
     </ProjectReference>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/opengl-renderer.vcxproj">
-      <Project>625CF9DF-A160-4E7B-A2C4-9B57BCE0EABE</Project>
+      <Project>AF3627C4-EB69-417C-AF56-56FE68367A25</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

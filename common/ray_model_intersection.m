@@ -11,7 +11,7 @@ for j = 1:length(blocks)
         u1 = tangent_point.u1; u2 = tangent_point.u2; u3 = tangent_point.u3;
         i = ray_convtriangle_intersection(c1, c2, c3, v1, v2, v3, u1, u2, u3, r1, r2, r3, p, d);
         if (norm(p - i) < norm(p - min_i))
-            min_i = i;
+            min_i = i;            
         end
     end
     if length(block) == 2

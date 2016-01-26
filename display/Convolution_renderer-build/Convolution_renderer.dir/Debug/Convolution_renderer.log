@@ -1,0 +1,102 @@
+﻿Build started 26.01.2016 18:32:15.
+     1>Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\Convolution_renderer.vcxproj" on node 2 (Build target(s)).
+     1>CustomBuild:
+         Building Custom Rule C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer/CMakeLists.txt
+         CMake does not need to re-run because C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\generate.stamp is up-to-date.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /IC:\Developer\include /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtWidgets /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtGui /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtCore /I"C:\Developer\Qt\5.4\msvc2013_64_opengl\mkspecs\win32-msvc2013" /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtOpenGL /IC:\Developer\Qt\5.4\msvc2013_64_opengl\include\QtXml /IC:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer /Zi /nologo /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D GLEW_STATIC /D HEADERONLY /D USE_EIGEN /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"Convolution_renderer.dir\Debug\\" /Fd"Convolution_renderer.dir\Debug\vc120.pdb" /Gd /TP /errorReport:prompt C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp
+         Convolution_renderer.cpp
+     1>c:\developer\include\opengp\surface_mesh\IO_obj.cpp(52): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_obj.cpp(69): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_obj.cpp(77): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_obj.cpp(87): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_obj.cpp(199): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(64): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(230) : see declaration of 'fscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(77): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(85): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(95): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(97): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(106): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(125): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(133): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(239): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(268): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_off.cpp(290): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_poly.cpp(45): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_poly.cpp(75): warning C4267: '=' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\developer\include\opengp\surface_mesh\IO_poly.cpp(76): warning C4267: '=' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\developer\include\opengp\surface_mesh\IO_poly.cpp(77): warning C4267: '=' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\developer\include\opengp\surface_mesh\IO_poly.cpp(78): warning C4267: '=' : conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\developer\include\opengp\surface_mesh\IO_stl.cpp(89): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_stl.cpp(105): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>c:\developer\include\opengp\surface_mesh\IO_stl.cpp(178): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(304) : see declaration of 'sscanf'
+     1>c:\developer\include\opengp\Surface_mesh.cpp(379): warning C4267: 'initializing' : conversion from 'size_t' to 'const unsigned int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(32): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(34): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(230) : see declaration of 'fscanf'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(38): warning C4996: 'fscanf': This function or variable may be unsafe. Consider using fscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(230) : see declaration of 'fscanf'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(79): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(80): warning C4305: 'argument' : truncation from 'double' to 'const float'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(165): warning C4244: '=' : conversion from 'GLfloat' to 'int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(211): error C2065: 'camera' : undeclared identifier
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(211): error C2228: left of '.setup' must have class/struct/union
+                 type is 'unknown-type'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(213): error C2065: 'camera' : undeclared identifier
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(213): error C2228: left of '.MVP' must have class/struct/union
+                 type is 'unknown-type'
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(213): error C2228: left of '.data' must have class/struct/union
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(213): error C2198: 'PFNGLUNIFORMMATRIX4FVPROC' : too few arguments for call
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(214): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(239): warning C4244: 'argument' : conversion from 'double' to 'const float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(264): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(265): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(266): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(267): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(268): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(269): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(289): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(290): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(291): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(292): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(302): warning C4244: 'argument' : conversion from '__int64' to 'int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(303): warning C4244: 'argument' : conversion from '__int64' to 'int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(304): warning C4244: 'argument' : conversion from '__int64' to 'int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(305): warning C4244: 'argument' : conversion from '__int64' to 'int', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(313): warning C4244: 'argument' : conversion from 'unsigned __int64' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(314): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(315): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(316): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(317): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(318): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(319): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(320): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(321): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(322): warning C4267: 'argument' : conversion from 'size_t' to 'GLsizei', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(423): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer\Convolution_renderer.cpp(426): warning C4244: 'argument' : conversion from 'int' to 'GLfloat', possible loss of data
+     1>Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\Convolution_renderer.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.84

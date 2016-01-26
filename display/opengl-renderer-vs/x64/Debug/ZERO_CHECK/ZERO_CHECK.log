@@ -1,4 +1,4 @@
-﻿Build started 05.01.2016 18:15:55.
+﻿Build started 26.01.2016 18:26:28.
      1>Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\ZERO_CHECK.vcxproj" on node 2 (Build target(s)).
      1>CustomBuild:
          Checking Build System
@@ -7,4 +7,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.16
+Time Elapsed 00:00:00.06

@@ -10,7 +10,7 @@ Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:23.
+Build started 26.01.2016 18:12:19.
 Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\3.2.0-rc1\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -36,7 +36,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:00.31
 
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -56,7 +56,7 @@ Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:24.
+Build started 26.01.2016 18:12:19.
 Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\3.2.0-rc1\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -82,7 +82,7 @@ Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.39
+Time Elapsed 00:00:00.31
 
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -94,157 +94,157 @@ The CXX compiler identification is MSVC, found in "C:/Users/tkach/OneDrive/EPFL/
 Determining if the C compiler works passed with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec1737411995.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec201142388.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:24.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec1737411995.vcxproj" on node 1 (default targets).
+Build started 26.01.2016 18:12:19.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec201142388.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec1737411995.dir\Debug\".
+  Creating directory "cmTryCompileExec201142388.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec1737411995.dir\Debug\cmTryCom.A511A2A5.tlog\".
+  Creating directory "cmTryCompileExec201142388.dir\Debug\cmTryCom.A6E0AD9F.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec1737411995.dir\Debug\cmTryCom.A511A2A5.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec201142388.dir\Debug\cmTryCom.A6E0AD9F.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1737411995.dir\Debug\\" /Fd"cmTryCompileExec1737411995.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCCompiler.c"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec201142388.dir\Debug\\" /Fd"cmTryCompileExec201142388.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCCompiler.c"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1737411995.dir\Debug\\" /Fd"cmTryCompileExec1737411995.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCCompiler.c"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec201142388.dir\Debug\\" /Fd"cmTryCompileExec201142388.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCCompiler.c"
   
   testCCompiler.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1737411995.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1737411995.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1737411995.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec1737411995.dir\Debug\testCCompiler.obj
-  cmTryCompileExec1737411995.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1737411995.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec201142388.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec201142388.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec201142388.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec201142388.dir\Debug\testCCompiler.obj
+  cmTryCompileExec201142388.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec201142388.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec1737411995.dir\Debug\cmTryCom.A511A2A5.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec1737411995.dir\Debug\cmTryCom.A511A2A5.tlog\cmTryCompileExec1737411995.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec1737411995.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec201142388.dir\Debug\cmTryCom.A6E0AD9F.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec201142388.dir\Debug\cmTryCom.A6E0AD9F.tlog\cmTryCompileExec201142388.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec201142388.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.47
+Time Elapsed 00:00:00.41
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3341634060.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec1217356931.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:25.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec3341634060.vcxproj" on node 1 (default targets).
+Build started 26.01.2016 18:12:20.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec1217356931.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec3341634060.dir\Debug\".
+  Creating directory "cmTryCompileExec1217356931.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec3341634060.dir\Debug\cmTryCom.C0B97D1F.tlog\".
+  Creating directory "cmTryCompileExec1217356931.dir\Debug\cmTryCom.08036398.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec3341634060.dir\Debug\cmTryCom.C0B97D1F.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec1217356931.dir\Debug\cmTryCom.08036398.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3341634060.dir\Debug\\" /Fd"cmTryCompileExec3341634060.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1217356931.dir\Debug\\" /Fd"cmTryCompileExec1217356931.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3341634060.dir\Debug\\" /Fd"cmTryCompileExec3341634060.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1217356931.dir\Debug\\" /Fd"cmTryCompileExec1217356931.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
   
   CMakeCCompilerABI.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3341634060.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3341634060.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3341634060.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3341634060.dir\Debug\CMakeCCompilerABI.obj
-  cmTryCompileExec3341634060.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3341634060.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1217356931.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1217356931.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1217356931.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec1217356931.dir\Debug\CMakeCCompilerABI.obj
+  cmTryCompileExec1217356931.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1217356931.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec3341634060.dir\Debug\cmTryCom.C0B97D1F.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec3341634060.dir\Debug\cmTryCom.C0B97D1F.tlog\cmTryCompileExec3341634060.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec3341634060.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec1217356931.dir\Debug\cmTryCom.08036398.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec1217356931.dir\Debug\cmTryCom.08036398.tlog\cmTryCompileExec1217356931.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec1217356931.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.50
+Time Elapsed 00:00:00.39
 
 
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2180948548.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec815742181.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:25.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec2180948548.vcxproj" on node 1 (default targets).
+Build started 26.01.2016 18:12:21.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec815742181.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec2180948548.dir\Debug\".
+  Creating directory "cmTryCompileExec815742181.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec2180948548.dir\Debug\cmTryCom.A139E3D5.tlog\".
+  Creating directory "cmTryCompileExec815742181.dir\Debug\cmTryCom.AB1407BC.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec2180948548.dir\Debug\cmTryCom.A139E3D5.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec815742181.dir\Debug\cmTryCom.AB1407BC.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec2180948548.dir\Debug\\" /Fd"cmTryCompileExec2180948548.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec815742181.dir\Debug\\" /Fd"cmTryCompileExec815742181.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec2180948548.dir\Debug\\" /Fd"cmTryCompileExec2180948548.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec815742181.dir\Debug\\" /Fd"cmTryCompileExec815742181.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   
   testCXXCompiler.cxx
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2180948548.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2180948548.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2180948548.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2180948548.dir\Debug\testCXXCompiler.obj
-  cmTryCompileExec2180948548.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2180948548.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec815742181.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec815742181.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec815742181.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec815742181.dir\Debug\testCXXCompiler.obj
+  cmTryCompileExec815742181.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec815742181.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec2180948548.dir\Debug\cmTryCom.A139E3D5.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec2180948548.dir\Debug\cmTryCom.A139E3D5.tlog\cmTryCompileExec2180948548.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec2180948548.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec815742181.dir\Debug\cmTryCom.AB1407BC.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec815742181.dir\Debug\cmTryCom.AB1407BC.tlog\cmTryCompileExec815742181.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec815742181.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.55
+Time Elapsed 00:00:00.39
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec4093590352.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3793347010.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:26.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec4093590352.vcxproj" on node 1 (default targets).
+Build started 26.01.2016 18:12:21.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec3793347010.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec4093590352.dir\Debug\".
+  Creating directory "cmTryCompileExec3793347010.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec4093590352.dir\Debug\cmTryCom.86DE2440.tlog\".
+  Creating directory "cmTryCompileExec3793347010.dir\Debug\cmTryCom.3E040B60.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec4093590352.dir\Debug\cmTryCom.86DE2440.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec3793347010.dir\Debug\cmTryCom.3E040B60.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec4093590352.dir\Debug\\" /Fd"cmTryCompileExec4093590352.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3793347010.dir\Debug\\" /Fd"cmTryCompileExec3793347010.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec4093590352.dir\Debug\\" /Fd"cmTryCompileExec4093590352.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3793347010.dir\Debug\\" /Fd"cmTryCompileExec3793347010.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
   
   CMakeCXXCompilerABI.cpp
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec4093590352.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec4093590352.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec4093590352.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec4093590352.dir\Debug\CMakeCXXCompilerABI.obj
-  cmTryCompileExec4093590352.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec4093590352.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3793347010.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3793347010.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3793347010.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3793347010.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTryCompileExec3793347010.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3793347010.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec4093590352.dir\Debug\cmTryCom.86DE2440.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec4093590352.dir\Debug\cmTryCom.86DE2440.tlog\cmTryCompileExec4093590352.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec4093590352.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec3793347010.dir\Debug\cmTryCom.3E040B60.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec3793347010.dir\Debug\cmTryCom.3E040B60.tlog\cmTryCompileExec3793347010.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec3793347010.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.49
+Time Elapsed 00:00:00.41
 
 
 
@@ -252,40 +252,40 @@ Time Elapsed 00:00:00.49
 Detecting CXX [] compiler features compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec4123361064.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2508926694.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 05.01.2016 18:15:27.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec4123361064.vcxproj" on node 1 (default targets).
+Build started 26.01.2016 18:12:22.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec2508926694.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec4123361064.dir\Debug\".
+  Creating directory "cmTryCompileExec2508926694.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec4123361064.dir\Debug\cmTryCom.83387DA4.tlog\".
+  Creating directory "cmTryCompileExec2508926694.dir\Debug\cmTryCom.7ADF85A8.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec4123361064.dir\Debug\cmTryCom.83387DA4.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec2508926694.dir\Debug\cmTryCom.7ADF85A8.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec4123361064.dir\Debug\\" /Fd"cmTryCompileExec4123361064.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\feature_tests.cxx"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2508926694.dir\Debug\\" /Fd"cmTryCompileExec2508926694.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\feature_tests.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W1 /WX- /Od /Ob0 /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec4123361064.dir\Debug\\" /Fd"cmTryCompileExec4123361064.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\feature_tests.cxx"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2508926694.dir\Debug\\" /Fd"cmTryCompileExec2508926694.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\feature_tests.cxx"
   
   feature_tests.cxx
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec4123361064.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec4123361064.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec4123361064.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec4123361064.dir\Debug\feature_tests.obj
-  cmTryCompileExec4123361064.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec4123361064.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2508926694.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2508926694.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2508926694.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2508926694.dir\Debug\feature_tests.obj
+  cmTryCompileExec2508926694.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2508926694.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec4123361064.dir\Debug\cmTryCom.83387DA4.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec4123361064.dir\Debug\cmTryCom.83387DA4.tlog\cmTryCompileExec4123361064.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec4123361064.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec2508926694.dir\Debug\cmTryCom.7ADF85A8.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec2508926694.dir\Debug\cmTryCom.7ADF85A8.tlog\cmTryCompileExec2508926694.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\opengl-renderer-vs\CMakeFiles\CMakeTmp\cmTryCompileExec2508926694.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.52
+Time Elapsed 00:00:00.36
 
 
     Feature record: CXX_FEATURE:1cxx_alias_templates

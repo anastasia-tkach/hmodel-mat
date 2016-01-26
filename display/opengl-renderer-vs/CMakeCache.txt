@@ -14,88 +14,84 @@
 # EXTERNAL cache entries
 ########################
 
-//Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
-// CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=
-
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
 // else will be ignored.
 CMAKE_CONFIGURATION_TYPES:STRING=Debug;Release;MinSizeRel;RelWithDebInfo
 
 //Flags used by the compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=
+CMAKE_CXX_FLAGS:STRING= /DWIN32 /D_WINDOWS /W3 /GR /EHsc
 
 //Flags used by the compiler during debug builds.
-CMAKE_CXX_FLAGS_DEBUG:STRING=
+CMAKE_CXX_FLAGS_DEBUG:STRING=/D_DEBUG /MDd /Zi /Ob0 /Od /RTC1
 
 //Flags used by the compiler during release builds for minimum
 // size.
-CMAKE_CXX_FLAGS_MINSIZEREL:STRING=
+CMAKE_CXX_FLAGS_MINSIZEREL:STRING=/MD /O1 /Ob1 /D NDEBUG
 
 //Flags used by the compiler during release builds.
-CMAKE_CXX_FLAGS_RELEASE:STRING=
+CMAKE_CXX_FLAGS_RELEASE:STRING=/MD /O2 /Ob2 /D NDEBUG
 
 //Flags used by the compiler during release builds with debug info.
-CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_CXX_FLAGS_RELWITHDEBINFO:STRING=/MD /Zi /O2 /Ob1 /D NDEBUG
 
 //Libraries linked by default with all C++ applications.
 CMAKE_CXX_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
 
 //Flags used by the compiler during all build types.
-CMAKE_C_FLAGS:STRING=
+CMAKE_C_FLAGS:STRING= /DWIN32 /D_WINDOWS /W3
 
 //Flags used by the compiler during debug builds.
-CMAKE_C_FLAGS_DEBUG:STRING=
+CMAKE_C_FLAGS_DEBUG:STRING=/D_DEBUG /MDd /Zi /Ob0 /Od /RTC1
 
 //Flags used by the compiler during release builds for minimum
 // size.
-CMAKE_C_FLAGS_MINSIZEREL:STRING=
+CMAKE_C_FLAGS_MINSIZEREL:STRING=/MD /O1 /Ob1 /D NDEBUG
 
 //Flags used by the compiler during release builds.
-CMAKE_C_FLAGS_RELEASE:STRING=
+CMAKE_C_FLAGS_RELEASE:STRING=/MD /O2 /Ob2 /D NDEBUG
 
 //Flags used by the compiler during release builds with debug info.
-CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=/MD /Zi /O2 /Ob1 /D NDEBUG
 
 //Libraries linked by default with all C applications.
 CMAKE_C_STANDARD_LIBRARIES:STRING=kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
 
 //Flags used by the linker.
-CMAKE_EXE_LINKER_FLAGS:STRING=
+CMAKE_EXE_LINKER_FLAGS:STRING= /machine:x64
 
 //Flags used by the linker during debug builds.
-CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
+CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=/debug /INCREMENTAL
 
 //Flags used by the linker during release minsize builds.
-CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=
+CMAKE_EXE_LINKER_FLAGS_MINSIZEREL:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during release builds.
-CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=
+CMAKE_EXE_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during Release with Debug Info builds.
-CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //Install path prefix, prepended onto install directories.
 CMAKE_INSTALL_PREFIX:PATH=C:/Program Files/opengl-renderer
 
 //Path to a program.
-CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/amd64/link.exe
+CMAKE_LINKER:FILEPATH=C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/bin/x86_amd64/link.exe
 
 //Flags used by the linker during the creation of modules.
-CMAKE_MODULE_LINKER_FLAGS:STRING=
+CMAKE_MODULE_LINKER_FLAGS:STRING= /machine:x64
 
 //Flags used by the linker during debug builds.
-CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=
+CMAKE_MODULE_LINKER_FLAGS_DEBUG:STRING=/debug /INCREMENTAL
 
 //Flags used by the linker during release minsize builds.
-CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=
+CMAKE_MODULE_LINKER_FLAGS_MINSIZEREL:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during release builds.
-CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=
+CMAKE_MODULE_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during Release with Debug Info builds.
-CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //Value Computed by CMake
 CMAKE_PROJECT_NAME:STATIC=opengl-renderer
@@ -107,26 +103,26 @@ CMAKE_RC_COMPILER:FILEPATH=rc
 CMAKE_RC_FLAGS:STRING=' '
 
 //Flags used by the linker during the creation of dll's.
-CMAKE_SHARED_LINKER_FLAGS:STRING=
+CMAKE_SHARED_LINKER_FLAGS:STRING= /machine:x64
 
 //Flags used by the linker during debug builds.
-CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=
+CMAKE_SHARED_LINKER_FLAGS_DEBUG:STRING=/debug /INCREMENTAL
 
 //Flags used by the linker during release minsize builds.
-CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=
+CMAKE_SHARED_LINKER_FLAGS_MINSIZEREL:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during release builds.
-CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=
+CMAKE_SHARED_LINKER_FLAGS_RELEASE:STRING=/INCREMENTAL:NO
 
 //Flags used by the linker during Release with Debug Info builds.
-CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=
+CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 
 //If set, runtime paths are not added when installing shared libraries,
 // but are added when building.
-CMAKE_SKIP_INSTALL_RPATH:BOOL=OFF
+CMAKE_SKIP_INSTALL_RPATH:BOOL=NO
 
 //If set, runtime paths are not added when using shared libraries.
-CMAKE_SKIP_RPATH:BOOL=OFF
+CMAKE_SKIP_RPATH:BOOL=NO
 
 //Flags used by the linker during the creation of static libraries.
 CMAKE_STATIC_LINKER_FLAGS:STRING=
@@ -150,7 +146,7 @@ CMAKE_USE_RELATIVE_PATHS:BOOL=OFF
 // .SILENT directive, and all commands will be echoed to the console
 // during the make.  This is useful for debugging only. With Visual
 // Studio IDE projects all commands are done without /nologo.
-CMAKE_VERBOSE_MAKEFILE:BOOL=OFF
+CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Path to a file.
 GLEW_INCLUDE_DIRS:PATH=C:/Developer/include
@@ -199,8 +195,6 @@ opengl-renderer_SOURCE_DIR:STATIC=C:/Users/tkach/OneDrive/EPFL/Code/HModel/displ
 # INTERNAL cache entries
 ########################
 
-//Stored GUID
-ALL_BUILD_GUID_CMAKE:INTERNAL=61EF21AB-7828-4990-AFFB-F0200ECFA827
 //This is the directory where this CMakeCache.txt was created
 CMAKE_CACHEFILE_DIR:INTERNAL=c:/Users/tkach/OneDrive/EPFL/Code/HModel/display/opengl-renderer-vs
 //Major version of cmake used to create the current loaded cache
@@ -321,17 +315,15 @@ OPENGL_gl_LIBRARY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: OPENGL_glu_LIBRARY
 OPENGL_glu_LIBRARY-ADVANCED:INTERNAL=1
 //Stored GUID
-SG_Filter_CMake Rules_GUID_CMAKE:INTERNAL=667A50F9-A5A6-4CD6-944B-99B2EC3A1332
+SG_Filter_CMake Rules_GUID_CMAKE:INTERNAL=8F3693E2-A640-42C6-B1F4-C9DE2B3F9A55
 //Stored GUID
-SG_Filter_Header Files_GUID_CMAKE:INTERNAL=ABE56873-1456-4F5F-97B2-88D23CDFDD3A
+SG_Filter_Header Files_GUID_CMAKE:INTERNAL=C4826642-4480-4A61-86BF-7E847A7E4A3E
 //Stored GUID
-SG_Filter_Object Files_GUID_CMAKE:INTERNAL=998186DB-B258-4921-9EB4-B2B833B0CE95
+SG_Filter_Object Files_GUID_CMAKE:INTERNAL=CCF2DCAB-3F60-4120-95C3-E0897DADEE32
 //Stored GUID
-SG_Filter_Resources_GUID_CMAKE:INTERNAL=88BAA0D1-8800-486C-ABBD-7A2A9064CD12
+SG_Filter_Resources_GUID_CMAKE:INTERNAL=00030DBD-0911-46AF-A469-6C7F78E835AB
 //Stored GUID
-SG_Filter_Source Files_GUID_CMAKE:INTERNAL=20549B25-3388-4BA1-AFEF-4C10683A1FF7
+SG_Filter_Source Files_GUID_CMAKE:INTERNAL=CE061E6F-D21B-4E79-9D81-76F5C8311B13
 //Stored GUID
-ZERO_CHECK_GUID_CMAKE:INTERNAL=494BBC9B-34D5-4589-80CE-BE9D271F1556
-//Stored GUID
-opengl-renderer_GUID_CMAKE:INTERNAL=625CF9DF-A160-4E7B-A2C4-9B57BCE0EABE
+ZERO_CHECK_GUID_CMAKE:INTERNAL=E8D94CF0-8686-4030-8C6E-44C266C6942A
 

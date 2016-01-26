@@ -29,11 +29,11 @@ for j = 1:length(blocks)
 end
 M = camera_matrix;
 p = camera_center;
+
 [U, V, D] = render_model_mex(C, R, B, T, M, W, H, p);
 
-%tangent_points = blocks_tangent_points(centers, blocks, radii);
 %[U, V, D] = render_model_matlab(centers, blocks, radii, tangent_points, W, H, M, p);
-%save rendered_model_matlab rendered_model_matlab;
+
 
 rendered_model = zeros(H, W, 3);
 rendered_model(:, :, 1) = U;
