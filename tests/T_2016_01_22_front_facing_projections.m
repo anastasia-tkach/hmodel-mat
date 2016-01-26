@@ -19,7 +19,7 @@ blocks = palm_blocks;
 
 % data_points = generate_depth_data_synthetic(centers, radii, blocks);
 %init_data_points = data_points;
-data_points = init_data_points([361:361, 377:377]);
+data_points = init_data_points;
 
 camera_ray = [0; 0; 1];
 camera_center = [0; 0; 0];
