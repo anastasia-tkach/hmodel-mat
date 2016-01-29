@@ -1,4 +1,4 @@
-function [rendered_model] = render_tracking_model(centers, blocks, radii, camera_matrix, camera_center, settings)
+function [rendered_model, I] = render_tracking_model(centers, blocks, radii, camera_matrix, camera_center, settings)
  H = settings.H; W = settings.W;
 
 D = 3;
@@ -30,7 +30,7 @@ end
 M = camera_matrix;
 p = camera_center;
 
-[U, V, D] = render_model_mex(C, R, B, T, M, W, H, p);
+[U, V, D, I] = render_model_mex(C, R, B, T, M, W, H, p);
 
 %[U, V, D] = render_model_matlab(centers, blocks, radii, tangent_points, W, H, M, p);
 

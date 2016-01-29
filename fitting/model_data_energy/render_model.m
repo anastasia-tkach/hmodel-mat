@@ -30,7 +30,7 @@ for j = 1:length(blocks)
 end
 M = camera_matrix;
 p = camera_center;
-[U, V, D] = render_model_mex(C, R, B, T, M, W, H, p);
+[U, V, D, I] = render_model_mex(C, R, B, T, M, W, H, p);
 
 %%
 %tangent_points = blocks_tangent_points(centers, blocks, radii);
@@ -42,6 +42,7 @@ pose.rendered_model = zeros(H, W, 3);
 pose.rendered_model(:, :, 1) = U;
 pose.rendered_model(:, :, 2) = V;
 pose.rendered_model(:, :, 3) = D;
+pose.
 
 
 

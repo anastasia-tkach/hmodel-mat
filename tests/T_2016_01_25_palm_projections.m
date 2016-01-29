@@ -15,7 +15,7 @@ load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks)
 load([semantics_path, 'palm_blocks.mat']);
 load([semantics_path, 'fingers_blocks.mat']);
 load([semantics_path, 'fingers_base_centers.mat']);
-blocks = palm_blocks;
+%blocks = palm_blocks;
 blocks = reindex(radii, blocks);
 
 data_points = generate_depth_data_synthetic(centers, radii, blocks);
@@ -27,30 +27,68 @@ camera_offset = -50;
 camera_center = [0; 0; camera_offset];
 
 %% Render palm
-display_result(centers, [], [], blocks, radii, false, 0.5, 'big');
 
-tangent_points = blocks_tangent_points(centers, blocks, radii);
-model_bounding_box = compute_model_bounding_box(centers, radii);
-num_samples = 30;
-X = linspace(model_bounding_box.min_x, model_bounding_box.max_x, num_samples);
-Y = linspace(model_bounding_box.min_y, model_bounding_box.max_y, num_samples);
-rendered_points = {};
-for i = 1:num_samples
-    for j = 1:num_samples
-        p = [X(i); Y(j); camera_offset];
-        %myline(p, p + camera_ray * 100, 'g');
-        rendered_points{end + 1} = ray_model_intersection(centers, blocks, radii, tangent_points, p, camera_ray);
+% tangent_points = blocks_tangent_points(centers, blocks, radii);
+% rendered_points = {};
+% 
+% model_bounding_box = compute_model_bounding_box(centers, radii);
+% H = 640; W = 480;
+% R = linspace(model_bounding_box.min_x, model_bounding_box.max_x, H);
+% C = linspace(model_bounding_box.min_y, model_bounding_box.max_y, W);
+% I = cell(H, W);
+% D = zeros(H, W);
+% for i = 1:H
+%     for j = 1:W
+%         p = [R(i); C(j); camera_offset];
+%         [~, ~, I{i, j}] = ray_model_intersection(centers, blocks, radii, tangent_points, p, camera_ray);
+%     end
+% end
+
+
+
+%% Display
+C = 50;
+settings.fov = 15;
+downscaling_factor = 2;
+settings.H = 480/downscaling_factor;
+settings.W = 640/downscaling_factor;
+settings.D = D;
+settings.side = 'front';
+settings.view_axis = 'Z';
+data_bounding_box = compute_model_bounding_box(centers, radii);
+[raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
+[rendered_model, I] = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
+figure; imshow(rendered_model(:, :, 3), []);
+
+%% Visualize
+M = zeros(settings.H, settings.W);
+n = length(centers);
+hash_to_index = containers.Map('KeyType','uint32', 'ValueType', 'uint32') ;
+count = 0;
+I = I + 1;
+for i = 1:settings.H
+    for j = 1:settings.W
+        v = 0;
+        w = I(i, j);
+        if ~isKey(hash_to_index, abs(w))
+            hash_to_index(abs(w)) = count;            
+            M(i, j) = count;
+            count = count + 1;
+        else
+             M(i, j) = hash_to_index(abs(w));
+        end        
     end
 end
+M = flipud(M); 
+figure; image(M, 'CDataMapping','scaled'); axis off; axis equal; colormap jet;
 
-%% Display 
-
-mypoints(rendered_points, 'k');
-view([-180, -90]); camlight; drawnow;
-
-return
+%display_result(centers, [], [], blocks, radii, false, 0.5, 'big');
+%mypoints(rendered_points, 'k');
+%mypoints(data_points, 'm');
+%view([-180, -90]); camlight; drawnow;
 
 
+return;
 %% Project palm
 [model_indices, model_points, axis_projections, is_best_projection]  = projection_palm(centers, radii, blocks, data_points, camera_ray, camera_center);
 model_normals = compute_model_normals_temp(centers, blocks, radii, model_points, model_indices);

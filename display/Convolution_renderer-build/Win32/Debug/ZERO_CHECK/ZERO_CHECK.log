@@ -1,0 +1,10 @@
+﻿Build started 27.01.2016 20:25:18.
+     1>Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\ZERO_CHECK.vcxproj" on node 2 (Build target(s)).
+     1>CustomBuild:
+         Checking Build System
+         CMake does not need to re-run because C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/generate.stamp is up-to-date.
+     1>Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\ZERO_CHECK.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.06

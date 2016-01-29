@@ -1,4 +1,4 @@
-function [i, normal] = ray_convsegment_intersection(c1, c2, r1, r2, p, v)
+function [i, normal, index] = ray_convsegment_intersection(c1, c2, r1, r2, index1, index2, p, v)
 D = length(p);
 n = (c2 - c1)/norm(c2 - c1);
 
@@ -15,11 +15,13 @@ alpha = atan(r / h);
 
 %% Ray - cone intersection
 i = Inf * ones(D, 1);
+index = Inf;
 normal = zeros(D, 1);
 [i12, n12] = ray_cone_intersection(z, n, alpha, p, v);
 if n' *(i12  - s1) >= 0 && n' * (i12 - s2) <= 0 && norm(i12) < Inf
     i = i12; 
     normal = n12;
+    index = [index1, index2];
 end
 
 %% Ray - sphere intersection
@@ -27,6 +29,7 @@ end
 if n' * (i1 - s1) < 0  && norm(i1) < Inf
     i = i1;
     normal = n1;
+    index = index1;
 end
 
 %% Ray - sphere intersection
@@ -35,6 +38,7 @@ end
 if n' * (i2 - s2) > 0 && norm(i2) < Inf
     i = i2;
     normal = n2;
+    index = index2;
 end
 
 

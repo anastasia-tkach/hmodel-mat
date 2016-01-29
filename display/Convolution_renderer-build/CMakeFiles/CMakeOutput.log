@@ -10,7 +10,7 @@ Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:48.
+Build started 27.01.2016 20:28:22.
 Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\3.2.0-rc1\CompilerIdC\CompilerIdC.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -56,7 +56,7 @@ Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:48.
+Build started 27.01.2016 20:28:22.
 Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\3.2.0-rc1\CompilerIdCXX\CompilerIdCXX.vcxproj" on node 1 (default targets).
 PrepareForBuild:
   Creating directory "Debug\".
@@ -94,73 +94,73 @@ The CXX compiler identification is MSVC, found in "C:/Users/tkach/OneDrive/EPFL/
 Determining if the C compiler works passed with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3709844563.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3172268745.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:48.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3709844563.vcxproj" on node 1 (default targets).
+Build started 27.01.2016 20:28:23.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3172268745.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec3709844563.dir\Debug\".
+  Creating directory "cmTryCompileExec3172268745.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec3709844563.dir\Debug\cmTryCom.F34C381E.tlog\".
+  Creating directory "cmTryCompileExec3172268745.dir\Debug\cmTryCom.BE7DC2DE.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec3709844563.dir\Debug\cmTryCom.F34C381E.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec3172268745.dir\Debug\cmTryCom.BE7DC2DE.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3709844563.dir\Debug\\" /Fd"cmTryCompileExec3709844563.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3172268745.dir\Debug\\" /Fd"cmTryCompileExec3172268745.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCCompiler.c"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3709844563.dir\Debug\\" /Fd"cmTryCompileExec3709844563.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCCompiler.c"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec3172268745.dir\Debug\\" /Fd"cmTryCompileExec3172268745.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCCompiler.c"
   
   testCCompiler.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3709844563.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3709844563.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3709844563.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3709844563.dir\Debug\testCCompiler.obj
-  cmTryCompileExec3709844563.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3709844563.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3172268745.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3172268745.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3172268745.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3172268745.dir\Debug\testCCompiler.obj
+  cmTryCompileExec3172268745.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3172268745.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec3709844563.dir\Debug\cmTryCom.F34C381E.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec3709844563.dir\Debug\cmTryCom.F34C381E.tlog\cmTryCompileExec3709844563.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3709844563.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec3172268745.dir\Debug\cmTryCom.BE7DC2DE.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec3172268745.dir\Debug\cmTryCom.BE7DC2DE.tlog\cmTryCompileExec3172268745.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3172268745.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.40
+Time Elapsed 00:00:00.35
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec367221558.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec1250768919.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:49.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec367221558.vcxproj" on node 1 (default targets).
+Build started 27.01.2016 20:28:23.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec1250768919.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec367221558.dir\Debug\".
+  Creating directory "cmTryCompileExec1250768919.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec367221558.dir\Debug\cmTryCom.B7288B5A.tlog\".
+  Creating directory "cmTryCompileExec1250768919.dir\Debug\cmTryCom.5A9A916F.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec367221558.dir\Debug\cmTryCom.B7288B5A.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec1250768919.dir\Debug\cmTryCom.5A9A916F.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec367221558.dir\Debug\\" /Fd"cmTryCompileExec367221558.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1250768919.dir\Debug\\" /Fd"cmTryCompileExec1250768919.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec367221558.dir\Debug\\" /Fd"cmTryCompileExec367221558.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"cmTryCompileExec1250768919.dir\Debug\\" /Fd"cmTryCompileExec1250768919.dir\Debug\vc120.pdb" /Gd /TC /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCCompilerABI.c"
   
   CMakeCCompilerABI.c
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec367221558.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec367221558.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec367221558.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec367221558.dir\Debug\CMakeCCompilerABI.obj
-  cmTryCompileExec367221558.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec367221558.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1250768919.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1250768919.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1250768919.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec1250768919.dir\Debug\CMakeCCompilerABI.obj
+  cmTryCompileExec1250768919.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1250768919.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec367221558.dir\Debug\cmTryCom.B7288B5A.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec367221558.dir\Debug\cmTryCom.B7288B5A.tlog\cmTryCompileExec367221558.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec367221558.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec1250768919.dir\Debug\cmTryCom.5A9A916F.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec1250768919.dir\Debug\cmTryCom.5A9A916F.tlog\cmTryCompileExec1250768919.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec1250768919.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
@@ -172,79 +172,79 @@ Time Elapsed 00:00:00.37
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2951606634.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2270529491.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:49.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2951606634.vcxproj" on node 1 (default targets).
+Build started 27.01.2016 20:28:24.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2270529491.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec2951606634.dir\Debug\".
+  Creating directory "cmTryCompileExec2270529491.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec2951606634.dir\Debug\cmTryCom.8BB7428D.tlog\".
+  Creating directory "cmTryCompileExec2270529491.dir\Debug\cmTryCom.99E6C042.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec2951606634.dir\Debug\cmTryCom.8BB7428D.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec2270529491.dir\Debug\cmTryCom.99E6C042.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2951606634.dir\Debug\\" /Fd"cmTryCompileExec2951606634.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2270529491.dir\Debug\\" /Fd"cmTryCompileExec2270529491.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2951606634.dir\Debug\\" /Fd"cmTryCompileExec2951606634.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2270529491.dir\Debug\\" /Fd"cmTryCompileExec2270529491.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\testCXXCompiler.cxx"
   
   testCXXCompiler.cxx
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2951606634.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2951606634.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2951606634.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2951606634.dir\Debug\testCXXCompiler.obj
-  cmTryCompileExec2951606634.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2951606634.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2270529491.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2270529491.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2270529491.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2270529491.dir\Debug\testCXXCompiler.obj
+  cmTryCompileExec2270529491.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2270529491.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec2951606634.dir\Debug\cmTryCom.8BB7428D.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec2951606634.dir\Debug\cmTryCom.8BB7428D.tlog\cmTryCompileExec2951606634.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2951606634.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec2270529491.dir\Debug\cmTryCom.99E6C042.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec2270529491.dir\Debug\cmTryCom.99E6C042.tlog\cmTryCompileExec2270529491.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2270529491.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.40
+Time Elapsed 00:00:00.36
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec3632640652.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2197483109.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:50.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3632640652.vcxproj" on node 1 (default targets).
+Build started 27.01.2016 20:28:24.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2197483109.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec3632640652.dir\Debug\".
+  Creating directory "cmTryCompileExec2197483109.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec3632640652.dir\Debug\cmTryCom.CF6888A8.tlog\".
+  Creating directory "cmTryCompileExec2197483109.dir\Debug\cmTryCom.C1ED9129.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec3632640652.dir\Debug\cmTryCom.CF6888A8.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec2197483109.dir\Debug\cmTryCom.C1ED9129.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3632640652.dir\Debug\\" /Fd"cmTryCompileExec3632640652.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2197483109.dir\Debug\\" /Fd"cmTryCompileExec2197483109.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec3632640652.dir\Debug\\" /Fd"cmTryCompileExec3632640652.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2197483109.dir\Debug\\" /Fd"cmTryCompileExec2197483109.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Program Files (x86)\CMake\share\cmake-3.2\Modules\CMakeCXXCompilerABI.cpp"
   
   CMakeCXXCompilerABI.cpp
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3632640652.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3632640652.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec3632640652.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec3632640652.dir\Debug\CMakeCXXCompilerABI.obj
-  cmTryCompileExec3632640652.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec3632640652.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2197483109.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2197483109.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2197483109.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2197483109.dir\Debug\CMakeCXXCompilerABI.obj
+  cmTryCompileExec2197483109.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2197483109.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec3632640652.dir\Debug\cmTryCom.CF6888A8.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec3632640652.dir\Debug\cmTryCom.CF6888A8.tlog\cmTryCompileExec3632640652.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec3632640652.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec2197483109.dir\Debug\cmTryCom.C1ED9129.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec2197483109.dir\Debug\cmTryCom.C1ED9129.tlog\cmTryCompileExec2197483109.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2197483109.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.41
+Time Elapsed 00:00:00.38
 
 
 
@@ -252,40 +252,40 @@ Time Elapsed 00:00:00.41
 Detecting CXX [] compiler features compiled with the following output:
 Change Dir: C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp
 
-Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec2638537778.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
+Run Build Command:"C:/Program Files (x86)/MSBuild/12.0/bin/MSBuild.exe" "cmTryCompileExec1950901861.vcxproj" "/p:Configuration=Debug" "/p:VisualStudioVersion=12.0"
 Microsoft (R) Build Engine version 12.0.31101.0
 [Microsoft .NET Framework, version 4.0.30319.34209]
 Copyright (C) Microsoft Corporation. All rights reserved.
 
-Build started 26.01.2016 18:31:51.
-Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2638537778.vcxproj" on node 1 (default targets).
+Build started 27.01.2016 20:28:25.
+Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec1950901861.vcxproj" on node 1 (default targets).
 PrepareForBuild:
-  Creating directory "cmTryCompileExec2638537778.dir\Debug\".
+  Creating directory "cmTryCompileExec1950901861.dir\Debug\".
   Creating directory "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\".
-  Creating directory "cmTryCompileExec2638537778.dir\Debug\cmTryCom.B81A1E5A.tlog\".
+  Creating directory "cmTryCompileExec1950901861.dir\Debug\cmTryCom.8FDFB93E.tlog\".
 InitializeBuildStatus:
-  Creating "cmTryCompileExec2638537778.dir\Debug\cmTryCom.B81A1E5A.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
+  Creating "cmTryCompileExec1950901861.dir\Debug\cmTryCom.8FDFB93E.tlog\unsuccessfulbuild" because "AlwaysCreate" was specified.
 ClCompile:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2638537778.dir\Debug\\" /Fd"cmTryCompileExec2638537778.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\feature_tests.cxx"
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec1950901861.dir\Debug\\" /Fd"cmTryCompileExec1950901861.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\feature_tests.cxx"
   Microsoft (R) C/C++ Optimizing Compiler Version 18.00.31101 for x64
   Copyright (C) Microsoft Corporation.  All rights reserved.
   
-  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec2638537778.dir\Debug\\" /Fd"cmTryCompileExec2638537778.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\feature_tests.cxx"
+  cl /c /Zi /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"cmTryCompileExec1950901861.dir\Debug\\" /Fd"cmTryCompileExec1950901861.dir\Debug\vc120.pdb" /Gd /TP /errorReport:queue "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\feature_tests.cxx"
   
   feature_tests.cxx
 Link:
-  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2638537778.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2638537778.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec2638537778.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec2638537778.dir\Debug\feature_tests.obj
-  cmTryCompileExec2638537778.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec2638537778.exe
+  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:QUEUE /OUT:"C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1950901861.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1950901861.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/CMakeFiles/CMakeTmp/Debug/cmTryCompileExec1950901861.lib" /MACHINE:X64  /machine:x64 /debug cmTryCompileExec1950901861.dir\Debug\feature_tests.obj
+  cmTryCompileExec1950901861.vcxproj -> C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\Debug\cmTryCompileExec1950901861.exe
 FinalizeBuildStatus:
-  Deleting file "cmTryCompileExec2638537778.dir\Debug\cmTryCom.B81A1E5A.tlog\unsuccessfulbuild".
-  Touching "cmTryCompileExec2638537778.dir\Debug\cmTryCom.B81A1E5A.tlog\cmTryCompileExec2638537778.lastbuildstate".
-Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec2638537778.vcxproj" (default targets).
+  Deleting file "cmTryCompileExec1950901861.dir\Debug\cmTryCom.8FDFB93E.tlog\unsuccessfulbuild".
+  Touching "cmTryCompileExec1950901861.dir\Debug\cmTryCom.8FDFB93E.tlog\cmTryCompileExec1950901861.lastbuildstate".
+Done Building Project "C:\Users\tkach\OneDrive\EPFL\Code\HModel\display\Convolution_renderer-build\CMakeFiles\CMakeTmp\cmTryCompileExec1950901861.vcxproj" (default targets).
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:00.37
+Time Elapsed 00:00:00.36
 
 
     Feature record: CXX_FEATURE:1cxx_alias_templates

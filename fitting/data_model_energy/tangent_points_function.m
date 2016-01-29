@@ -1,11 +1,24 @@
 function [v1, v2, v3, u1, u2, u3] = tangent_points_function(c1, c2, c3, r1, r2, r3)
 
+epsilon = 10e-9;
+if r1 - r2 < epsilon && r1 - r3 < epsilon
+    n = cross(c1 - c2, c1 - c3);
+    n = n / norm(n);
+    v1 = c1 + r1 * n;
+    v2 = c2 + r2 * n;
+    v3 = c3 + r3 * n;
+    u1 = c1 - r1 * n;
+    u2 = c2 - r2 * n;
+    u3 = c3 - r3 * n;
+    return;
+end
+
 z12 = c1 + (c2 - c1) * r1 / (r1 - r2);
 z13 = c1 + (c3 - c1) * r1 / (r1 - r3);
 
 l = (z12 - z13) / norm(z12 - z13);
-pronuection = (c1 - z12)' * l;
-z = z12 + pronuection * l;
+projection = (c1 - z12)' * l;
+z = z12 + projection * l;
 
 eta = norm(c1 - z);
 sin_beta = r1/eta;

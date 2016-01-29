@@ -30,7 +30,7 @@ end
 data_bounding_box = compute_model_bounding_box(centers, radii);
 
 [raytracing_matrix, ~, camera_center] = get_raytracing_matrix(centers, radii, data_bounding_box, settings.view_axis, settings, settings.side);
-rendered_model = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
+[rendered_model, I] = render_tracking_model(centers, blocks, radii, raytracing_matrix, camera_center, settings);
 
 [I, J] = find((rendered_model(:, :, 3) > - settings.RAND_MAX));
 

@@ -9,6 +9,7 @@ using namespace Eigen;
 using namespace std;
 
 const int D = 3;
+const int C = 50;
 
 struct six {
     Vector3d v1;
@@ -180,7 +181,7 @@ Vector3d ray_sphere_intersection(const Vector3d & c, double r, const Vector3d & 
     return i;
 }
 
-Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, double r1, double r2, const Vector3d & p, const Vector3d & v) {
+Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, double r1, double r2, int index1, int index2, const Vector3d & p, const Vector3d & v, int & w) {
     Vector3d n = (c2 - c1) / (c2 - c1).norm();
     double beta = asin((r1 - r2) / (c1 - c2).norm());
     double eta1 = r1 * sin(beta);
@@ -199,31 +200,35 @@ Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, d
     Vector3d i12 = ray_cone_intersection(z, n, alpha, p, v);
     if (n.transpose() *(i12 - s1) >= 0 && n.transpose() * (i12 - s2) <= 0 && i12.norm() < std::numeric_limits<double>::max()) {
         i = i12;
+        w = C * index1 + index2;
     }
     
     // Ray - sphere intersection
     Vector3d i1 = ray_sphere_intersection(c1, r1, p, v);
     if (n.transpose() * (i1 - s1) < 0 && i1.norm() < std::numeric_limits<double>::max()) {
         i = i1;
+        w = index1;
     }
     
     // Ray - sphere intersection
     Vector3d i2 = ray_sphere_intersection(c2, r2, p, v);
     if (n.transpose() * (i2 - s2) > 0 && i2.norm() < std::numeric_limits<double>::max()) {
         i = i2;
+        w = index2;
     }
     return i;
 }
 
 Vector3d ray_convtriangle_intersection(const Vector3d & c1, const Vector3d & c2, const Vector3d & c3, const Vector3d & v1, const Vector3d & v2, const Vector3d & v3,
-        const Vector3d & u1, const Vector3d & u2, const Vector3d & u3, double r1, double r2, double r3, const Vector3d & p, const Vector3d & v) {
+        const Vector3d & u1, const Vector3d & u2, const Vector3d & u3, double r1, double r2, double r3, int index1, int index2, int index3, const Vector3d & p, const Vector3d & v, int & w) {
     
     vector<Vector3d> I;
-    I.push_back(ray_convsegment_intersection(c1, c2, r1, r2, p, v));
-    I.push_back(ray_convsegment_intersection(c1, c3, r1, r3, p, v));
-    I.push_back(ray_convsegment_intersection(c2, c3, r2, r3, p, v));
-    I.push_back(ray_triangle_intersection(v1, v2, v3, p, v));
-    I.push_back(ray_triangle_intersection(u1, u2, u3, p, v));
+    vector<int> W;
+    I.push_back(ray_convsegment_intersection(c1, c2, r1, r2, index1, index2, p, v, w)); W.push_back(w);
+    I.push_back(ray_convsegment_intersection(c1, c3, r1, r3, index1, index3, p, v, w)); W.push_back(w);
+    I.push_back(ray_convsegment_intersection(c2, c3, r2, r3, index2, index3, p, v, w)); W.push_back(w);
+    I.push_back(ray_triangle_intersection(v1, v2, v3, p, v)); w = C * C * index1 + C * index2 + index3; W.push_back(w);
+    I.push_back(ray_triangle_intersection(u1, u2, u3, p, v)); w = -w; W.push_back(w);
     
     double min_value = std::numeric_limits<double>::max();
     int min_index = 0;
@@ -231,16 +236,18 @@ Vector3d ray_convtriangle_intersection(const Vector3d & c1, const Vector3d & c2,
         double value = (p - I[j]).norm();
         if (value < min_value) {
             min_value = value;
-            min_index = j;
+            min_index = j;            
         }
     }
     Vector3d i = I[min_index];
+    w = W[min_index];
     return i;
 }
 
 Vector3d ray_model_intersection(const vector<Vector3d> & centers, const vector<vector<int>> & blocks,
-        const VectorXd & radii, const vector<six> & tangent_points, const Vector3d & p, const Vector3d & d) {
+        const VectorXd & radii, const vector<six> & tangent_points, const Vector3d & p, const Vector3d & d, int & w) {
     Vector3d i;
+    int min_w = -RAND_MAX;
     Vector3d min_i = std::numeric_limits<double>::max() *Vector3d::Ones();
     double min_distance = std::numeric_limits<double>::max();
     Vector3d c1, c2, c3, v1, v2, v3, u1, u2, u3;
@@ -253,51 +260,52 @@ Vector3d ray_model_intersection(const vector<Vector3d> & centers, const vector<v
             r1 = radii[block[0]]; r2 = radii[block[1]]; r3 = radii[block[2]];
             v1 = tangent_point.v1; v2 = tangent_point.v2; v3 = tangent_point.v3;
             u1 = tangent_point.u1; u2 = tangent_point.u2; u3 = tangent_point.u3;
-            i = ray_convtriangle_intersection(c1, c2, c3, v1, v2, v3, u1, u2, u3, r1, r2, r3, p, d);
+            i = ray_convtriangle_intersection(c1, c2, c3, v1, v2, v3, u1, u2, u3, r1, r2, r3, block[0], block[1], block[2], p, d, w);
             if ((p - i).norm() < min_distance) {
                 min_distance = (p - i).norm();
                 min_i = i;
+                min_w = w;
             }
         }
         if (block.size() == 2) {
             c1 = centers[block[0]]; c2 = centers[block[1]];
             r1 = radii[block[0]]; r2 = radii[block[1]];
-            i = ray_convsegment_intersection(c1, c2, r1, r2, p, d);
+            i = ray_convsegment_intersection(c1, c2, r1, r2, block[0], block[1], p, d, w);
             if ((p - i).norm() < min_distance ) {
                 min_distance = (p - i).norm();
                 min_i = i;
+                min_w = w;
             }
         }
     }
     
-    i = min_i;
-    return i;
+    w = min_w;
+    return min_i;
 }
 
 void render_model(const vector<Vector3d> & centers, const vector<vector<int>> & blocks,
         const VectorXd & radii, const vector<six> & tangent_points, const Matrix<double, 3, 3> & M, const Vector3d & p, int W, int H,
-        double * U, double * V, double * D) {
+        double * U, double * V, double * D, int * I) {
     
     Vector3d d, i;
+    int w = -RAND_MAX;
     for (int n = 0; n < W; n++) {
         for (int m = 0; m < H; m++) {
-            d = M * Vector3d(n + 1, m + 1, 1);
-            /*if (n == W - 1 && m == H - 1){
-             * mexPrintf("%f %f %f \n", d(0), d(1), d(2));
-             * }*/
-            
+            d = M * Vector3d(n + 1, m + 1, 1);            
             d.normalize();
-            i = ray_model_intersection(centers, blocks, radii, tangent_points, p, d);
+            i = ray_model_intersection(centers, blocks, radii, tangent_points, p, d, w);
             
             if (i.norm() < std::numeric_limits<double>::max()) {
                 U[n * H + m] = i(0);
                 V[n * H + m] = i(1);
                 D[n * H + m] = i(2);
+                I[n * H + m] = w;
             }
             else {
                 U[n * H + m] = - RAND_MAX;
                 V[n * H + m] = - RAND_MAX;
                 D[n * H + m] = - RAND_MAX;
+                I[n * H + m] = - RAND_MAX;
             }
         }
     }
@@ -344,7 +352,10 @@ void mexFunction( int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     plhs[2] = mxCreateDoubleMatrix((mwSize) H, (mwSize)W, mxREAL);
     double * D = mxGetPr(plhs[2]);
     
-    render_model(centers, blocks, radii, tangent_points, matrix, p, W, H, U, V, D);
+    plhs[3] = mxCreateNumericMatrix((mwSize) H, (mwSize)W, mxINT32_CLASS, mxREAL);
+    int * I = (int *) mxGetPr(plhs[3]);
+    
+    render_model(centers, blocks, radii, tangent_points, matrix, p, W, H, U, V, D, I);
     
 }
 

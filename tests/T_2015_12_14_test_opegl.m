@@ -30,6 +30,9 @@ projection = [
     0, 0, -1, 0];
 
 %% View matrix
+% image_center = [0, 0, 1];
+% camera_center = [0, 0, 0];
+% camera_up = [0, 1, 0];
 f = image_center - camera_center; f = f/norm(f);
 u = camera_up / norm(camera_up);
 s = cross(f, u); s = s/norm(s);

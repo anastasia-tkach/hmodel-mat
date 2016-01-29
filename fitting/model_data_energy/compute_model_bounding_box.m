@@ -17,11 +17,11 @@ for i = 1:length(centers)
     if centers{i}(2) - radii{i} < model_bounding_box.min_y
         model_bounding_box.min_y = centers{i}(2) - radii{i};
     end
-    if centers{i}(2) + radii{i} > model_bounding_box.max_y
-        model_bounding_box.max_y = centers{i}(2) + radii{i};
-    end
     if centers{i}(1) + radii{i} > model_bounding_box.max_x
         model_bounding_box.max_x = centers{i}(1) + radii{i};
+    end
+    if centers{i}(2) + radii{i} > model_bounding_box.max_y
+        model_bounding_box.max_y = centers{i}(2) + radii{i};
     end
     if D == 3
         if centers{i}(3) - radii{i} < model_bounding_box.min_z

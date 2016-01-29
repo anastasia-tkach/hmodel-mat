@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGUID>{F0DC6A20-5BB4-400E-8258-039147B660EB}</ProjectGUID>
+    <ProjectGUID>{BB889CC5-B397-4D59-BF45-3F89197C56CA}</ProjectGUID>
     <Keyword>Win32Proj</Keyword>
     <Platform>x64</Platform>
     <ProjectName>ALL_BUILD</ProjectName>
@@ -163,10 +163,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/Convolution_renderer.vcxproj">
-      <Project>0D6A6C97-E8CB-44DE-B9DC-D01190643450</Project>
+      <Project>762FEC36-404F-4061-8F7E-2FDF27FB80FF</Project>
     </ProjectReference>
     <ProjectReference Include="C:/Users/tkach/OneDrive/EPFL/Code/HModel/display/Convolution_renderer-build/ZERO_CHECK.vcxproj">
-      <Project>0361F2C5-1F13-47BD-B327-3B0B44412538</Project>
+      <Project>5B38C120-5C9C-4639-A9BA-0583BAAE56DE</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
