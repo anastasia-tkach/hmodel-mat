@@ -1,4 +1,4 @@
-function [v1, v2, v3, u1, u2, u3] = tangent_points_function(c1, c2, c3, r1, r2, r3)
+function [v1, v2, v3, u1, u2, u3, n, m] = tangent_points_function(c1, c2, c3, r1, r2, r3)
 
 epsilon = 10e-9;
 if r1 - r2 < epsilon && r1 - r3 < epsilon
@@ -37,6 +37,6 @@ v3 = c3 + r3 * n;
 
 g = - sin_beta * h + cos_beta * f;
 u1 = z + nu * g;
-n = (u1  - c1) / norm(u1  - c1);
-u2 = c2 + r2 * n;
-u3 = c3 + r3 * n;
+m = (u1  - c1) / norm(u1  - c1);
+u2 = c2 + r2 * m;
+u3 = c3 + r3 * m;

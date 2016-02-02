@@ -1,4 +1,4 @@
-//mex render_model_mex.cpp -largeArrayDims -IC:\Users\tkach\OneDrive\EPFL\Code\External\eigen_dir
+//mex render_orthographic_model_mex.cpp -largeArrayDims -IC:\Users\tkach\OneDrive\EPFL\Code\External\eigen_dir
 
 #include "mex.h"
 #include <vector>
@@ -181,7 +181,7 @@ Vector3d ray_sphere_intersection(const Vector3d & c, double r, const Vector3d & 
     return i;
 }
 
-Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, double r1, double r2, int index1, int index2, const Vector3d & p, const Vector3d & v, int & w) {
+Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, double r1, double r2, int index1, int index2, const Vector3d & p, const Vector3d & v) {
     Vector3d n = (c2 - c1) / (c2 - c1).norm();
     double beta = asin((r1 - r2) / (c1 - c2).norm());
     double eta1 = r1 * sin(beta);
@@ -199,22 +199,19 @@ Vector3d ray_convsegment_intersection(const Vector3d & c1, const Vector3d &c2, d
     // Ray - cone intersections
     Vector3d i12 = ray_cone_intersection(z, n, alpha, p, v);
     if (n.transpose() *(i12 - s1) >= 0 && n.transpose() * (i12 - s2) <= 0 && i12.norm() < std::numeric_limits<double>::max()) {
-        i = i12;
-        w = C * index1 + index2;
+        i = i12;        
     }
     
     // Ray - sphere intersection
     Vector3d i1 = ray_sphere_intersection(c1, r1, p, v);
     if (n.transpose() * (i1 - s1) < 0 && i1.norm() < std::numeric_limits<double>::max()) {
-        i = i1;
-        w = index1;
+        i = i1;       
     }
     
     // Ray - sphere intersection
     Vector3d i2 = ray_sphere_intersection(c2, r2, p, v);
     if (n.transpose() * (i2 - s2) > 0 && i2.norm() < std::numeric_limits<double>::max()) {
-        i = i2;
-        w = index2;
+        i = i2;        
     }
     return i;
 }
@@ -224,9 +221,9 @@ Vector3d ray_convtriangle_intersection(const Vector3d & c1, const Vector3d & c2,
     
     vector<Vector3d> I;
     vector<int> W;
-    I.push_back(ray_convsegment_intersection(c1, c2, r1, r2, index1, index2, p, v, w)); W.push_back(w);
-    I.push_back(ray_convsegment_intersection(c1, c3, r1, r3, index1, index3, p, v, w)); W.push_back(w);
-    I.push_back(ray_convsegment_intersection(c2, c3, r2, r3, index2, index3, p, v, w)); W.push_back(w);
+    I.push_back(ray_convsegment_intersection(c1, c2, r1, r2, index1, index2, p, v)); w = C * index1 + index2; W.push_back(w);
+    I.push_back(ray_convsegment_intersection(c1, c3, r1, r3, index1, index3, p, v)); w = C * index1 + index3; W.push_back(w);
+    I.push_back(ray_convsegment_intersection(c2, c3, r2, r3, index2, index3, p, v)); w = C * index2 + index3; W.push_back(w);
     I.push_back(ray_triangle_intersection(v1, v2, v3, p, v)); w = C * C * index1 + C * index2 + index3; W.push_back(w);
     I.push_back(ray_triangle_intersection(u1, u2, u3, p, v)); w = -w; W.push_back(w);
     
@@ -270,11 +267,11 @@ Vector3d ray_model_intersection(const vector<Vector3d> & centers, const vector<v
         if (block.size() == 2) {
             c1 = centers[block[0]]; c2 = centers[block[1]];
             r1 = radii[block[0]]; r2 = radii[block[1]];
-            i = ray_convsegment_intersection(c1, c2, r1, r2, block[0], block[1], p, d, w);
+            i = ray_convsegment_intersection(c1, c2, r1, r2, block[0], block[1], p, d);
             if ((p - i).norm() < min_distance ) {
                 min_distance = (p - i).norm();
                 min_i = i;
-                min_w = w;
+                min_w = C * block[0] + block[1];
             }            
         }
     }
@@ -300,15 +297,15 @@ void render_model(const vector<Vector3d> & centers, const vector<vector<int>> & 
                 V[n * H + m] = i(1);
                 D[n * H + m] = i(2);
                 I[n * H + m] = w;
+                
+                //mexPrintf("n = %d, m = %d, p = %f %f %f\n", n, m, c(0), c(1), c(2), w);
             }
             else {
                 U[n * H + m] = - RAND_MAX;
                 V[n * H + m] = - RAND_MAX;
                 D[n * H + m] = - RAND_MAX;
                 I[n * H + m] = - RAND_MAX;
-            }
-            //if (m >= 836 && m <= 839 & n >= 278 && n <= 281)
-                //mexPrintf("n = %d, m = %d, p = %f %f %f, w = %d\n", n, m, c(0), c(1), c(2), w);
+            }            
         }
     }
 }

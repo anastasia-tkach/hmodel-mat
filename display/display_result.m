@@ -81,7 +81,6 @@ if (display_data)
 end
 
 return
-
 %% Specify surface types
 for i = 1:length(blocks)
     if length(blocks{i}) == 3
