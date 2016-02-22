@@ -1,4 +1,4 @@
-function [final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, verbose)
+function [outline3D] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, verbose)
 
 %% Compute palm outline
 [palm_outline] = find_planar_outline(centers, palm_blocks, radii, false);
@@ -20,6 +20,7 @@ for f = 1:length(fingers_blocks)
     
     %% Find intersection    
     for i = start:length(finger_outline)
+        if i > length(finger_outline), break; end
         for j = 1:length(palm_outline)
             [t1, t2] = intersect_outline_outline(centers, radii, finger_outline{i}, palm_outline{j});
             if ~isempty(t1) || ~isempty(t2)

@@ -12,13 +12,16 @@ if is_point_on_segment(c1, c2, s)
     q = s + (p - s) / norm(p - s) * (gamma + r2);      
     index = [index1, index2];
 else
-    if norm(p - c1) < norm(p - c2)
-        s = c1; 
-        q = c1 + r1 * (p - c1) / norm(p - c1);
+    q1 = c1 + r1 * (p - c1) / norm(p - c1);
+    q2 = c2 + r2 * (p - c2) / norm(p - c2);
+    if sign(norm(p - c1) - norm(q1 - c1)) * norm(p - q1) < sign(norm(p - c2) - norm(q2 - c2)) * norm(p - q2)
+    %if norm(p - c1) < norm(p - c2)
+        s = c1;        
+        q = q1;
         index = index1;
     else
-        s = c2;
-        q = c2 + r2 * (p - c2) / norm(p - c2);
+        s = c2;    
+        q = q2;
         index = index2;
     end
 end
