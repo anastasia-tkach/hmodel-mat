@@ -8,7 +8,7 @@
 % % [centers, radii, blocks] = get_random_convtriangle();
 %
 % % Hand model
-% input_path = '_my_hand/tracking_initialization/';
+% input_path = '_my_hand/tracking_initi5alization/';
 % semantics_path = '_my_hand/semantics/';
 % load([input_path, 'centers.mat']); load([input_path, 'radii.mat']);
 % load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks);

@@ -1,6 +1,7 @@
 function [outline] = find_3D_outline(centers, outline)
 
 for i = 1:length(outline)
+    if isempty(outline{i}), continue; end
     if length(outline{i}.indices) == 2
         c1 = centers{outline{i}.indices(1)};
         c2 = centers{outline{i}.indices(2)};
