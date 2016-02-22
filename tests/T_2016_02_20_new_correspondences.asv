@@ -21,18 +21,18 @@ if ~debug
     [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blcks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
     [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
     segments = initialize_ik_hmodel(centers, names_map);
-    theta = 0 * randn(26, 1);
+    theta = 0.15 * randn(26, 1);
     [centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
     [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
     [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
     
     %% Rotate model
-    %rotation_axis = randn(D, 1);
-    %rotation_angle = 1 * randn;
-    %R = makehgtform('axisrotate', rotation_axis, rotation_angle);
-    %for i = 1:length(centers)
-    %    centers{i} = transform(centers{i}, R);
-    %end
+    rotation_axis = randn(D, 1);
+    rotation_angle = 1 * randn;
+    R = makehgtform('axisrotate', rotation_axis, rotation_angle);
+    for i = 1:length(centers)
+        centers{i} = transform(centers{i}, R);
+    end
     
     %% Topology change
     if topology_change
@@ -64,34 +64,7 @@ if debug
     blocks = palm_blocks(4:5);
 end
 
-%% Get neighbors map
-C = 50;
-neighbors = containers.Map('KeyType', 'uint32', 'ValueType', 'any');
-% Neighbors of each center
-for i = 1:length(centers)
-    neighbors_list = [];
-    for j = 1:length(blocks)
-        if ismember(i, blocks{j})
-            neighbors_list(end + 1) = j;
-        end        
-    end    
-    neighbors(i) = neighbors_list;
-end
-% Neighbors of each edge
-for i = 1:length(blocks)
-    pairs = nchoosek(blocks{i}, 2);
-    for j = 1:size(pairs, 1)
-        indices = pairs(j, :);
-        neighbors_list = [];
-        for k = 1:length(blocks)
-            if all(ismember(indices, blocks{k}))
-                neighbors_list(end + 1) = k;
-            end
-        end
-        neighbors(indices(1) * C + indices(2)) = neighbors_list;
-    end
-end
-
+%% Algorithm
 tangent_points = blocks_tangent_points(centers, blocks, radii);
 tic
 model_points = cell(length(data_points), 1);
@@ -100,7 +73,7 @@ model_indices = cell(length(data_points), 1);
 discarded_points = cell(length(data_points), 1);
 for i = 1:length(data_points)
     p = data_points{i};
-    [model_points{i}, model_indices{i}, axis_points{i}, ~] = projeciton_group(p, centers, radii, blocks, tangent_points, neighbors, camera_ray, debug);
+    [model_points{i}, model_indices{i}, axis_points{i}, ~] = projeciton_group(p, centers, radii, blocks, tangent_points, camera_ray, debug);
 end
 disp(toc)
 

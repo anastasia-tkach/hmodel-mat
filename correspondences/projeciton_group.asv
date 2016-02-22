@@ -41,35 +41,33 @@ end
 %% Find the answer
 for j = 1:length(indices)    
     distance = sign(norm(p - skeleton{j}) - norm(projections{j} - skeleton{j})) * norm(p - projections{j});
-    if length(indices{j}) == 3
-       if verbose
-           myline(centers{indices{j}(1)}, centers{indices{j}(2)}, 'r');
-           myline(centers{indices{j}(1)}, centers{indices{j}(3)}, 'r');
-           myline(centers{indices{j}(2)}, centers{indices{j}(3)}, 'r');
-       end
-    end
+    %if length(indices{j}) == 3
+    %    if verbose
+    %        myline(centers{indices{j}(1)}, centers{indices{j}(2)}, 'r');
+    %        myline(centers{indices{j}(1)}, centers{indices{j}(3)}, 'r');
+    %        myline(centers{indices{j}(2)}, centers{indices{j}(3)}, 'r');
+    %    end
+    %end
     if length(indices{j}) == 2 || length(indices{j}) == 1
         %% Old way
-        %is_closest = true;
-        %for k = 1:length(blocks)
-        %   if all(ismember(indices{j}, blocks{k}))
-        %       if ~all(ismember(indices{k}, indices{j}))
-        %           is_closest = false;
-        %       end
-        %   end
+        is_closest = true;
+        for k = 1:length(blocks)
+            if all(ismember(indices{j}, blocks{k}))
+                if ~all(ismember(indices{k}, indices{j}))
+                    is_closest = false;
+                end
+            end
+        end
+        if is_closest == false, continue; end
+        %if verbose
+        %    if length(indices{j}) == 2, myline(centers{indices{j}(1)}, centers{indices{j}(2)}, 'r');
+        %    else scatter3(centers{indices{j}(1)}(1), centers{indices{j}(1)}(2), centers{indices{j}(1)}(3), 50, 'r', 'o', 'filled'); end
         %end
-        %if is_closest == false, continue; end
-
         %% New way
-        key = 0; for k = 1:length(indices{j}), key = C * key + indices{j}(k); end
-        neighbors_list = neighbors(k);
+        key = 0; for k = 1:length(indices), key = C * key + indices(k); end
+        neighbors_list = neigbors(k);
         for k = 1:length(neighbors_list)
             if ~all(ismember(indices{neighbors_list(k)}, indices{j})), continue; end
-        end
-        
-        if verbose
-           if length(indices{j}) == 2, myline(centers{indices{j}(1)}, centers{indices{j}(2)}, 'r');
-           else scatter3(centers{indices{j}(1)}(1), centers{indices{j}(1)}(2), centers{indices{j}(1)}(3), 50, 'r', 'o', 'filled'); end
         end
     end
     

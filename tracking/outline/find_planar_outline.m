@@ -49,7 +49,7 @@ end
 %% Walk
 outline = cell(0, 1);
 count = 1; first = true; k_start = k; type = 1;
-while first || k ~= k_start;
+while first || k ~= k_start;  
     first = false;
     outline{count}.start = points{k}.value;
     %% Circle
@@ -80,7 +80,8 @@ end
 %% Display planar outline
 if ~verbose, return; end
 
-figure; hold on; axis off; axis equal;
+%figure; 
+hold on; axis off; axis equal;
 set(gcf,'color','w');
 for i = 1:length(circles)
     if ~isstruct(circles{i}), continue; end

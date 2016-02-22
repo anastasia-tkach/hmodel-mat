@@ -28,22 +28,26 @@ else
 end
 
 %% Find direction
-% If it is a tangency point
-if ismember(i, segments{i_next}.indices),
-    p1 = points{k_next}.value;
-    if abs(segments{i_next}.t1 - p1) < epsilon;
-        p2 = segments{i_next}.t2;
-    else
-        p2 = segments{i_next}.t1;
-    end
-    v_next = p2 - p1;
-% If it is an intersection point
-else    
-    beta = myatan2(u_next);
-    beta = beta + 1e-5;
-    w = [cos(beta); sin(beta)];
-    tangent = w - u_next/norm(u_next);
-    v = segments{i_next}.t2 - segments{i_next}.t1;
-    v_next = pick_closest_direction(tangent, v, 'clockwise');
+if type_next == 1
+    v_next = u_next;
 end
-
+if type_next == 2
+    % If it is a tangency point
+    if ismember(i, segments{i_next}.indices),
+        p1 = points{k_next}.value;
+        if abs(segments{i_next}.t1 - p1) < epsilon;
+            p2 = segments{i_next}.t2;
+        else
+            p2 = segments{i_next}.t1;
+        end
+        v_next = p2 - p1;
+        % If it is an intersection point
+    else
+        beta = myatan2(u_next);
+        beta = beta + 1e-5;
+        w = [cos(beta); sin(beta)];
+        tangent = w - u_next/norm(u_next);
+        v = segments{i_next}.t2 - segments{i_next}.t1;
+        v_next = pick_closest_direction(tangent, v, 'clockwise');
+    end
+end
