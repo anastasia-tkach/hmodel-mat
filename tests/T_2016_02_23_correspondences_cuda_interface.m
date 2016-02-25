@@ -1,9 +1,9 @@
-
-
 close all;
 clc;
 clear;
 D = 3;
+debug = false;
+with_outline = false;
 
 %% Input data
 input_path = '_my_hand/tracking_initialization/'; semantics_path = '_my_hand/semantics/';
@@ -17,7 +17,7 @@ load([semantics_path, 'fingers_base_centers.mat']); fingers_base_centers(5) = 20
 [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blcks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
 [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 segments = initialize_ik_hmodel(centers, names_map);
-theta = 0 * randn(26, 1);
+theta = 0.2 * randn(26, 1);
 [centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
@@ -43,6 +43,12 @@ blocks = reindex(radii, blocks);
 data_points = generate_depth_data_synthetic(centers, radii, blocks);
 camera_ray = [0; 0; 1];
 
+% Reduce data
+% i = randi([1, length(data_points)], 1, 1);
+% data_points = {data_points{i}};
+% b = randi([16, 29], 1, 1);
+% blocks = {blocks{b}};
+
 %% Write the data to files
 D = 3;
 RAND_MAX = 32767;
@@ -62,9 +68,19 @@ for j = 1:length(blocks)
         B(k, j) = blocks{j}(k) - 1;
     end   
 end
-path = 'C:\Developer\hmodel-cuda\data\';
+path = 'C:\Developer\hmodel-cuda-build\data\';
 write_input_parameters_to_files(path, C, R, B, P);
-return
+
+%% Read cpp output
+fileID = fopen([path, 'Q.txt'], 'r');
+Q = fscanf(fileID, '%f');
+Q = reshape(Q, 3, length(data_points));
+cpp_points = cell(length(data_points), 1);
+for i = 1:length(data_points)
+    if Q(1, i) ~= RAND_MAX
+        cpp_points{i} = Q(:, i);
+    end
+end
 
 %% Get neighbors map
 C = 50;
@@ -94,24 +110,51 @@ for i = 1:length(blocks)
     end
 end
 
+%% Get cuda neighbors map
+neighbors_array = -1 * ones(length(blocks) * 6 * 6, 1);
+for i = 1:length(blocks)
+    count = 1;
+    % neighbors of each center
+    for j = 1:length(blocks{i})
+        neighbors_list = [];
+        n = 1;
+        for k = 1:length(blocks)
+            if ismember(blocks{i}(j), blocks{k})
+                neighbors_array(6 * 6 * (i - 1) + 6 * (count - 1) + n) = k;
+                n = n + 1;
+            end
+        end
+        count = count + 1;
+    end
+    % neighbors of each edge
+    pairs = nchoosek(blocks{i}, 2);
+    for j = 1:size(pairs, 1)
+        indices = pairs(j, :);
+        n = 1;
+        for k = 1:length(blocks)
+            if all(ismember(indices, blocks{k}))
+                neighbors_array(6 * 6 * (i - 1) + 6 * (count - 1) + n) = k;
+            end
+        end
+        count = count + 1;
+    end
+end
+
+%% Compute projections
 tangent_points = blocks_tangent_points(centers, blocks, radii);
-tic
+
 model_points = cell(length(data_points), 1);
 axis_points = cell(length(data_points), 1);
 model_indices = cell(length(data_points), 1);
-discarded_points = cell(length(data_points), 1);
+b = cell(length(data_points), 1);
 for i = 1:length(data_points)
     p = data_points{i};
-    [model_points{i}, model_indices{i}, axis_points{i}, ~] = projeciton_group(p, centers, radii, blocks, tangent_points, neighbors, camera_ray, false);
+    [model_points{i}, model_indices{i}, axis_points{i}, block_indices{i}, ~] = ...
+        projeciton_group(p, centers, radii, blocks, tangent_points, neighbors, neighbors_array, camera_ray, false, debug);
 end
-disp(toc)
 
 %% Replace by outline if closer
-palm_blocks = [palm_blocks, fingers_blocks{1}{3}, fingers_blocks{2}{3}, fingers_blocks{3}{3}, fingers_blocks{4}{3}];
-fingers_blocks{1} = fingers_blocks{1}(1:2); fingers_blocks{2} = fingers_blocks{2}(1:2);
-fingers_blocks{3} = fingers_blocks{3}(1:2); fingers_blocks{4} = fingers_blocks{4}(1:2);
-fingers_base_centers(1) = 3; fingers_base_centers(2) = 7; fingers_base_centers(3) = 11;
-fingers_base_centers(4) = 15; fingers_base_centers(5) = 19;
+if with_outline
 [outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, false);
 [outline_indices, outline_points] = compute_projections_outline(data_points, outline, centers, radii, camera_ray);
 for i = 1:length(data_points)
@@ -121,6 +164,7 @@ for i = 1:length(data_points)
         model_indices{i} = outline_indices{i};
     end
 end
+end
 
 %% Display
 display_result(centers, data_points, model_points, blocks, radii, false, 0.6, 'big');
@@ -129,13 +173,14 @@ model_color = 'm';
 mypoints(data_points, data_color);
 mypoints(model_points, model_color);
 mylines(data_points, model_points, [0.6, 0.6, 0.6]);
-mypoints(discarded_points, 'k');
+if with_outline
 for i = 1:length(outline)
     if length(outline{i}.indices) == 2
         myline(outline{i}.start, outline{i}.end, 'y');
     else
         draw_circle_sector_in_plane(centers{outline{i}.indices}, radii{outline{i}.indices}, camera_ray, outline{i}.start, outline{i}.end, 'y');
     end
+end
 end
 view([-180, -90]); camlight;
 
@@ -156,6 +201,21 @@ for i = 1:length(model_points)
     end
 end
 mypoints(inside_points, 'b');
+
+%% Compare matlab and cpp
+for i = 1:length(model_points)
+    %disp([model_points{i}'; cpp_points{i}']);
+    if isempty(cpp_points{i})
+        if all(~isinf(model_points{i}))
+            disp('different nan');
+        end
+    else
+        if (norm(model_points{i} - cpp_points{i})) > 1e-3
+            mypoint(cpp_points{i}, 'k');
+            disp('different');
+        end
+    end
+end
 
 
 

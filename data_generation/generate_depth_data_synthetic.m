@@ -14,9 +14,9 @@ settings.view_axis = 'Z';
 
 %% Shift the data w.r.t. model
 rotation_axis = randn(D, 1);
-rotation_angle = 0 * randn;
+rotation_angle = 0.3 * randn;
 % hand model
-translation_vector = 5 * [0; 0; 1];
+translation_vector = 10 * rand * [0; 0; 1];
 % syntetic
 % translation_vector = 0.5 * rand * [0; 0; 1];
 R = makehgtform('axisrotate', rotation_axis, rotation_angle);
