@@ -1,4 +1,4 @@
-
+clc;
 close all;
 clear;
 %% Synthetic data
@@ -25,17 +25,7 @@ palm_blocks = {[21,22,28], [28,22,26], [22,23,26], [26, 23, 25], [26, 20, 25], [
 fingers_blocks{5} = {[35,17], [17,18], [18,19]};
 
 blocks = [fingers_blocks{1}, fingers_blocks{2}, fingers_blocks{3}, fingers_blocks{4}, fingers_blocks{5}, palm_blocks];
-palm_blocks = [palm_blocks, fingers_blocks{1}{3}, fingers_blocks{2}{3}, fingers_blocks{3}{3}, fingers_blocks{4}{3}];
-fingers_blocks{1} = fingers_blocks{1}(1:2);
-fingers_blocks{2} = fingers_blocks{2}(1:2);
-fingers_blocks{3} = fingers_blocks{3}(1:2);
-fingers_blocks{4} = fingers_blocks{4}(1:2);
-fingers_blocks{5} = fingers_blocks{5}(1:3);
-fingers_base_centers(1) = 3;
-fingers_base_centers(2) = 7;
-fingers_base_centers(3) = 11;
-fingers_base_centers(4) = 15;
-fingers_base_centers(5) = 19;
+blocks = reindex(radii, blocks);
 
 %% Pose the model
 [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blcks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
@@ -48,6 +38,63 @@ theta(4:6) = theta(4:6) * 2;
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 
 camera_ray = [0; 0; 1];
-%%
+
+%% write data
+D = 3;
+RAND_MAX = 32767;
+R = zeros(1, length(radii));
+C = zeros(D, length(centers));
+B = RAND_MAX * ones(3, length(blocks));
+for j = 1:length(radii)
+    R(j) = radii{j}; 
+    C(:, j) = centers{j}; 
+end
+for j = 1:length(blocks)
+    for k = 1:length(blocks{j})
+        B(k, j) = blocks{j}(k) - 1;
+    end   
+end
+path = 'C:\Developer\hmodel-cuda-build\data\';
+write_input_parameters_to_files(path, C, R, B);
+
+%% Find outline
 [final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, true);
-view([-180, -90]); camlight;
+
+%% Read data
+fileID = fopen([path, 'O.txt'], 'r');
+O = fscanf(fileID, '%f');
+N = length(O)/3;
+O = reshape(O, 3, N)';
+cpp_outline = cell(N/3, 1);
+for i = 1:N/3
+    cpp_outline{i}.start = O(3 * (i - 1) + 1:3 * (i - 1) + 1, :)';
+    cpp_outline{i}.end = O(3 * (i - 1) + 2:3 * (i - 1) + 2, :)';
+    cpp_outline{i}.indices = O(3 * i:3 * i, :);   
+    if cpp_outline{i}.indices(2) == RAND_MAX
+        cpp_outline{i}.indices = cpp_outline{i}.indices(1) + 1;
+        continue;
+    end
+    if cpp_outline{i}.indices(3) == RAND_MAX
+        cpp_outline{i}.indices = cpp_outline{i}.indices(1:2) + 1;
+    end
+end
+figure; hold on; axis off; axis equal;
+for i = 1:length(cpp_outline)
+    if length(cpp_outline{i}.indices) == 2
+        myline(cpp_outline{i}.start, cpp_outline{i}.end, 'b');
+    else
+        draw_circle_sector_in_plane(centers{cpp_outline{i}.indices}, radii{cpp_outline{i}.indices}, camera_ray, cpp_outline{i}.start, cpp_outline{i}.end, 'b');
+    end
+end
+%view([-180, -90]); camlight;
+
+for i = 1:min(length(cpp_outline), length(final_outline))
+    disp(['outline[', num2str(i - 1), ']']);    
+    disp(['   indices = ' num2str(final_outline{i}.indices)]);
+    disp(['   indices = ' num2str(cpp_outline{i}.indices)]);
+    disp(['   start = ' num2str(final_outline{i}.start')]);
+    disp(['   start = ' num2str(cpp_outline{i}.start')]);
+    disp(['   end = ' num2str(final_outline{i}.end')]);
+    disp(['   end = ' num2str(cpp_outline{i}.end')]);
+    disp(' ');
+end

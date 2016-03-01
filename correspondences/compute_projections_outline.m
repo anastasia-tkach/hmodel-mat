@@ -20,6 +20,7 @@ for i = 1:length(points)
             c2 = outline{j}.end;
             q = project_point_on_segment(p, c1, c2);
         end
+        %disp(['(', num2str(i - 1), ', ', num2str(j - 1), '):', num2str(q')]);
         if norm(p - q) < min_distance
             min_distance = norm(p - q);
             projections{i} = q;

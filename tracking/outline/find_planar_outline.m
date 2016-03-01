@@ -14,7 +14,7 @@ for i = 1:length(blocks3D)
 end
 
 %% Find intersections
-[points, circles, segments] = find_outline_intersections(centers, radii, blocks);
+[points, circles, segments] = find_outline_intersections(centers, radii, blocks3D);
 
 %% Find start
 up = [0; 1];
@@ -49,7 +49,7 @@ end
 %% Walk
 outline = cell(0, 1);
 count = 1; first = true; k_start = k; type = 1;
-while first || k ~= k_start;  
+while first || k ~= k_start  
     first = false;
     outline{count}.start = points{k}.value;
     %% Circle
@@ -70,11 +70,12 @@ while first || k ~= k_start;
         [k, type, i, v] = find_closest_on_segment(segments, points, i, k, v);  
     end
     outline{count}.end = points{k}.value;
-    count = count + 1;
+    count = count + 1;    
+    
+    %print_outline(outline, count - 1);
     
     if count == 100, break; end
 end
-
 
 
 %% Display planar outline
@@ -99,3 +100,33 @@ for i = 1:length(outline)
     end
 end
 
+end
+
+function print_outline(outline, i)
+%for i = 1:length(outline)
+    disp(['outline[', num2str(i - 1), ']']);
+    if length(outline{i}.indices) == 2
+        disp(['   t1 = ' num2str(outline{i}.t1')]);
+        disp(['   t2 = ' num2str(outline{i}.t2')]);
+    end
+    disp(['   indices = ' num2str(outline{i}.indices - 1)]);
+    disp(['   start = ' num2str(outline{i}.start')]);
+    disp(['   end = ' num2str(outline{i}.end')]);
+    disp(' ');
+%end
+end
+
+
+function print_outline(outline)
+for i = 1:length(outline)
+    disp(['outline[', num2str(i - 1), ']']);
+    if length(outline{i}.indices) == 2
+        disp(['   t1 = ' num2str(outline{i}.t1')]);
+        disp(['   t2 = ' num2str(outline{i}.t2')]);
+    end
+    disp(['   indices = ' num2str(outline{i}.indices - 1)]);
+    disp(['   start = ' num2str(outline{i}.start')]);
+    disp(['   end = ' num2str(outline{i}.end')]);
+    disp(' ');
+end
+end

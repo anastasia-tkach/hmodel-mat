@@ -3,7 +3,7 @@ clc;
 clear;
 D = 3;
 debug = false;
-with_outline = false;
+with_outline = true;
 
 %% Input data
 input_path = '_my_hand/tracking_initialization/'; semantics_path = '_my_hand/semantics/';
@@ -43,7 +43,7 @@ blocks = reindex(radii, blocks);
 data_points = generate_depth_data_synthetic(centers, radii, blocks);
 camera_ray = [0; 0; 1];
 
-% Reduce data
+%% Reduce data
 % i = randi([1, length(data_points)], 1, 1);
 % data_points = {data_points{i}};
 % b = randi([16, 29], 1, 1);
@@ -74,13 +74,14 @@ write_input_parameters_to_files(path, C, R, B, P);
 %% Read cpp output
 fileID = fopen([path, 'Q.txt'], 'r');
 Q = fscanf(fileID, '%f');
-Q = reshape(Q, 3, length(data_points));
+Q = reshape(Q, 3, length(Q)/3);
 cpp_points = cell(length(data_points), 1);
-for i = 1:length(data_points)
+for i = 1:size(Q, 2);
     if Q(1, i) ~= RAND_MAX
         cpp_points{i} = Q(:, i);
     end
 end
+
 
 %% Get neighbors map
 C = 50;
@@ -167,9 +168,10 @@ end
 end
 
 %% Display
-display_result(centers, data_points, model_points, blocks, radii, false, 0.6, 'big');
+display_result(centers, [], [], blocks, radii, false, 0.6, 'big');
 data_color = [0, 1, 1];
 model_color = 'm';
+%mypoints(outline_points, 'm');
 mypoints(data_points, data_color);
 mypoints(model_points, model_color);
 mylines(data_points, model_points, [0.6, 0.6, 0.6]);
@@ -204,7 +206,7 @@ mypoints(inside_points, 'b');
 
 %% Compare matlab and cpp
 for i = 1:length(model_points)
-    %disp([model_points{i}'; cpp_points{i}']);
+    
     if isempty(cpp_points{i})
         if all(~isinf(model_points{i}))
             disp('different nan');
@@ -212,6 +214,7 @@ for i = 1:length(model_points)
     else
         if (norm(model_points{i} - cpp_points{i})) > 1e-3
             mypoint(cpp_points{i}, 'k');
+            disp([model_points{i}'; cpp_points{i}']);
             disp('different');
         end
     end
