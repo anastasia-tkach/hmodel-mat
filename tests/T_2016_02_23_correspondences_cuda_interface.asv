@@ -79,21 +79,13 @@ cpp_model_points = cell(length(data_points), 1);
 cpp_model_indices = cell(length(data_points), 1);
 cpp_axis_points = cell(length(data_points), 1);
 cpp_block_indices = cell(length(data_points), 1);
-k = 1;
-for i = 1:4:size(Q, 2);    
+for i = 1:4:size(Q, 2);
     if Q(1, i) ~= RAND_MAX
-        cpp_model_points{k} = Q(:, i);
-        if Q(2, i + 1) == RAND_MAX
-            cpp_model_indices{k} = Q(1, i + 1) + 1;
-        elseif Q(3, i + 1) == RAND_MAX
-            cpp_model_indices{k} = Q(1:2, i + 1) + 1;
-        else
-            cpp_model_indices{k} = Q(:, i + 1) + 1;
-        end
-        cpp_axis_points{k} = Q(:, i + 2);
-        cpp_block_indices{k} = Q(1, i + 3) + 1;
+        cpp_model_points{i} = Q(:, i);
+        cpp_model_indices{i} = Q(:, i + 1);
+        cpp_axis_points{i} = Q(:, i + 2);
+        cpp_block_indices{i} = Q(1, i + 3);
     end
-    k = k + 1;
 end
 
 
@@ -217,13 +209,13 @@ for i = 1:length(model_points)
         end
     end
 end
-mypoints(inside_points, 'g');
+mypoints(inside_points, 'b');
 
 %% Compare matlab and cpp
 for i = 1:length(model_points)
     
     if isempty(cpp_model_points{i})
-        if all(~isinf(model_points{i}))
+        if all(~isinf(cpp_model_points{i}))
             disp('different nan');
         end
     else
@@ -232,35 +224,15 @@ for i = 1:length(model_points)
             disp([cpp_model_points{i}'; model_points{i}']);
             disp('different');
         end
-        %if length(model_indices{i}) == 1
-        %    if model_indices{i}(1) ~= cpp_model_indices{i}(1) 
-        %        disp([cpp_model_indices{i}'; model_indices{i}']);
-        %        disp('different');
-        %    end
-        %elseif length(model_indices{i}) == 2
-        %    if (model_indices{i}(1) ~= cpp_model_indices{i}(1) || model_indices{i}(2) ~= cpp_model_indices{i}(2))
-        %        disp([cpp_model_indices{i}'; model_indices{i}']);
-        %        disp('different');
-        %    end
-        %else
-        %    if (model_indices{i}(1) ~= cpp_model_indices{i}(1) || model_indices{i}(2) ~= cpp_model_indices{i}(2) || model_indices{i}(3) ~= cpp_model_indices{i}(3))
-        %        disp([cpp_model_indices{i}'; model_indices{i}']);
-        %        disp('different');
-        %    end
-        %end
-        if ~all(ismember(model_indices{i}, cpp_model_indices{i})) || ~all(ismember(cpp_model_indices{i}, model_indices{i})) 
-            disp('different model_indices');
-            disp([num2str(cpp_model_indices{i}'), ', ', num2str(model_indices{i})]);
-            
+        if (model_indices(1) ~= cpp_model_indices(1) || model_indices(2) ~= cpp_model_indices(2) || model_indices(3) ~= cpp_model_indices(3))           
+            disp([cpp_model_indices{i}'; model_indices{i}']);
+            disp('different');
         end
         if (norm(cpp_axis_points{i} - axis_points{i})) > 1e-3
-            disp('different axis_points');
-            disp([cpp_axis_points{i}'; axis_points{i}']);            
+            disp([cpp_axis_points{i}'; axis_points{i}']);
+            disp('different');
         end
-        if cpp_block_indices{i} ~= block_indices{i}
-            disp([num2str(i), ': different block indices']);
-            disp([cpp_block_indices{i}, block_indices{i}]);            
-        end
+        if cpp_block_
     end
 end
 

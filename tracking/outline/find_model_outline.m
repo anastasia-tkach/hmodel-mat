@@ -6,15 +6,39 @@ fingers_blocks{3} = fingers_blocks{3}(1:2); fingers_blocks{4} = fingers_blocks{4
 fingers_base_centers(1) = 3; fingers_base_centers(2) = 7; fingers_base_centers(3) = 11;
 fingers_base_centers(4) = 15; fingers_base_centers(5) = 19;
 
- %print_blocks(fingers_blocks{5});
+%% Find palm blocks and finger blocks indices
+palm_blocks_indices = [];
+
+for i = 1:length(palm_blocks)
+    for j = 1:length(blocks)
+        if length(palm_blocks{i}) ~= length(blocks{j}), continue; end
+        if all(ismember(palm_blocks{i}, blocks{j}))
+            palm_blocks_indices(end + 1) = j;
+        end
+    end
+end
+fingers_blocks_indices = {};
+for f = 1:length(fingers_blocks)
+    finger_blocks_indices = [];
+    for i = 1:length(fingers_blocks{f})
+        for j = 1:length(blocks)
+            if length(fingers_blocks{f}{i}) ~= length(blocks{j}), continue; end
+            if all(ismember(fingers_blocks{f}{i}, blocks{j}))
+                finger_blocks_indices(end + 1) = j;
+            end
+        end
+    end
+    fingers_blocks_indices{end + 1} = finger_blocks_indices;
+end
+%print_blocks(fingers_blocks{5});
 
 %% Compute palm outline
-[palm_outline] = find_planar_outline(centers, palm_blocks, radii, false);
+[palm_outline] = find_planar_outline(centers, blocks, palm_blocks_indices, radii, false);
 
 final_outline = [];
 for f = 1:length(fingers_blocks)
     %% Compute finger outline
-    [finger_outline] = find_planar_outline(centers, fingers_blocks{f}, radii, false);
+    [finger_outline] = find_planar_outline(centers, blocks, fingers_blocks_indices{f}, radii, false);
     
     %print_outline(finger_outline);
     
@@ -31,22 +55,23 @@ for f = 1:length(fingers_blocks)
             palm_index = i;
             break;
         end
-    end    
-    if palm_index ~= -1 && finger_index ~= -1        
+    end
+    if palm_index ~= -1 && finger_index ~= -1
         intersections = intersect_segment_segment_same_circle(centers{palm_outline{palm_index}.indices}, radii{palm_outline{palm_index}.indices}, camera_ray, ...
-            palm_outline{palm_index}.start, palm_outline{palm_index}.end, finger_outline{finger_index}.start, finger_outline{finger_index}.end);        
+            palm_outline{palm_index}.start, palm_outline{palm_index}.end, finger_outline{finger_index}.start, finger_outline{finger_index}.end);
         for k = 1:length(intersections)
             intersections{k}.indices = fingers_base_centers(f);
             finger_outline{end + 1} = intersections{k};
+            finger_outline{end}.block = finger_outline{finger_index}.block;
         end
-    end        
-   
+    end
+    
     if palm_index ~= -1, palm_outline(palm_index) = []; end
     if finger_index ~= -1, finger_outline(finger_index) = []; end
     
     final_outline = [final_outline, finger_outline];
     
-   
+    
 end
 final_outline = [final_outline, palm_outline];
 

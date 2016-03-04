@@ -45,10 +45,13 @@ for i = 1:2:size(Q, 2);
     if all(Q(:, i) == [0; 0; 0]) || all(Q(:, i + 1) == [0; 0; 0]) 
         continue; 
     end
+    if all(Q(:, i) == [-111; -111; -111]) || all(Q(:, i + 1) == [-111; -111; -111]) 
+        continue; 
+    end
     data_points{end + 1} = Q(:, i) - mean_centers;
     model_points{end + 1} = Q(:, i + 1) - mean_centers;
 end
-
+figure; hold on; axis off; axis equal; mypoints(data_points, 'm');
 %% Display
 display_result(centers, data_points, model_points, blocks, radii, true, 0.8, 'big');
 view([-180, -90]); camlight;

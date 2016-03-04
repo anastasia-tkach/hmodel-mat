@@ -1,20 +1,9 @@
-function [outline] = find_planar_outline(centers, blocks, radii, verbose)
+function [outline] = find_planar_outline(centers, blocks, blocks_indices, radii, verbose)
 
 epsilon = 1e-9;
 
-%% Flatten the model
-blocks3D = blocks;
-blocks = {};
-for i = 1:length(blocks3D)
-    indices = nchoosek(blocks3D{i}, 2);
-    index1 = indices(:, 1); index2 = indices(:, 2);
-    for j = 1:length(index1)
-        blocks{end + 1} = [index1(j), index2(j)];
-    end
-end
-
 %% Find intersections
-[points, circles, segments] = find_outline_intersections(centers, radii, blocks3D);
+[points, circles, segments] = find_outline_intersections(centers, radii, blocks, blocks_indices);
 
 %% Find start
 up = [0; 1];
@@ -54,10 +43,12 @@ while first || k ~= k_start
     outline{count}.start = points{k}.value;
     %% Circle
     if type == 1
-        outline{count}.indices = i;        
+        outline{count}.indices = i;   
+        outline{count}.block = circles{i}.block;
         [k, type, i, v] = find_closest_on_circle(circles, segments, points, i, k);
         %% Sement
     else
+        outline{count}.block = segments{i}.block;
         if (circles{segments{i}.indices(1)}.center - circles{segments{i}.indices(2)}.center)' * v > 0
             outline{count}.indices = segments{i}.indices;
             outline{count}.t1 = segments{i}.t1;

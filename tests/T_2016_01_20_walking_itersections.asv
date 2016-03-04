@@ -98,7 +98,7 @@ for i = 1:min(length(cpp_outline), length(final_outline))
     disp(['   block = ' num2str(final_outline{i}.block)]);
     disp(['   block = ' num2str(cpp_outline{i}.block)]);
     if final_outline{i}.block ~= cpp_outline{i}.block
-        disp('diffent blocks');
+        disp('diffent blocks'
     end
     disp(' ');
 end

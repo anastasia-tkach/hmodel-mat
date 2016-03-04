@@ -49,6 +49,7 @@ crop_indices = {[names_map('pinky_base'), names_map('pinky_bottom')], [names_map
     [names_map('middle_base'), names_map('middle_bottom')], [names_map('index_base'), names_map('index_bottom')],};
 limits_indices = {[names_map('pinky_membrane'), names_map('ring_membrane')], [names_map('ring_membrane'), names_map('middle_membrane')], ...
     [names_map('middle_membrane'), names_map('index_membrane')]};
+block_indices = [3, 6, 9, 12];
 fingers_outline = {};
 for i = 1:length(crop_indices)
     [l1, l2, r1, r2] = get_tangents(centers{crop_indices{i}(1)}, centers{crop_indices{i}(2)}, radii{crop_indices{i}(1)}, radii{crop_indices{i}(2)});
@@ -57,11 +58,13 @@ for i = 1:length(crop_indices)
     fingers_outline{end}.end = l2;
     fingers_outline{end}.t2 = l2;
     fingers_outline{end}.indices = crop_indices{i};
+    fingers_outline{end}.block = block_indices(i);
     fingers_outline{end + 1}.start = r1;
     fingers_outline{end}.t1 = r1;
     fingers_outline{end}.end = r2;
     fingers_outline{end}.t2 = r2;
     fingers_outline{end}.indices = crop_indices{i};
+    fingers_outline{end}.block = block_indices(i);
 end
 %print_outline(fingers_outline);
 
