@@ -13,7 +13,7 @@ num_parameters = 26;
 %% Load data
 load([data_path, 'points.mat']); data_points = points;
 %load([data_path, 'normals.mat']); data_normals = normals;
-data_points = data_points(2303:2303);
+data_points = data_points;
 
 %% Initialize
 segments = create_ik_model(mode);

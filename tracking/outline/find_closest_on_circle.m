@@ -10,7 +10,8 @@ for j = 1:length(circles{i}.points)
     beta = myatan2(u);
     if beta < alpha, beta = beta + 2 * pi; end
     delta =  beta - alpha;
-    if delta > - epsilon && delta < epsilon, continue; end
+    if abs(delta) < epsilon, continue; end
+    %disp([alpha, beta, delta]);
     if delta < min_delta
         min_delta = delta;
         k_next = circles{i}.points(j);

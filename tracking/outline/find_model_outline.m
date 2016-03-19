@@ -1,42 +1,52 @@
-function [outline3D] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, verbose)
+function [outline3D] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, verbose, hmodel_model)
 
-palm_blocks = [palm_blocks, fingers_blocks{1}{3}, fingers_blocks{2}{3}, fingers_blocks{3}{3}, fingers_blocks{4}{3}];
-fingers_blocks{1} = fingers_blocks{1}(1:2); fingers_blocks{2} = fingers_blocks{2}(1:2);
-fingers_blocks{3} = fingers_blocks{3}(1:2); fingers_blocks{4} = fingers_blocks{4}(1:2);
 fingers_base_centers(1) = 3; fingers_base_centers(2) = 7; fingers_base_centers(3) = 11;
 fingers_base_centers(4) = 15; fingers_base_centers(5) = 19;
 
-%% Find palm blocks and finger blocks indices
-palm_blocks_indices = [];
+if (hmodel_model)
+    palm_blocks = [palm_blocks, fingers_blocks{1}{3}, fingers_blocks{2}{3}, fingers_blocks{3}{3}, fingers_blocks{4}{3}];
+    fingers_blocks{1} = fingers_blocks{1}(1:2); fingers_blocks{2} = fingers_blocks{2}(1:2);
+    fingers_blocks{3} = fingers_blocks{3}(1:2); fingers_blocks{4} = fingers_blocks{4}(1:2);
 
-for i = 1:length(palm_blocks)
-    for j = 1:length(blocks)
-        if length(palm_blocks{i}) ~= length(blocks{j}), continue; end
-        if all(ismember(palm_blocks{i}, blocks{j}))
-            palm_blocks_indices(end + 1) = j;
-        end
-    end
-end
-fingers_blocks_indices = {};
-for f = 1:length(fingers_blocks)
-    finger_blocks_indices = [];
-    for i = 1:length(fingers_blocks{f})
+    palm_blocks_indices = [];
+    
+    for i = 1:length(palm_blocks)
         for j = 1:length(blocks)
-            if length(fingers_blocks{f}{i}) ~= length(blocks{j}), continue; end
-            if all(ismember(fingers_blocks{f}{i}, blocks{j}))
-                finger_blocks_indices(end + 1) = j;
+            if length(palm_blocks{i}) ~= length(blocks{j}), continue; end
+            if all(ismember(palm_blocks{i}, blocks{j}))
+                palm_blocks_indices(end + 1) = j;
             end
         end
     end
-    fingers_blocks_indices{end + 1} = finger_blocks_indices;
+    fingers_blocks_indices = {};
+    for f = 1:length(fingers_blocks)
+        finger_blocks_indices = [];
+        for i = 1:length(fingers_blocks{f})
+            for j = 1:length(blocks)
+                if length(fingers_blocks{f}{i}) ~= length(blocks{j}), continue; end
+                if all(ismember(fingers_blocks{f}{i}, blocks{j}))
+                    finger_blocks_indices(end + 1) = j;
+                end
+            end
+        end
+        fingers_blocks_indices{end + 1} = finger_blocks_indices;
+    end
+    
+else
+    palm_blocks_indices = [3, 6, 9, 12, 15, 16, 17];    
+    fingers_blocks_indices = {};
+    fingers_blocks_indices{end + 1} = [1; 2];
+    fingers_blocks_indices{end + 1} = [4; 5];    
+    fingers_blocks_indices{end + 1} = [7; 8];
+    fingers_blocks_indices{end + 1} = [10; 11];
+    fingers_blocks_indices{end + 1} = [13; 14];
 end
-%print_blocks(fingers_blocks{5});
 
 %% Compute palm outline
 [palm_outline] = find_planar_outline(centers, blocks, palm_blocks_indices, radii, false);
 
 final_outline = [];
-for f = 1:length(fingers_blocks)
+for f = 1:length(fingers_blocks_indices)
     %% Compute finger outline
     [finger_outline] = find_planar_outline(centers, blocks, fingers_blocks_indices{f}, radii, false);
     
@@ -75,7 +85,9 @@ for f = 1:length(fingers_blocks)
 end
 final_outline = [final_outline, palm_outline];
 
-[final_outline] = adjust_fingers_outline(centers, radii, final_outline, names_map);
+if (hmodel_model)
+    [final_outline] = adjust_fingers_outline(centers, radii, final_outline, names_map);
+end
 
 %% Find 3D outline
 [outline3D] = find_3D_outline(centers, final_outline);
@@ -83,8 +95,8 @@ final_outline = [final_outline, palm_outline];
 %% Display
 if ~verbose, return; end
 
-%display_result(centers, [], [], blocks, radii, false, 0.5, 'small');
-figure; hold on; axis off; axis equal;
+display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
+%figure; hold on; axis off; axis equal;
 for i = 1:length(outline3D)
     if length(outline3D{i}.indices) == 2
         myline(outline3D{i}.start, outline3D{i}.end, 'm');
@@ -93,7 +105,7 @@ for i = 1:length(outline3D)
     end
 end
 
-view([0, 90]);
+view([-180, -90]); camlight;
 
 end
 

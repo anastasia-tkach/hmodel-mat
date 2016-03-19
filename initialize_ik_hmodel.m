@@ -18,7 +18,7 @@ for i = 1:length(segments)
     end
     
     if isempty(c)
-        child_name = segments{i}.end_name;
+        child_name = segments{i}.rigid_names{1};
     else
         child_name = segments{c}.name;
     end
@@ -40,27 +40,29 @@ for i = 1:length(segments)
     segments{i}.local(1:D, D + 1) =  T;  
 end
 
-%% Update all transforms
-
-% for i = 1:length(segments)  
-%     if length(segments{i}.kinematic_chain) > 8
-%         segments{i}.local(1:D, 1:D) = eye(D, D);
-%     end
-% end
-
 segments = update_transform(segments, 1);
 
-%% Compute length
+
+%% Initialize rigid centers
 for i = 1:length(segments)
-    if isfield(segments{i}, 'end_name')    
-        segments{i}.length = norm(centers{names_map(segments{i}.name)} - centers{names_map(segments{i}.end_name)});
-    end
-    if isfield(segments{i}, 'additional_name')    
-        segments{i}.additional_length = norm(centers{names_map(segments{i}.name)} - centers{names_map(segments{i}.additional_name)});
+    if isfield(segments{i}, 'rigid_names')  
+        for j = 1:length(segments{i}.rigid_names)
+            segments{i}.offsets{j} =  segments{i}.global(1:D, 1:D)' * (centers{names_map(segments{i}.rigid_names{j})} -  centers{names_map(segments{i}.name)});
+        end
     end
 end
 
-%% Initialize rigid centers
-for i = 1:length(segments{1}.rigid_names)
-    segments{1}.offsets{i} = centers{names_map(segments{1}.rigid_names{i})} -  centers{names_map(segments{1}.name)};
-end
+
+%% Print initial transformations
+% for i = 1:length(segments)
+%     disp(segments{i}.name);
+%     A = segments{i}.local';
+%     a = A(:);
+%     s = num2str(a(1));
+%     for j = 2:length(a)
+%         s = [s, ', ', num2str(a(j))];  
+%     end
+%     disp([s, ';']);
+%     disp(' ');
+% end
+

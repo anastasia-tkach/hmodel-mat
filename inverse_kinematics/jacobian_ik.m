@@ -17,9 +17,6 @@ for k = 1:num_model_points
     segment = segments{segment_indices(k)};
     for l = 1:length(segment.kinematic_chain)
         joint_id = segment.kinematic_chain(l);
-        if joint_id == 24
-            disp(' ');
-        end
         segment_id = joints{joint_id}.segment_id;
         switch joints{joint_id}.axis
             case 'X'

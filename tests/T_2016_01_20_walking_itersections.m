@@ -26,27 +26,52 @@ fingers_blocks{5} = {[35,17], [17,18], [18,19]};
 
 blocks = [fingers_blocks{1}, fingers_blocks{2}, fingers_blocks{3}, fingers_blocks{4}, fingers_blocks{5}, palm_blocks];
 blocks = reindex(radii, blocks);
+print_blocks_names(blocks, names_map);
 
 %% Pose the model
 [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blcks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
 [attachments, ~] = initialize_attachments(centers, radii, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 segments = initialize_ik_hmodel(centers, names_map);
-theta = 0.2 * randn(26, 1);
-theta(4:6) = theta(4:6) * 2;
-[centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
+theta = zeros(26, 1);
+%theta = 0.1 * randn(26, 1);
+%theta(4:6) = theta(4:6) * 2;
+%[centers, joints] = pose_ik_hmodel(theta, centers, names_map, segments);
+joints = joints_parameters(zeros(26, 1));
+[centers] = pose_ik_hmodel(theta, centers, names_map, segments, joints);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 [centers, ~, ~, attachments] = update_attachments(centers, blocks, centers, attachments, 'hand', global_frame_indices, names_map, palm_centers_names);
 
 camera_ray = [0; 0; 1];
 
-%% write data
+%% Adjust the model
 D = 3;
+% scaling_factor = 1.3553;
+% for i = 1:length(centers)
+%     centers{i} = scaling_factor * centers{i};
+%     radii{i} = scaling_factor * radii{i};
+% end
+centers{names_map('thumb_fold')} = centers{names_map('thumb_fold')} + [-7; 2; 0];
+centers{names_map('middle_membrane')} = centers{names_map('middle_membrane')} + [0; -3; 2];
+centers{names_map('index_membrane')} = centers{names_map('index_membrane')} + [0; 0; -2];
+radii{names_map('thumb_top')} = 0.9 * radii{names_map('thumb_top')};
+
+%% Initial transformations to matrix form
+%for i = 1:length(segments), disp([num2str(i - 1), ' ', segments{i}.name]); end
+I = zeros(length(segments), 4 * 4);
+for i = 1:length(segments)
+    I(i, :) = segments{i}.local(:)';
+end
+I = I';
+%% Model to matrix form
+num_centers = 36;
+
 RAND_MAX = 32767;
-R = zeros(1, length(radii));
-C = zeros(D, length(centers));
+R = zeros(1, num_centers);
+C = zeros(D, num_centers);
 B = RAND_MAX * ones(3, length(blocks));
-for j = 1:length(radii)
-    R(j) = radii{j}; 
+scaling_factor = 1;
+for j = 1:num_centers
+    R(j) =  radii{j}; 
     C(:, j) = centers{j}; 
 end
 for j = 1:length(blocks)
@@ -55,11 +80,12 @@ for j = 1:length(blocks)
     end   
 end
 path = 'C:\Developer\hmodel-cuda-build\data\';
-write_input_parameters_to_files(path, C, R, B);
+write_input_parameters_to_files(path, C, R, B, I);
 
 %% Find outline
-[final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, true);
+[final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, true, true);
 
+return
 %% Read data
 fileID = fopen([path, 'O.txt'], 'r');
 O = fscanf(fileID, '%f');

@@ -72,7 +72,7 @@ end
 %% Display planar outline
 if ~verbose, return; end
 
-%figure; 
+figure; 
 hold on; axis off; axis equal;
 set(gcf,'color','w');
 for i = 1:length(circles)
