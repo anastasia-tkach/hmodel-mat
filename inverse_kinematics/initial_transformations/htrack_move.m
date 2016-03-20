@@ -13,7 +13,7 @@ for i = 1:num_thetas
             rotateX(i) = theta(i);
         elseif all(dofs{i}.axis == [0, 1, 0])
             rotateY(i) = theta(i);
-        else all(dofs{i}.axis == [0, 0, 1])
+        else
             rotateZ(i) = theta(i);
         end          
     else

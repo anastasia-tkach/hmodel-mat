@@ -32,15 +32,15 @@ load([semantics_path, 'tracking/named_blocks.mat']);
 
 %% Pose the model
 segments = initialize_ik_hmodel(centers, names_map);
-%theta = 0.2 * randn(26, 1);
+theta = zeros(26, 1);
 %theta(1:6) = 0;
-theta(7:end) = -pi/8;
-theta(4) = pi/2;
+%(7:end) = -pi/8;
+%theta(4) = pi/2;
 joints = joints_parameters(zeros(26, 1));
 [centers] = pose_ik_hmodel(theta, centers, names_map, segments, joints);
 
 %% Display result
 % figure; hold on; axis off; axis equal; display_skeleton(centers, radii, blocks, [], false, []);
 % return
-display_result(centers, [], [], blocks, radii, false, 0.8, 'big');
+display_result(centers, [], [], blocks, radii, false, 0.5, 'big');
 view([-180, -90]); camlight;
