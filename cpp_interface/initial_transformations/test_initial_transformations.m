@@ -1,5 +1,6 @@
-close all; clc;
-display = false;
+close all; clc; clear;
+display = true;
+D = 3;
 
 input_path = '_my_hand/fitting_result/';
 semantics_path = '_my_hand/semantics/';
@@ -17,9 +18,11 @@ end
 scaling_factor = 25;
 for p = 1:num_poses
     for i = 1:length(poses{p}.centers)
-        poses{p}.centers{i} = scaling_factor * poses{p}.centers{i};
-        radii{i} = scaling_factor * radii{i};
+        poses{p}.centers{i} = scaling_factor * poses{p}.centers{i};        
     end
+end
+for i = 1:length(radii)
+    radii{i} = scaling_factor * radii{i};
 end
 poses_blocks = blocks;
 
@@ -33,7 +36,7 @@ palm_indices = [names_map('palm_right'), names_map('palm_back'), names_map('palm
     names_map('pinky_base'), names_map('ring_base'), names_map('middle_base'), names_map('index_base'), names_map('thumb_base')];
 P = cell(length(palm_indices), 1); Q = cell(length(palm_indices), 1);
 for i = 1:length(palm_indices)
-    P{i} = pose.centers{palm_indices(i)}; 
+    P{i} = pose.centers{palm_indices(i)};
     Q{i} = poses{p}.centers{palm_indices(i)};
 end
 [M, scaling] = find_rigid_transformation(P, Q, true);
@@ -57,20 +60,162 @@ if (display)
     end
 end
 
-%% Initial transformations
+%% Shift palm base to [0; 0; 0]
+disp('Shifting palm_back to zero');
+t = [0; 0; 0];
+for i = 1:num_poses
+    t = t + poses{p}.centers{names_map('palm_back')};
+end
+t = t/num_poses;
+for p = 1:num_poses
+    for i = 1:length(poses{p}.centers)
+        poses{p}.centers{i} = poses{p}.centers{i} - t;
+    end
+end
 
-thumb_indices = [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_middle'), names_map('thumb_additional')];
-alpha1 = compute_initial_transformation(poses, thumb_indices, 'thumb');
+%% Initial transformations
+[phalanges, dofs] = full_hand_parameters();
+for i = 1:length(phalanges)
+    phalanges{i}.local = eye(4, 4);
+    phalanges{i}.length = 0;
+end
+num_thetas = 29;
+parameters1 = zeros(num_thetas, 1);
+parameters2 = zeros(num_thetas, 1);
+parameters3 = zeros(num_thetas, 1);
+parameters4 = zeros(num_thetas, 1);
+parameters5 = zeros(num_thetas, 1);
+
+num_alpha_thetas = 5 + num_poses * 4;
+lower_bound_thumb = -pi/2 * ones(num_alpha_thetas, 1);
+upper_bound_thumb = pi/2 * ones(num_alpha_thetas, 1);
+% lower_bound_thumb(1) = 0; upper_bound_thumb(1) = 1; 
+% lower_bound_thumb(2) = 0; upper_bound_thumb(2) = 1; 
+% lower_bound_thumb(3) = -1; upper_bound_thumb(3) = 1;  
+lower_bound_thumb(4:5) = - pi/3; upper_bound_thumb(4:5) = pi/3;
+
+lower_bound_fingers = -pi/9 * ones(num_alpha_thetas, 1);
+upper_bound_fingers = pi/9 * ones(num_alpha_thetas, 1);
+
+thumb_indices = [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_middle'), names_map('thumb_top')];
+[M1, M2, M3, L, theta_thumb] = compute_initial_transformation(poses, thumb_indices, lower_bound_thumb, upper_bound_thumb, []);%'thumb');
+phalanges{2}.local = M1; phalanges{3}.local = M2; phalanges{4}.local = M3;
+phalanges{2}.length = L(1); phalanges{3}.length = L(2); phalanges{4}.length = L(3);
 
 index_indices = [names_map('index_base'), names_map('index_bottom'), names_map('index_middle'), names_map('index_top')];
-alpha2 = compute_initial_transformation(poses, index_indices, 'index');
+[M1, M2, M3, L, theta_index] = compute_initial_transformation(poses, index_indices, lower_bound_fingers, upper_bound_thumb, []);%'index');
+phalanges{14}.local = M1; phalanges{15}.local = M2; phalanges{16}.local = M3;
+phalanges{14}.length = L(1); phalanges{15}.length = L(2); phalanges{16}.length = L(3);
 
 middle_indices = [names_map('middle_base'), names_map('middle_bottom'), names_map('middle_middle'), names_map('middle_top')];
-alpha3 = compute_initial_transformation(poses, middle_indices, 'middle');
+[M1, M2, M3, L, theta_middle] = compute_initial_transformation(poses, middle_indices, lower_bound_fingers, upper_bound_thumb, []);%'middle');
+phalanges{11}.local = M1; phalanges{12}.local = M2; phalanges{13}.local = M3;
+phalanges{11}.length = L(1); phalanges{12}.length = L(2); phalanges{13}.length = L(3);
 
 ring_indices = [names_map('ring_base'), names_map('ring_bottom'), names_map('ring_middle'), names_map('ring_top')];
-alpha4 = compute_initial_transformation(poses, ring_indices, 'ring');
+[M1, M2, M3, L, theta_ring] = compute_initial_transformation(poses, ring_indices, lower_bound_fingers, upper_bound_thumb, []);%'ring');
+phalanges{8}.local = M1; phalanges{9}.local = M2; phalanges{10}.local = M3;
+phalanges{8}.length = L(1); phalanges{9}.length = L(2); phalanges{10}.length = L(3);
 
 pinky_indices = [names_map('pinky_base'), names_map('pinky_bottom'), names_map('pinky_middle'), names_map('pinky_top')];
-alpha5 = compute_initial_transformation(poses, pinky_indices, 'pinky');
+[M1, M2, M3, L, theta_pinky] = compute_initial_transformation(poses, pinky_indices, lower_bound_fingers, upper_bound_thumb, []);%'pinky');
+phalanges{5}.local = M1; phalanges{6}.local = M2; phalanges{7}.local = M3;
+phalanges{5}.length = L(1); phalanges{6}.length = L(2); phalanges{7}.length = L(3);
+
+%% Set parameters
+parameters1(10:13) = theta_thumb(1:4); parameters2(10:13) = theta_thumb(5:8); parameters3(10:13) = theta_thumb(9:12); parameters4(10:13) = theta_thumb(13:16); parameters5(10:13) = theta_thumb(17:20);
+parameters1(14:17) = theta_index(1:4); parameters2(14:17) = theta_index(5:8); parameters3(14:17) = theta_index(9:12); parameters4(14:17) = theta_index(13:16); parameters5(14:17) = theta_index(17:20);
+parameters1(18:21) = theta_middle(1:4); parameters2(18:21) = theta_middle(5:8); parameters3(18:21) = theta_middle(9:12); parameters4(18:21) = theta_middle(13:16); parameters5(18:21) = theta_middle(17:20);
+parameters1(22:25) = theta_ring(1:4); parameters2(22:25) = theta_ring(5:8); parameters3(22:25) = theta_ring(9:12); parameters4(22:25) = theta_ring(13:16); parameters5(22:25) = theta_ring(17:20);
+parameters1(26:29) = theta_pinky(1:4); parameters2(26:29) = theta_pinky(5:8); parameters3(26:29) = theta_pinky(9:12); parameters4(26:29) = theta_pinky(13:16); parameters5(26:29) = theta_pinky(17:20);
+
+%% Pose
+Rx = @(alpha) [1, 0, 0; 0, cos(alpha), -sin(alpha); 0, sin(alpha), cos(alpha)];
+Ry = @(alpha) [cos(alpha), 0, sin(alpha); 0, 1, 0; -sin(alpha), 0, cos(alpha)];
+Rz = @(alpha)[cos(alpha), -sin(alpha), 0; sin(alpha), cos(alpha), 0; 0, 0, 1];
+
+P = {parameters1; parameters2; parameters3; parameters4; parameters5};
+for p = 1:num_poses
+    phalanges_i = htrack_move(P{p}, dofs, phalanges);
+    points = {};
+    for i = 2:length(phalanges) - 2
+        base = transform([0; 0; 0], phalanges_i{i}.global);
+        tip = transform([0; phalanges_i{i}.length; 0], phalanges_i{i}.global);
+        points{end + 1} = base; points{end + 1} = tip;
+    end
+    figure; hold on; axis off; axis equal;
+    display_skeleton(poses{p}.centers, radii, blocks, [], false, 'b');
+    for i = 1:length(points)/2
+        myline(points{2 * (i - 1) + 1}, points{2 * i}, 'm');
+    end
+end
+
+
+%% Initialize rigid centers in pose 4
+pose_id = 4;
+
+for i = 1:length(phalanges)
+    phalanges{i}.init_local = phalanges{i}.local;
+end
+
+phalanges = htrack_move(P{pose_id}, dofs, phalanges);
+for i = 1:length(phalanges)
+    if isfield(phalanges{i}, 'rigid_names')  
+        for j = 1:length(phalanges{i}.rigid_names)
+            phalanges{i}.offsets{j} =  phalanges{i}.global(1:D, 1:D)' * (poses{pose_id}.centers{names_map(phalanges{i}.rigid_names{j})} -  poses{pose_id}.centers{names_map(phalanges{i}.name)});
+        end
+    end
+end
+
+figure; hold on; axis off; axis equal;
+display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'g');
+
+%% Pose centers
+for i = 1:length(phalanges)
+    phalanges{i}.local = phalanges{i}.init_local;
+end
+theta = zeros(num_thetas, 1);
+theta(10:13) = parameters4(10:13);
+phalanges = htrack_move(theta, dofs, phalanges);
+num_phalanges = 16;
+for i = 1:num_phalanges
+    poses{pose_id}.centers{names_map(phalanges{i}.name)} = phalanges{i}.global(1:D, D + 1);    
+    if isfield(phalanges{i}, 'rigid_names')
+        for j = 1:length(phalanges{i}.rigid_names)
+            index = names_map(phalanges{i}.rigid_names{j});
+            T = phalanges{i}.global(1:D, 1:D) * phalanges{i}.offsets{j};
+            poses{pose_id}.centers{index} = poses{pose_id}.centers{names_map(phalanges{i}.name)} + T;
+        end
+    end
+end
+
+display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'r');
+display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
+view([0, 90]); 
+
+%% Write model to cpp
+I = zeros(length(phalanges), 4 * 4);
+for i = 1:length(phalanges)
+    I(i, :) = phalanges{i}.local(:)';
+end
+I = I';
+num_centers = 36;
+num_blocks = 29;
+RAND_MAX = 32767;
+R = zeros(1, num_centers);
+C = zeros(D, num_centers);
+B = RAND_MAX * ones(3, length(blocks));
+scaling_factor = 1;
+for j = 1:num_centers
+    R(j) =  radii{j};
+    C(:, j) = centers{j};
+end
+for j = 1:length(blocks)
+    for k = 1:length(blocks{j})
+        B(k, j) = blocks{j}(k) - 1;
+    end
+end
+
+% path = 'C:\Developer\hmodel-cuda-build\data\';
+% write_input_parameters_to_files(path, C, R, B, I);
 

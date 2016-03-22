@@ -1,5 +1,5 @@
 clc;
-close all;
+%close all;
 clear;
 
 %% Load previous model
@@ -57,6 +57,8 @@ for j = 1:length(blocks)
     end
 end
 
+display_result(centers, [], [], blocks, radii, false, 1, 'none');
+
 %% Write the matrices
-% path = 'C:\Developer\hmodel-cuda-build\data\';
-% write_input_parameters_to_files(path, C, R, B, I);
+path = 'C:\Developer\hmodel-cuda-build\data\';
+write_input_parameters_to_files(path, C, R, B, I);

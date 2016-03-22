@@ -1,19 +1,11 @@
-function [initial_rotations] = compute_initial_transformation(poses, indices, figure_title)
+function [M1, M2, M3, L, theta] = compute_initial_transformation(poses, indices, lb, ub, figure_title)
 
 D = 3;
 num_poses = length(poses);
 
-Rx = @(alpha) [1, 0, 0;
-    0, cos(alpha), -sin(alpha);
-    0, sin(alpha), cos(alpha)];
-
-Ry = @(alpha) [cos(alpha), 0, sin(alpha);
-    0, 1, 0
-    -sin(alpha), 0, cos(alpha)];
-
-Rz = @(alpha)[cos(alpha), -sin(alpha), 0;
-    sin(alpha), cos(alpha), 0;
-    0, 0, 1];
+Rx = @(alpha) [1, 0, 0; 0, cos(alpha), -sin(alpha); 0, sin(alpha), cos(alpha)];
+Ry = @(alpha) [cos(alpha), 0, sin(alpha); 0, 1, 0; -sin(alpha), 0, cos(alpha)];
+Rz = @(alpha)[cos(alpha), -sin(alpha), 0; sin(alpha), cos(alpha), 0; 0, 0, 1];
 
 u = [0; 1; 0];
 
@@ -40,7 +32,7 @@ for i = 1:length(indices) - 1
     end
 end
 L = mean(L);
-t1 = 0;
+t1 = zeros(3, 1);
 for p = 1:num_poses
     t1 = t1 + poses{p}.centers{indices(1)};
 end
@@ -103,18 +95,30 @@ f = @(alpha_theta) [
 
 %disp(f(alpha_theta_true));
 
-alpha_theta0 = rand(num_alpha_thetas, 1);
-lb = -pi/2 * ones(num_alpha_thetas, 1);
-ub = pi/2 * ones(num_alpha_thetas, 1);
-lb(4:5) = - pi/7; ub(4:5) = pi/7;
+alpha_theta0 = (lb + ub) / 2 + 0.1 * rand(num_alpha_thetas, 1);
 
 [alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);
 
-initial_rotations = alpha_theta_ls(1:5);
-
+disp(alpha_theta_ls(1:5)');
 %disp([alpha_theta_true, alpha_theta_ls])
 
+%% Build initial transformations matrices
+M1 = eye(D + 1, D + 1);
+M1(1:3, 1:3) = T1(alpha_theta_ls);
+M1(1:3, 4) = t1;
+
+M2 = eye(D + 1, D + 1);
+M2(1:3, 1:3) = T2(alpha_theta_ls);
+M2(1:3, 4) = t2;
+
+M3 = eye(D + 1, D + 1);
+M3(1:3, 1:3) = T3(alpha_theta_ls);
+M3(1:3, 4) = t3;
+
+theta = alpha_theta_ls(6:end);
+
 %% Display
+if isempty(figure_title), return; end
 figure; hold on; axis off; axis equal;
 for p = 1:num_poses
     for i = 1:length(indices) - 1

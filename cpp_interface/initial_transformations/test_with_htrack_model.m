@@ -177,3 +177,31 @@ ub = pi/2 * ones(length(theta_test), 1);
 
 mypoint(Q2(theta_ls), 'y'); mypoint(Q3(theta_ls), 'y'); mypoint(Q4(theta_ls), 'y'); hold on;
 
+%% Posing
+M1 = eye(D + 1, D + 1);
+M1(1:3, 1:3) = T1(alpha_theta_ls);
+M1(1:3, 4) = t1;
+
+M2 = eye(D + 1, D + 1);
+M2(1:3, 1:3) = T2(alpha_theta_ls);
+M2(1:3, 4) = t2;
+
+M3 = eye(D + 1, D + 1);
+M3(1:3, 1:3) = T3(alpha_theta_ls);
+M3(1:3, 4) = t3;
+
+phalanges{2}.local = M1;
+phalanges{3}.local = M2;
+phalanges{4}.local = M3;
+
+points = get_finger_points(alpha_theta_ls(6:9), dofs, phalanges, false);
+mypoints(points, 'm');
+points = get_finger_points(alpha_theta_ls(10:13), dofs, phalanges, false);
+mypoints(points, 'm');
+points = get_finger_points(alpha_theta_ls(14:17), dofs, phalanges, false);
+mypoints(points, 'm');
+points = get_finger_points(alpha_theta_ls(18:21), dofs, phalanges, false);
+mypoints(points, 'm');
+points = get_finger_points(alpha_theta_ls(22:25), dofs, phalanges, false);
+mypoints(points, 'm');
+
