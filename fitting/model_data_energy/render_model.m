@@ -42,8 +42,6 @@ pose.rendered_model = zeros(H, W, 3);
 pose.rendered_model(:, :, 1) = U;
 pose.rendered_model(:, :, 2) = V;
 pose.rendered_model(:, :, 3) = D;
-pose.
-
 
 
 

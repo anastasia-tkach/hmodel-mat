@@ -1,9 +1,9 @@
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-num_poses = 2;
-start_pose = 4;
-num_iters = 20;
+num_poses = 5;
+start_pose = 1;
+num_iters = 15;
 damping = 100;
 %{
     From previou5s experience
@@ -24,10 +24,16 @@ semantics_path = '_my_hand/semantics/';
 
 %% Load input
 load([semantics_path, 'solid_blocks.mat']);
+load([semantics_path, 'fitting/names_map.mat']);
+solid_blocks{19} = [names_map('palm_right'), names_map('palm_back'), names_map('palm_left'), names_map('palm_thumb'), ...
+    names_map('pinky_base'), names_map('ring_base'), names_map('middle_base'), names_map('index_base'), names_map('thumb_base')];
+
+%solid_blocks{19} = [solid_blocks{19}, names_map('pinky_base'), names_map('ring_base'), names_map('middle_base'), names_map('index_base')];
+
 load([semantics_path, 'fitting/blocks.mat']);
-load([semantics_path, 'smooth_blocks.mat']);
-load([semantics_path, 'tangent_centers.mat']);
-load([semantics_path, 'tangent_blocks.mat']);
+% load([semantics_path, 'smooth_blocks.mat']);
+% load([semantics_path, 'tangent_centers.mat']);
+% load([semantics_path, 'tangent_blocks.mat']);
 poses = cell(num_poses, 1);
 
 for k = start_pose:start_pose + num_poses - 1
@@ -40,6 +46,7 @@ end
 
 %[poses, radii] = adjust_poses_scales(poses, blocks, false);
 %radii = poses{5}.radii;
+
 [blocks] = reindex(radii, blocks);
 num_centers = length(radii); num_poses = length(poses);
 
@@ -65,7 +72,7 @@ for iter = 1:num_iters
         poses{p} = compute_energy1(poses{p}, radii, blocks, settings, false);
         
         %% Smoothness energy
-        [poses{p}.f3, poses{p}.Jc3, poses{p}.Jr3] = compute_energy3(poses{p}.centers, radii, blocks, settings);
+        %[poses{p}.f3, poses{p}.Jc3, poses{p}.Jr3] = compute_energy3(poses{p}.centers, radii, blocks, settings);
         
         %% Silhouette energy
         poses{p} = compute_energy4(poses{p}, blocks, radii, settings, false);
@@ -74,7 +81,7 @@ for iter = 1:num_iters
         poses{p} = compute_energy5(poses{p}, radii, blocks, settings);
         
         %% Tangency energy
-        [poses{p}.f6, poses{p}.Jc6, poses{p}.Jr6] = compute_energy6(centers, radii, tangent_blocks, tangent_centers, false);
+        %[poses{p}.f6, poses{p}.Jc6, poses{p}.Jr6] = compute_energy6(centers, radii, tangent_blocks, tangent_centers, false);
     end
     
     %% Shape consistency energy
@@ -84,10 +91,10 @@ for iter = 1:num_iters
     
     %% Assemble overall linear system
     [f1, J1] = assemble_energy(poses, '1', settings);
-    [f3, J3] = assemble_energy(poses, '3', settings);
+    %[f3, J3] = assemble_energy(poses, '3', settings);
     [f4, J4] = assemble_energy(poses, '4', settings);
     [f5, J5] = assemble_energy(poses, '5', settings);
-    [f6, J6] = assemble_energy(poses, '6', settings);
+    %[f6, J6] = assemble_energy(poses, '6', settings);
     
     %% Compute update
     I = eye(D * num_centers * num_poses + num_centers, D * num_centers * num_poses + num_centers);
@@ -95,17 +102,19 @@ for iter = 1:num_iters
     
     %% Apply update
     w4 = length(f1) / length(f4);
-    %w2 = w2 * 2;
-    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w3 * (J3' * J3) + w4 * (J4' * J4) +  w5 * (J5' * J5) +  w6 * (J6' * J6);
-    rhs = w1 * J1' * f1 + w2 * J2' * f2 + w3 * J3' * f3 +  w4 * J4' * f4 + w5 * J5' * f5 + w6 * J6' * f6;
+    w2 = w2 * 2;
+    %LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) +  w3 * (J3' * J3) + w4 * (J4' * J4) +  w5 * (J5' * J5) +  w6 * (J6' * J6);
+    %rhs = w1 * J1' * f1 + w2 * J2' * f2 + w3 * J3' * f3 +  w4 * J4' * f4 + w5 * J5' * f5 + w6 * J6' * f6;
+    LHS = damping * I + w1 * (J1' * J1) + w2 * (J2' * J2) + w4 * (J4' * J4) +  w5 * (J5' * J5);
+    rhs = w1 * J1' * f1 + w2 * J2' * f2 + w4 * J4' * f4 + w5 * J5' * f5;
     delta = -  LHS \ rhs;
     
     if ~isreal(delta), error('complex parameters'), end;    
     
     [valid_update, poses, radii, ~] = apply_update(poses, blocks, radii, delta, D);
     
-    energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); energies(3) = w3 * (f3' * f3); 
-    energies(4) = w4 * (f4' * f4); energies(5) = w5 * (f5' * f5); energies(6) = w6 * (f6' * f6); disp(energies);
+    energies(1) = w1 * (f1' * f1); energies(2) = w2 * (f2' * f2); 
+    energies(4) = w4 * (f4' * f4); energies(5) = w5 * (f5' * f5);
     history{iter + 1}.poses = poses; history{iter + 1}.radii = radii; history{iter + 1}.energies = energies;
     
 end
@@ -113,7 +122,7 @@ end
 %% Display
 for p = 1:length(poses)
     [poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
-    display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, false, 1, 'big');
+    display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, true, 1, 'big');
     %figure; axis off; axis equal; hold on; 
     %display_skeleton(poses{p}.centers, radii, blocks, poses{p}.points, false, []);
 end
@@ -154,3 +163,12 @@ disp(['RESULT = ', num2str(total_fitting_error)]);
 % save([output_path, '5_points.mat'], 'points');
 % save([output_path, 'radii.mat'], 'radii');
 % save([output_path, 'blocks.mat'], 'blocks');
+
+for p = 1:num_poses
+    centers = poses{p}.centers;
+    points = poses{p}.points;
+    save([output_path, num2str(p), '_centers.mat'], 'centers');
+    save([output_path, num2str(p), '_points.mat'], 'points');
+    save([output_path, 'radii.mat'], 'radii');
+    save([output_path, 'blocks.mat'], 'blocks');
+end

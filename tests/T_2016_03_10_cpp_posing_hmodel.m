@@ -21,14 +21,14 @@ load([semantics_path, 'tracking/named_blocks.mat']);
 
 
 %% Topology change
-% palm_blocks = {[21,22,28], [28,22,26], [22,23,26], [26, 23, 25], [26, 20, 25], [23, 24, 25], [20, 25, 36], [20, 36, 19], ...
-%     [30,31,21], [21,22,31], [31,32,22], [22,23,32], [32,23,24], [32,24,33]};
-% fingers_blocks{5} = {[35,17], [17,18], [18,19]};
+palm_blocks = {[21,22,28], [28,22,26], [22,23,26], [26, 23, 25], [26, 20, 25], [23, 24, 25], [20, 25, 36], [20, 36, 19], ...
+    [30,31,21], [21,22,31], [31,32,22], [22,23,32], [32,23,24], [32,24,33]};
+fingers_blocks{5} = {[35,17], [17,18], [18,19]};
 
-% blocks = [fingers_blocks{1}, fingers_blocks{2}, fingers_blocks{3}, fingers_blocks{4}, fingers_blocks{5}, palm_blocks];
-% blocks = reindex(radii, blocks);
-% figure; hold on; axis off; axis equal;
-% display_skeleton(centers, radii, blocks, [], false, 'r');
+blocks = [fingers_blocks{1}, fingers_blocks{2}, fingers_blocks{3}, fingers_blocks{4}, fingers_blocks{5}, palm_blocks];
+blocks = reindex(radii, blocks);
+figure; hold on; axis off; axis equal;
+display_skeleton(centers, radii, blocks, [], false, 'r');
 
 %% Pose the model
 segments = initialize_ik_hmodel(centers, names_map);
