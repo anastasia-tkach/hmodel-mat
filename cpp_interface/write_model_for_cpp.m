@@ -1,6 +1,6 @@
 clc;
 %close all;
-clear;
+%clear;
 
 %% Load previous model
 input_path = '_my_hand/tracking_initialization/';

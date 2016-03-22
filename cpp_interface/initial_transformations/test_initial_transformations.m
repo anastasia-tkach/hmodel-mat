@@ -13,7 +13,7 @@ for p = 1:num_poses
     load([input_path, num2str(p), '_centers.mat']);
     poses{p}.centers = centers;
 end
-
+blocks = reindex(radii, blocks);
 %% Scale to make the alignment more stable
 scaling_factor = 25;
 for p = 1:num_poses
@@ -176,6 +176,7 @@ for i = 1:length(phalanges)
 end
 theta = zeros(num_thetas, 1);
 theta(10:13) = parameters4(10:13);
+
 phalanges = htrack_move(theta, dofs, phalanges);
 num_phalanges = 16;
 for i = 1:num_phalanges
@@ -188,18 +189,21 @@ for i = 1:num_phalanges
         end
     end
 end
+centers = poses{pose_id}.centers;
 
 display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'r');
-display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
-view([0, 90]); 
+display_result(poses{pose_id}.centers, [], [], blocks(1:29), radii, false, 1, 'big');
+view([-180, -90]); camlight;
+
 
 %% Write model to cpp
 I = zeros(length(phalanges), 4 * 4);
 for i = 1:length(phalanges)
+    disp(phalanges{i}.local);
     I(i, :) = phalanges{i}.local(:)';
 end
 I = I';
-num_centers = 36;
+num_centers = 34;
 num_blocks = 29;
 RAND_MAX = 32767;
 R = zeros(1, num_centers);
@@ -216,6 +220,14 @@ for j = 1:length(blocks)
     end
 end
 
-% path = 'C:\Developer\hmodel-cuda-build\data\';
-% write_input_parameters_to_files(path, C, R, B, I);
+path = 'C:\Developer\hmodel-cuda-build\data\';
+write_input_parameters_to_files(path, C, R, B, I);
 
+my_keys = keys(names_map);
+for i = 1:length(my_keys)
+    disp([my_keys{i}, ' ', num2str(names_map(my_keys{i}) - 1)]);
+end
+
+for i = 1:num_blocks
+    disp(blocks{i} - 1);
+end

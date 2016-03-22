@@ -2,6 +2,7 @@ clc; clear; close all;
 RAND_MAX = 32767;
 camera_ray = [0; 0; 1];
 path = 'C:\Developer\hmodel-cuda-build\data\';
+path = 'C:\Users\tkach\OneDrive\EPFL\Code\HModel\cpp_interface\retarget_pca\';
 
 %% Read centers
 fileID = fopen([path, '_C.txt'], 'r');
@@ -40,6 +41,9 @@ for i = 1:size(B, 2);
     end   
 end
 blocks = reindex(radii, blocks);
+
+display_result(centers, [], [], blocks, radii, false, 1, 'big');
+return;
 
 %% Read cpp outline;
 fileID = fopen([path, 'O.txt'], 'r');
