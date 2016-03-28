@@ -74,7 +74,7 @@ for p = 1:num_poses
 end
 
 %% Initial transformations
-[phalanges, dofs] = full_hand_parameters();
+[phalanges, dofs] = hmodel_parameters();
 for i = 1:length(phalanges)
     phalanges{i}.local = eye(4, 4);
     phalanges{i}.length = 0;
@@ -159,42 +159,31 @@ for i = 1:length(phalanges)
 end
 
 phalanges = htrack_move(P{pose_id}, dofs, phalanges);
-for i = 1:length(phalanges)
-    if isfield(phalanges{i}, 'rigid_names')  
-        for j = 1:length(phalanges{i}.rigid_names)
-            phalanges{i}.offsets{j} =  phalanges{i}.global(1:D, 1:D)' * (poses{pose_id}.centers{names_map(phalanges{i}.rigid_names{j})} -  poses{pose_id}.centers{names_map(phalanges{i}.name)});
-        end
-    end
-end
+
+phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 
 figure; hold on; axis off; axis equal;
 display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'g');
-
-%% Pose centers
-for i = 1:length(phalanges)
-    phalanges{i}.local = phalanges{i}.init_local;
-end
-theta = zeros(num_thetas, 1);
-theta(10:13) = parameters4(10:13);
-
-phalanges = htrack_move(theta, dofs, phalanges);
-num_phalanges = 16;
-for i = 1:num_phalanges
-    poses{pose_id}.centers{names_map(phalanges{i}.name)} = phalanges{i}.global(1:D, D + 1);    
-    if isfield(phalanges{i}, 'rigid_names')
-        for j = 1:length(phalanges{i}.rigid_names)
-            index = names_map(phalanges{i}.rigid_names{j});
-            T = phalanges{i}.global(1:D, 1:D) * phalanges{i}.offsets{j};
-            poses{pose_id}.centers{index} = poses{pose_id}.centers{names_map(phalanges{i}.name)} + T;
-        end
-    end
-end
-centers = poses{pose_id}.centers;
-
-display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'r');
 display_result(poses{pose_id}.centers, [], [], blocks(1:29), radii, false, 1, 'big');
-view([-180, -90]); camlight;
 
+%% Rotate model
+theta = zeros(num_thetas, 1);
+theta(10) =  0.023069;
+theta(11) = 0.5;
+theta(12) = -0.2;
+theta(13) = -0.2;
+theta(4) = -0.4;
+theta(5) = 2.7;
+[centers, phalanges] = rotate_initial_transformations(poses{pose_id}.centers, radii, blocks, phalanges, dofs, theta, names_map);
+
+%% Save the final model
+output_path = '_my_hand/final/';
+save([output_path, 'centers.mat'], 'centers');
+save([output_path, 'radii.mat'], 'radii');
+save([output_path, 'phalanges.mat'], 'phalanges');
+save([output_path, 'dofs.mat'], 'dofs');
+
+display_result(centers, [], [], blocks(1:29), radii, false, 1, 'big'); view([-180, -90]); camlight;
 
 %% Write model to cpp
 I = zeros(length(phalanges), 4 * 4);
@@ -220,14 +209,14 @@ for j = 1:length(blocks)
     end
 end
 
-path = 'C:\Developer\hmodel-cuda-build\data\';
-write_input_parameters_to_files(path, C, R, B, I);
+% path = 'C:\Developer\hmodel-cuda-build\data\';
+% write_input_parameters_to_files(path, C, R, B, I);
 
-my_keys = keys(names_map);
-for i = 1:length(my_keys)
-    disp([my_keys{i}, ' ', num2str(names_map(my_keys{i}) - 1)]);
-end
-
-for i = 1:num_blocks
-    disp(blocks{i} - 1);
-end
+% my_keys = keys(names_map);
+% for i = 1:length(my_keys)
+%     disp([my_keys{i}, ' ', num2str(names_map(my_keys{i}) - 1)]);
+% end
+% 
+% for i = 1:num_blocks
+%     disp(blocks{i} - 1);
+% end
