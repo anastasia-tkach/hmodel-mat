@@ -93,9 +93,10 @@ f = @(alpha_theta) [
     P4{2} - Q42(alpha_theta); P4{3} - Q43(alpha_theta); P4{4} - Q44(alpha_theta); ... 
     P5{2} - Q52(alpha_theta); P5{3} - Q53(alpha_theta); P5{4} - Q54(alpha_theta)];
 
-%disp(f(alpha_theta_true));
+%disp(f(alpha_theta_true));5
 
 alpha_theta0 = (lb + ub) / 2 + 0.1 * rand(num_alpha_thetas, 1);
+%alpha_theta0 = ub + 0.1 * rand(num_alpha_thetas, 1);
 
 [alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);
 
@@ -103,6 +104,12 @@ disp(alpha_theta_ls(1:5)');
 %disp([alpha_theta_true, alpha_theta_ls])
 
 %% Build initial transformations matrices
+
+if strcmp(figure_title, 'thumb')
+    %0.6089;  -1.1076; -0.3581   
+    alpha_theta_ls(2) = -0.7;       
+end
+
 M1 = eye(D + 1, D + 1);
 M1(1:3, 1:3) = T1(alpha_theta_ls);
 M1(1:3, 4) = t1;
@@ -118,7 +125,7 @@ M3(1:3, 4) = t3;
 theta = alpha_theta_ls(6:end);
 
 %% Display
-if isempty(figure_title), return; end
+return;
 figure; hold on; axis off; axis equal;
 for p = 1:num_poses
     for i = 1:length(indices) - 1

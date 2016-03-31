@@ -1,13 +1,16 @@
-function [outline3D] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, verbose, hmodel_model)
+function [outline3D] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, camera_ray, names_map, verbose, hmodel_model)
 
-fingers_base_centers(1) = 3; fingers_base_centers(2) = 7; fingers_base_centers(3) = 11;
-fingers_base_centers(4) = 15; fingers_base_centers(5) = 19;
+fingers_base_centers(1) = names_map('pinky_bottom');
+fingers_base_centers(2) = names_map('ring_bottom');
+fingers_base_centers(3) = names_map('middle_bottom');
+fingers_base_centers(4) = names_map('index_bottom');
+fingers_base_centers(5) = names_map('thumb_bottom');
 
 if (hmodel_model)
     palm_blocks = [palm_blocks, fingers_blocks{1}{3}, fingers_blocks{2}{3}, fingers_blocks{3}{3}, fingers_blocks{4}{3}];
     fingers_blocks{1} = fingers_blocks{1}(1:2); fingers_blocks{2} = fingers_blocks{2}(1:2);
     fingers_blocks{3} = fingers_blocks{3}(1:2); fingers_blocks{4} = fingers_blocks{4}(1:2);
-
+    
     palm_blocks_indices = [];
     
     for i = 1:length(palm_blocks)
@@ -33,10 +36,10 @@ if (hmodel_model)
     end
     
 else
-    palm_blocks_indices = [3, 6, 9, 12, 15, 16, 17];    
+    palm_blocks_indices = [3, 6, 9, 12, 15, 16, 17];
     fingers_blocks_indices = {};
     fingers_blocks_indices{end + 1} = [1; 2];
-    fingers_blocks_indices{end + 1} = [4; 5];    
+    fingers_blocks_indices{end + 1} = [4; 5];
     fingers_blocks_indices{end + 1} = [7; 8];
     fingers_blocks_indices{end + 1} = [10; 11];
     fingers_blocks_indices{end + 1} = [13; 14];
@@ -95,7 +98,7 @@ end
 %% Display
 if ~verbose, return; end
 
-display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
+display_result(centers, [], [], blocks, radii, false, 0.8, 'big');
 %figure; hold on; axis off; axis equal;
 for i = 1:length(outline3D)
     if length(outline3D{i}.indices) == 2

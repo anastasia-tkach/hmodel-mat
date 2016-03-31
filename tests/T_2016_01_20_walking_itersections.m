@@ -1,17 +1,14 @@
 clc;
 close all;
 clear;
-%% Synthetic data
-[centers, radii, blocks] = get_random_convquad();
-for i = 1:length(centers)
-    centers{i} = centers{i} + [0; 0; 1];
-end
 
 %% Hand model
 input_path = '_my_hand/tracking_initialization/';
 semantics_path = '_my_hand/semantics/';
 load([input_path, 'centers.mat']); load([input_path, 'radii.mat']);
-load([semantics_path, 'tracking/blocks.mat']); [blocks] = reindex(radii, blocks);
+%load([semantics_path, 'tracking/blocks.mat']); 
+load([semantics_path, 'fitting/blocks.mat'], 'blocks');
+[blocks] = reindex(radii, blocks);
 load([semantics_path, 'palm_blocks.mat']);
 load([semantics_path, 'fingers_blocks.mat']);
 load([semantics_path, 'fingers_base_centers.mat']);
@@ -26,7 +23,7 @@ fingers_blocks{5} = {[35,17], [17,18], [18,19]};
 
 blocks = [fingers_blocks{1}, fingers_blocks{2}, fingers_blocks{3}, fingers_blocks{4}, fingers_blocks{5}, palm_blocks];
 blocks = reindex(radii, blocks);
-print_blocks_names(blocks, names_map);
+%print_blocks_names(blocks, names_map);
 
 %% Pose the model
 [attachments, global_frame_indices, palm_centers_names, solid_blocks, elastic_blcks, parents] = get_semantic_structures(centers, blocks, names_map, named_blocks);
@@ -57,35 +54,35 @@ radii{names_map('thumb_top')} = 0.9 * radii{names_map('thumb_top')};
 
 %% Initial transformations to matrix form
 %for i = 1:length(segments), disp([num2str(i - 1), ' ', segments{i}.name]); end
-I = zeros(length(segments), 4 * 4);
-for i = 1:length(segments)
-    I(i, :) = segments{i}.local(:)';
-end
-I = I';
-%% Model to matrix form
-num_centers = 36;
-
-RAND_MAX = 32767;
-R = zeros(1, num_centers);
-C = zeros(D, num_centers);
-B = RAND_MAX * ones(3, length(blocks));
-scaling_factor = 1;
-for j = 1:num_centers
-    R(j) =  radii{j}; 
-    C(:, j) = centers{j}; 
-end
-for j = 1:length(blocks)
-    for k = 1:length(blocks{j})
-        B(k, j) = blocks{j}(k) - 1;
-    end   
-end
-path = 'C:\Developer\hmodel-cuda-build\data\';
-write_input_parameters_to_files(path, C, R, B, I);
+% I = zeros(length(segments), 4 * 4);
+% for i = 1:length(segments)
+%     I(i, :) = segments{i}.local(:)';
+% end
+% I = I';
+% %% Model to matrix form
+% num_centers = 36;
+% 
+% RAND_MAX = 32767;
+% R = zeros(1, num_centers);
+% C = zeros(D, num_centers);
+% B = RAND_MAX * ones(3, length(blocks));
+% scaling_factor = 1;
+% for j = 1:num_centers
+%     R(j) =  radii{j}; 
+%     C(:, j) = centers{j}; 
+% end
+% for j = 1:length(blocks)
+%     for k = 1:length(blocks{j})
+%         B(k, j) = blocks{j}(k) - 1;
+%     end   
+% end
+% path = 'C:\Developer\hmodel-cuda-build\data\';
+% write_input_parameters_to_files(path, C, R, B, I);
 
 %% Find outline
 [final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, fingers_base_centers, camera_ray, names_map, true, true);
+return;
 
-return
 %% Read data
 fileID = fopen([path, 'O.txt'], 'r');
 O = fscanf(fileID, '%f');

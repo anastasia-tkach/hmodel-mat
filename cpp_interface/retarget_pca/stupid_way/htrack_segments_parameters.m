@@ -1,4 +1,4 @@
-function [segments] = segments_parameters()
+function [segments] = htrack_segments_parameters()
 
 segments = {};
 
@@ -245,7 +245,7 @@ i = i + 1;
 segment.name = 'HandIndex1';
 segment.parent_id = 1;
 segment.children_ids = [15];
-segment.kinetmatic_chain = [1, 2, 3, 4, 5, 6, 14, 15];
+segment.kinematic_chain = [1, 2, 3, 4, 5, 6, 14, 15];
 segment.local = [
    0.985431    0.170074 0.000888117          30;
   -0.169422    0.981171   0.0927368          80;

@@ -48,7 +48,7 @@ named_blocks{end + 1} = {'index_bottom', 'index_base'};
 
 named_blocks{end + 1} = {'thumb_top', 'thumb_middle'};
 named_blocks{end + 1} = {'thumb_middle', 'thumb_bottom'};
-named_blocks{end + 1} = {'thumb_bottom', 'thumb_base'};
+named_blocks{end + 1} = {'thumb_bottom', 'thumb_base', 'thumb_fold'};
 
 %% Blocks palm
 named_blocks{end + 1} = {'palm_pinky', 'palm_ring', 'palm_right'};
@@ -67,7 +67,7 @@ named_blocks{end + 1} = {'palm_ring', 'palm_middle', 'middle_membrane'};
 named_blocks{end + 1} = {'middle_membrane', 'palm_middle', 'palm_index'}; 
 named_blocks{end + 1} = {'middle_membrane', 'palm_index', 'index_membrane'};
 
-named_blocks{end + 1} = {'thumb_bottom', 'thumb_fold', 'thumb_base'};
+%named_blocks{end + 1} = {'thumb_bottom', 'thumb_fold', 'thumb_base'};
 named_blocks{end + 1} = {'thumb_fold', 'palm_thumb', 'thumb_base'};
 named_blocks{end + 1} = {'thumb_additional', 'thumb_top'};
 

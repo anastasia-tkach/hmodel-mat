@@ -150,25 +150,11 @@ total_fitting_error = total_fitting_error / length(poses);
 disp(['RESULT = ', num2str(total_fitting_error)]);
 
 %% Store the results
-% centers = poses{1}.centers;
-% points = poses{1}.points;
-% save([output_path, '4_centers.mat'], 'centers');
-% save([output_path, '4_points.mat'], 'points');
-% save([output_path, 'radii.mat'], 'radii');
-% save([output_path, 'blocks.mat'], 'blocks');
-% 
-% centers = poses{2}.centers;
-% points = poses{2}.points;
-% save([output_path, '5_centers.mat'], 'centers');
-% save([output_path, '5_points.mat'], 'points');
-% save([output_path, 'radii.mat'], 'radii');
-% save([output_path, 'blocks.mat'], 'blocks');
-
-for p = 1:num_poses
-    centers = poses{p}.centers;
-    points = poses{p}.points;
-    save([output_path, num2str(p), '_centers.mat'], 'centers');
-    save([output_path, num2str(p), '_points.mat'], 'points');
-    save([output_path, 'radii.mat'], 'radii');
-    save([output_path, 'blocks.mat'], 'blocks');
-end
+% for p = 1:num_poses
+%     centers = poses{p}.centers;
+%     points = poses{p}.points;
+%     save([output_path, num2str(p), '_centers.mat'], 'centers');
+%     save([output_path, num2str(p), '_points.mat'], 'points');
+%     save([output_path, 'radii.mat'], 'radii');
+%     save([output_path, 'blocks.mat'], 'blocks');
+% end

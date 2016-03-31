@@ -60,5 +60,5 @@ end
 display_result(centers, [], [], blocks, radii, false, 1, 'none');
 
 %% Write the matrices
-path = 'C:\Developer\hmodel-cuda-build\data\';
+path = 'C:\Developer\hmodel-cuda-build\data\hmodel_old\';
 write_input_parameters_to_files(path, C, R, B, I);

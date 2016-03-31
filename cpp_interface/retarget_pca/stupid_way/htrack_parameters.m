@@ -6,7 +6,7 @@ Rx = @(alpha) [1, 0, 0, 0; 0, cos(alpha), -sin(alpha), 0; 0, sin(alpha), cos(alp
 
 %% Scale Htrack
 [phalanges, dofs] = hmodel_parameters();
-segments = segments_parameters();
+segments = htrack_segments_parameters();
 
 for i = 1:num_phalanges
     segments{i}.length = scaling_factor * segments{i}.length;

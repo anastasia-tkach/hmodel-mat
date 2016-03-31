@@ -1,7 +1,7 @@
 clear
 data_path = '_data/htrack_model/';
-mode = 'hand';
-skeleton = false;
+mode = 'finger';
+skeleton = true;
 
 %% Get model
 segments = create_ik_model(mode);

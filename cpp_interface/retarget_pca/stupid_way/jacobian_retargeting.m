@@ -1,5 +1,5 @@
 function [F, J] = jacobian_retargeting(phalanges, dofs, model_points, data_points, phalange_indices)
-num_model_points = size(model_points, 1);
+num_model_points = length(model_points);
 J = zeros(num_model_points, length(dofs));
 F = zeros(num_model_points, 1);
 
@@ -16,6 +16,7 @@ for k = 1:num_model_points
     phalange = phalanges{phalange_indices(k)};
     
     for i = 1:length(phalange.kinematic_chain)
+       
         dof_id = phalange.kinematic_chain(i);
         phalange_id = dofs{dof_id}.phalange_id;
         u = dofs{dof_id}.axis';

@@ -18,14 +18,15 @@ for k = 1:num_model_points
     for l = 1:length(segment.kinematic_chain)
         joint_id = segment.kinematic_chain(l);
         segment_id = joints{joint_id}.segment_id;
-        switch joints{joint_id}.axis
-            case 'X'
-                u = [1; 0; 0];
-            case 'Y'
-                u = [0; 1; 0];
-            case 'Z'
-                u = [0; 0; 1];
-        end        
+        %switch joints{joint_id}.axis
+        %    case 'X'
+        %        u = [1; 0; 0];
+        %    case 'Y'
+        %        u = [0; 1; 0];
+        %    case 'Z'
+        %        u = [0; 0; 1];
+        %end   
+        u = joints{joint_id}.axis;
         p = segments{segment_id}.global(1:3, 4);
         T = segments{segment_id}.global;
         v = T * [u; 1]; v = v(1:3) / v(4);

@@ -1,7 +1,8 @@
-function [centers, phalanges] = rotate_initial_transformations(centers, radii, blocks, phalanges, dofs, theta, names_map)
+function [centers, radii, phalanges] = rotate_and_scale_initial_transformations(centers, radii, blocks, phalanges, dofs, theta, scaling_factor, names_map)
 
 D = 3;
 num_thetas = 29;
+num_phalanges = 16;
 
 %% Rotate centers 
 for i = 1:length(phalanges)
@@ -30,11 +31,33 @@ phalanges{14}.local = T * phalanges{14}.local;
 
 %% Pose rotated model
 theta = zeros(num_thetas, 1);
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+phalanges{3}.local(2, 4) = 27.6;
+phalanges{4}.local(2, 4) = 23.5;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 phalanges = htrack_move(theta, dofs, phalanges);
 phalanges = initialize_offsets(centers, phalanges, names_map);
+%disp('modified thumb top');
+%phalanges{4}.offsets{1} = 1.3 * phalanges{4}.offsets{1};
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+v = phalanges{4}.offsets{2} / norm( phalanges{4}.offsets{2});
+v = [ -0.1650; 0.9841; 0.0658];
+v = [ -0.07; 0.9841; 0.0658];
+v = v/norm(v);
+phalanges{4}.offsets{2} = 18 * v;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 theta = zeros(num_thetas, 1);
 phalanges = htrack_move(theta, dofs, phalanges);
 [centers] = update_centers(centers, phalanges, names_map);
+
+%% Scale
+for i = 1:length(centers)
+    centers{i} = scaling_factor * centers{i};
+    radii{i} = scaling_factor * radii{i};
+end
+for i = 1:num_phalanges
+    phalanges{i}.local(1:3, 4) = scaling_factor * phalanges{i}.local(1:3, 4);
+end
 
 % figure; hold on; axis off; axis equal;
 % display_skeleton(centers, radii, blocks(1:29), [], false, 'r');

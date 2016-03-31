@@ -19,19 +19,19 @@ end
 for i = order
     segment = segments{joints{i}.segment_id};
     T = [];
-    switch joints{i}.axis
-        case 'X'
-            joints{i}.axis_vector = [1; 0; 0];
-        case 'Y'
-            joints{i}.axis_vector = [0; 1; 0];
-        case 'Z'
-            joints{i}.axis_vector = [0; 0; 1];
-    end
+    %switch joints{i}.axis
+    %    case 'X'
+    %        joints{i}.axis_vector = [1; 0; 0];
+    %    case 'Y'
+    %        joints{i}.axis_vector = [0; 1; 0];
+    %    case 'Z'
+    %        joints{i}.axis_vector = [0; 0; 1];
+    %end
     switch joints{i}.type
         case 'R'
-            T = segment.local * makehgtform('axisrotate', joints{i}.axis_vector, joints{i}.value);            
+            T = segment.local * makehgtform('axisrotate', joints{i}.axis, joints{i}.value);            
         case 'T'
-            T = segment.local * makehgtform('translate', joints{i}.axis_vector * joints{i}.value);
+            T = segment.local * makehgtform('translate', joints{i}.axis * joints{i}.value);
     end
     segments{joints{i}.segment_id}.local = T;
     segments = update_transform(segments, joints{i}.segment_id);

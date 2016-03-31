@@ -21,7 +21,7 @@ segments{i}.name = 'thumb_base';
 segments{i}.parent_id = 1;
 segments{i}.children_ids = [3];
 segments{i}.kinematic_chain = [1, 2, 3, 4, 5, 6, 7, 8];
-segments{i}.rigid_names = {'thumb_membrane'};
+%segments{i}.rigid_names = {'thumb_membrane'};
 
 %% segment 3
 i = i + 1;

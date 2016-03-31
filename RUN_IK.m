@@ -3,12 +3,12 @@ settings.mode = 'tracking';
 settings_default;
 
 data_path = '_data/htrack_model/';
-skeleton = false; mode = 'hand';
+skeleton = true; mode = 'finger';
 
 damping = 0.0001;
 w1 = 1; w4 = 10e4;
 num_iters = 2;
-num_parameters = 26;
+num_parameters = 8;
 
 %% Load data
 load([data_path, 'points.mat']); data_points = points;
@@ -44,18 +44,18 @@ for iter = 1:num_iters
     end
     
     %% Solve IK & apply
-    [F1, J1] = jacobian_ik(segments, joints, model_points, data_points, get_segment_indcies(block_indices, mode), settings);
-    [F4, J4] = jacobian_ik_joint_limits(joints);
+    [F, J] = jacobian_ik(segments, joints, model_points, data_points, get_segment_indcies(block_indices, mode), settings);
+    %[F4, J4] = jacobian_ik_joint_limits(joints);
     %J1([1:23, 25:26]) = 0;
     %% Solve for IK
     I = eye(length(theta), length(theta));    
-    LHS = w1 * (J1' * J1) + w4 * (J4' * J4) + damping * I;
-    RHS = w1 * J1' * F1 + w4 * J4' * F4;
+    LHS = J' * J + damping * I;
+    RHS = J' * F;
     delta_theta = LHS \ RHS;
-    energies(1) = w1 * F1' * F1; energies(2) = w4 * F4' * F4; 
-    history{iter + 1}.energies = energies; disp(energies);    
+    %energies(1) = w1 * F1' * F1; energies(2) = w4 * F4' * F4; 
+    %history{iter + 1}.energies = energies; disp(energies);    
     
     theta = theta + delta_theta;
     [posed_segments, joints] = pose_ik_model(segments, theta, false, mode);
 end
-display_energies(history, 'IK');
+%display_energies(history, 'IK');
