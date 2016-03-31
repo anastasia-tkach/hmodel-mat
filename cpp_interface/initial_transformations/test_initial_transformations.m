@@ -96,8 +96,6 @@ lower_bound_thumb(4:5) = - pi/3; upper_bound_thumb(4:5) = pi/3;
 
 lower_bound_fingers = -pi/9 * ones(num_alpha_thetas, 1);
 upper_bound_fingers = pi/2 * ones(num_alpha_thetas, 1);
-lower_bound_fingers(1:3) = -pi/9;
-upper_bound_fingers(1:3) = pi/4;
 lower_bound_fingers(4:5) = -pi/40;
 upper_bound_fingers(4:5) = pi/40;
 
@@ -106,20 +104,32 @@ thumb_indices = [names_map('thumb_base'), names_map('thumb_bottom'), names_map('
 phalanges{2}.local = M1; phalanges{3}.local = M2; phalanges{4}.local = M3;
 phalanges{2}.length = L(1); phalanges{3}.length = L(2); phalanges{4}.length = L(3);
 
+lower_bound_fingers(1:3) = -pi/4;
+upper_bound_fingers(1:3) = pi/4;
+
 index_indices = [names_map('index_base'), names_map('index_bottom'), names_map('index_middle'), names_map('index_top')];
 [M1, M2, M3, L, theta_index] = compute_initial_transformation(poses, index_indices, lower_bound_fingers, upper_bound_fingers, 'index');
 phalanges{14}.local = M1; phalanges{15}.local = M2; phalanges{16}.local = M3;
 phalanges{14}.length = L(1); phalanges{15}.length = L(2); phalanges{16}.length = L(3);
+
+lower_bound_fingers(1:3) = -pi/6;
+upper_bound_fingers(1:3) = pi/6;
 
 middle_indices = [names_map('middle_base'), names_map('middle_bottom'), names_map('middle_middle'), names_map('middle_top')];
 [M1, M2, M3, L, theta_middle] = compute_initial_transformation(poses, middle_indices, lower_bound_fingers, upper_bound_fingers, 'middle');
 phalanges{11}.local = M1; phalanges{12}.local = M2; phalanges{13}.local = M3;
 phalanges{11}.length = L(1); phalanges{12}.length = L(2); phalanges{13}.length = L(3);
 
+lower_bound_fingers(1:3) = -pi/6;
+upper_bound_fingers(1:3) = pi/6;
+
 ring_indices = [names_map('ring_base'), names_map('ring_bottom'), names_map('ring_middle'), names_map('ring_top')];
 [M1, M2, M3, L, theta_ring] = compute_initial_transformation(poses, ring_indices, lower_bound_fingers, upper_bound_fingers, 'ring');
 phalanges{8}.local = M1; phalanges{9}.local = M2; phalanges{10}.local = M3;
 phalanges{8}.length = L(1); phalanges{9}.length = L(2); phalanges{10}.length = L(3);
+
+lower_bound_fingers(1:3) = -pi/6;
+upper_bound_fingers(1:3) = pi/6;
 
 pinky_indices = [names_map('pinky_base'), names_map('pinky_bottom'), names_map('pinky_middle'), names_map('pinky_top')];
 [M1, M2, M3, L, theta_pinky] = compute_initial_transformation(poses, pinky_indices, lower_bound_fingers, upper_bound_fingers, 'pinky');
@@ -171,18 +181,20 @@ phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 %display_result(poses{pose_id}.centers, [], [], blocks(1:29), radii, false, 1, 'big');
 
 %% Rotate model
-scaling_factor = 1.5;
+scaling_factor = 1.43;
 theta = zeros(num_thetas, 1);
-theta(10) =  0;
+theta(10) =  0.5;
 theta(11) = 0.5;
 theta(12) = -0.2;
 theta(13) = -0.2;
 theta(4) = -0.4;
 theta(5) = 2.7;
 
-radii{names_map('thumb_additional')} = 4.7;
-%radii{names_map('thumb_top')} = 6.8;
-%radii{names_map('thumb_middle')} = 6.5;
+f  = 1.5 / scaling_factor;
+radii{names_map('thumb_additional')} = f * 4.7;
+radii{names_map('thumb_top')} = f * radii{names_map('thumb_top')};
+radii{names_map('thumb_middle')} = f * radii{names_map('thumb_middle')};
+radii{names_map('thumb_bottom')} = f * radii{names_map('thumb_bottom')};
 
 [centers, radii, phalanges] = rotate_and_scale_initial_transformations(poses{pose_id}.centers, radii, blocks, phalanges, dofs, theta, scaling_factor, names_map);
 
