@@ -5,7 +5,7 @@ clear; clc;
 num_thetas = 29;
 num_thetas_ignore = 9;
 
-mode = 'fingers';
+mode = 'thumb';
 
 if strcmp(mode, 'fingers')
     %load MData_Fingers1;

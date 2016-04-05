@@ -100,14 +100,15 @@ alpha_theta0 = (lb + ub) / 2 + 0.1 * rand(num_alpha_thetas, 1);
 
 [alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);
 
-disp(alpha_theta_ls(1:5)');
+%disp(alpha_theta_ls(1:5)');
 %disp([alpha_theta_true, alpha_theta_ls])
 
 %% Build initial transformations matrices
 
 if strcmp(figure_title, 'thumb')
     %0.6089;  -1.1076; -0.3581   
-    alpha_theta_ls(2) = -0.7;       
+    alpha_theta_ls(2) = -0.7;    
+    disp(alpha_theta_ls(1:3)');
 end
 
 M1 = eye(D + 1, D + 1);

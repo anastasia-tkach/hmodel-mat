@@ -149,21 +149,6 @@ Ry = @(alpha) [cos(alpha), 0, sin(alpha); 0, 1, 0; -sin(alpha), 0, cos(alpha)];
 Rz = @(alpha)[cos(alpha), -sin(alpha), 0; sin(alpha), cos(alpha), 0; 0, 0, 1];
 
 P = {parameters1; parameters2; parameters3; parameters4; parameters5};
-for p = 1:num_poses
-    phalanges_i = htrack_move(P{p}, dofs, phalanges);
-    points = {};
-    for i = 2:length(phalanges) - 2
-        base = transform([0; 0; 0], phalanges_i{i}.global);
-        tip = transform([0; phalanges_i{i}.length; 0], phalanges_i{i}.global);
-        points{end + 1} = base; points{end + 1} = tip;
-    end
-    figure; hold on; axis off; axis equal;
-    display_skeleton(poses{p}.centers, radii, blocks, [], false, 'b');
-    for i = 1:length(points)/2
-        myline(points{2 * (i - 1) + 1}, points{2 * i}, 'm');
-    end
-end
-
 
 %% Initialize rigid centers in pose 4
 pose_id = 4;
@@ -172,6 +157,7 @@ for i = 1:length(phalanges)
     phalanges{i}.init_local = phalanges{i}.local;
 end
 
+disp(P{pose_id}(10:11)');
 phalanges = htrack_move(P{pose_id}, dofs, phalanges);
 
 phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
@@ -206,6 +192,17 @@ save([output_path, 'phalanges.mat'], 'phalanges');
 save([output_path, 'dofs.mat'], 'dofs');
 
 display_result(centers, [], [], blocks(1:28), radii, false, 1, 'big'); view([-180, -90]); camlight;
+
+%% Find euler angles
+T1 = phalanges{11}.local(1:3, 1:3);
+euler_angles = rotm2eul(T1, 'ZYX');
+alpha = zeros(3, 1);
+alpha(1) = euler_angles(3);
+alpha(2) = euler_angles(2);
+alpha(3) = euler_angles(1);
+T1_test = Rz(alpha(3)) * Ry(alpha(2)) * Rx(alpha(1));
+disp([euler_angles(3), euler_angles(2), euler_angles(1)]);
+
 
 %% Write model to cpp
 I = zeros(length(phalanges), 4 * 4);

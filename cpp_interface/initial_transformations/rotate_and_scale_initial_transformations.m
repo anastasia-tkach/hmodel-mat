@@ -34,7 +34,7 @@ theta = zeros(num_thetas, 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f = 0.94;
 phalanges{3}.local(2, 4) = 27.6;
-phalanges{4}.local(2, 4) = 23.5;
+phalanges{4}.local(2, 4) = 24.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 phalanges = htrack_move(theta, dofs, phalanges);
 phalanges = initialize_offsets(centers, phalanges, names_map);
@@ -45,7 +45,8 @@ v = phalanges{4}.offsets{2} / norm( phalanges{4}.offsets{2});
 v = [ -0.1650; 0.9841; 0.0658];
 v = [ -0.07; 0.9841; 0.0658];
 v = v/norm(v);
-phalanges{4}.offsets{2} = 18 * v;
+phalanges{4}.offsets{2} = 17 * v;
+phalanges{4}.offsets{1} = 0.95 * phalanges{4}.offsets{1};
 phalanges{7}.offsets{1} = f * phalanges{7}.offsets{1};
 phalanges{10}.offsets{1} = f * phalanges{10}.offsets{1};
 phalanges{13}.offsets{1} = f * phalanges{13}.offsets{1};
