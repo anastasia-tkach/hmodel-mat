@@ -42,10 +42,10 @@ phalanges = initialize_offsets(centers, phalanges, names_map);
 %phalanges{4}.offsets{1} = 1.3 * phalanges{4}.offsets{1};
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 v = phalanges{4}.offsets{2} / norm( phalanges{4}.offsets{2});
-v = [ -0.1650; 0.9841; 0.0658];
-v = [ -0.07; 0.9841; 0.0658];
+%v = [ -0.1650; 0.9841; 0.0658];
+v = [ -0.05; 0.9841; 0.13];
 v = v/norm(v);
-phalanges{4}.offsets{2} = 17 * v;
+phalanges{4}.offsets{2} = 18 * v;
 phalanges{4}.offsets{1} = 0.95 * phalanges{4}.offsets{1};
 phalanges{7}.offsets{1} = f * phalanges{7}.offsets{1};
 phalanges{10}.offsets{1} = f * phalanges{10}.offsets{1};

@@ -65,8 +65,8 @@ poses{p}.centers{names_map('palm_index')} = poses{p}.centers{names_map('palm_ind
 down = mean([poses{p}.centers{names_map('palm_left')}, poses{p}.centers{names_map('palm_right')}, poses{p}.centers{names_map('palm_back')}], 2) - ...
     mean([poses{p}.centers{names_map('palm_ring')}, poses{p}.centers{names_map('palm_middle')}], 2);
 down = down / norm(down);
-poses{p}.centers{names_map('palm_middle')} = poses{p}.centers{names_map('palm_middle')} + (4.4 + 4) * down;
-poses{p}.centers{names_map('palm_ring')} = poses{p}.centers{names_map('palm_ring')} + (6.0 + 2) * down;
+poses{p}.centers{names_map('palm_middle')} = poses{p}.centers{names_map('palm_middle')} + (4.4 + 2) * down;
+poses{p}.centers{names_map('palm_ring')} = poses{p}.centers{names_map('palm_ring')} + (6.0 + 2) * down_shift;
 
 pinky_down = poses{p}.centers{names_map('palm_right')} -  poses{p}.centers{names_map('palm_pinky')};
 pinky_down_shift = pinky_down / norm(pinky_down);
@@ -75,11 +75,11 @@ poses{p}.centers{names_map('palm_pinky')} = poses{p}.centers{names_map('palm_pin
 % Shift forward membranes
 poses{p}.centers{names_map('index_membrane')} =  poses{p}.centers{names_map('index_membrane')} + ...
    1.1 * poses{p}.centers{names_map('palm_index')} - 1.1 * poses{p}.centers{names_map('index_base')} - 7 * index_down_shift + 8 * left;
-poses{p}.centers{names_map('middle_membrane')} =  poses{p}.centers{names_map('middle_membrane')} + 4 * down; % down instead
+poses{p}.centers{names_map('middle_membrane')} =  poses{p}.centers{names_map('middle_membrane')} + 2 * down; % down instead
 poses{p}.centers{names_map('ring_membrane')} =  poses{p}.centers{names_map('ring_membrane')} + ...
     0.5 * poses{p}.centers{names_map('palm_ring')} - 0.5 * poses{p}.centers{names_map('ring_base')};
 poses{p}.centers{names_map('pinky_membrane')} =  poses{p}.centers{names_map('pinky_membrane')} + ...
-    1 * poses{p}.centers{names_map('palm_pinky')} - 1 * poses{p}.centers{names_map('pinky_base')};
+    1.1 * poses{p}.centers{names_map('palm_pinky')} - 1.1 * poses{p}.centers{names_map('pinky_base')};
 
 % Shift palm centers
 poses{p}.centers{names_map('palm_thumb')} =  poses{p}.centers{names_map('palm_thumb')} + 4 * left;
@@ -88,7 +88,7 @@ poses{p}.centers{names_map('palm_index')} =  poses{p}.centers{names_map('palm_in
     0.6 * poses{p}.centers{names_map('index_base')} - 0.6 * poses{p}.centers{names_map('palm_index')} + ...
     0.2 * poses{p}.centers{names_map('palm_index')} - 0.2 * poses{p}.centers{names_map('palm_middle')} + 2 * left;
 
-poses{p}.centers{names_map('palm_ring')} = poses{p}.centers{names_map('palm_ring')} + 1.5 * front;
+poses{p}.centers{names_map('palm_pinky')} = poses{p}.centers{names_map('palm_pinky')} + 1.5 * left;
 
 poses{p}.centers{names_map('palm_pinky')} = poses{p}.centers{names_map('palm_pinky')} + 1.5 * left;
 
@@ -96,30 +96,34 @@ poses{p}.centers{names_map('palm_left')} =  poses{p}.centers{names_map('palm_bac
     0.4 * poses{p}.centers{names_map('palm_back')} - 0.4 * poses{p}.centers{names_map('palm_right')} + 3.2 * front;
 
 poses{p}.centers{names_map('palm_back')} =  poses{p}.centers{names_map('palm_back')} + ...
-    0.2 * poses{p}.centers{names_map('palm_right')} - 0.2 * poses{p}.centers{names_map('palm_back')};
+    0.4 * poses{p}.centers{names_map('palm_right')} - 0.4 * poses{p}.centers{names_map('palm_back')};
+poses{p}.centers{names_map('palm_right')} =  poses{p}.centers{names_map('palm_right')}  - 2 *  down_shift;
 
-poses{p}.centers{names_map('palm_back')} = poses{p}.centers{names_map('palm_back')} + 3 * front + 2 * down;
-poses{p}.centers{names_map('palm_right')} = poses{p}.centers{names_map('palm_right')} + 3 * front;
+% poses{p}.centers{names_map('palm_back')} = poses{p}.centers{names_map('palm_back')} + 2 * front;
+% poses{p}.centers{names_map('palm_right')} = poses{p}.centers{names_map('palm_right')} + 3 * front;
 
 % Shift finger bases
 poses{p}.centers{names_map('thumb_base')} =  poses{p}.centers{names_map('thumb_base')} + 4 * down;
 poses{p}.centers{names_map('thumb_fold')} =  poses{p}.centers{names_map('thumb_fold')} + 4 * down;
 poses{p}.centers{names_map('index_base')} =  poses{p}.centers{names_map('index_base')} + 8 * left;
 poses{p}.centers{names_map('middle_base')} = poses{p}.centers{names_map('middle_base')} + 2 * front + 4 * left;
-poses{p}.centers{names_map('ring_base')} = poses{p}.centers{names_map('ring_base')} + 2 * front;
+poses{p}.centers{names_map('ring_base')} = poses{p}.centers{names_map('ring_base')} + 1.5 * front;
+
 
 % Adjust radii
 radii{names_map('palm_index')} = 0.9 * radii{names_map('palm_index')};
 radii{names_map('palm_middle')} = 1.1 * radii{names_map('palm_middle')};
-radii{names_map('palm_ring')} = 1.13 * radii{names_map('palm_ring')};
+radii{names_map('palm_ring')} = 1.27 * radii{names_map('palm_ring')};
 radii{names_map('palm_thumb')} = 0.8 * radii{names_map('palm_thumb')};
 
 radii{names_map('palm_left')} = 1.07 * radii{names_map('palm_left')};
-radii{names_map('palm_right')} = 0.82 * radii{names_map('palm_right')};
-radii{names_map('palm_back')} = 0.82 * radii{names_map('palm_back')};
+radii{names_map('palm_right')} = 0.97 * radii{names_map('palm_right')};
+radii{names_map('palm_back')} = 0.97 * radii{names_map('palm_back')};
 
 display_skeleton(poses{p}.centers, radii, blocks, [], false, 'r');
 
+%myvector(poses{p}.centers{names_map('index_base')}, left, 10, 'g');
+%return
 
 %% Align poses
 [poses] = align_poses(poses, radii, blocks, names_map, false);
