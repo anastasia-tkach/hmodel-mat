@@ -29,7 +29,7 @@ if (max_y == -Inf)
                circles{i}.center = centers{i}(1:2);
                circles{i}.radius = radii{i};
                circles{i}.block = blocks_indices(j);
-               p = circles{i}.center + circles{i}.radius * up;
+               p = circles{j}.center + circles{j}.radius * up;
            end
        end       
     end
@@ -59,17 +59,7 @@ outline = cell(0, 1);
 count = 1; first = true; k_start = k; type = 1;
 while first || k ~= k_start  
     first = false;
-    
-    if isempty(points)
-        outline{count}.start = circles{i}.center + circles{i}.radius * up;
-        outline{count}.indices = i;   
-        outline{count}.block = circles{i}.block;
-        outline{count}.end = circles{i}.center + circles{i}.radius * up;
-        break;
-    end
-    
     outline{count}.start = points{k}.value;
-
     %% Circle
     if type == 1
         outline{count}.indices = i;   
