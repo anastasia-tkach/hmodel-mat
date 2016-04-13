@@ -1,19 +1,10 @@
-clc;
-close all;
-clear;
-camera_ray = [0; 0; 1];
-
-%% Hand model
-new_model = false;
+clear; clc;
 
 input_path = '_my_hand/final/';
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 load([semantics_path, 'fitting/blocks.mat'], 'blocks');
-load([input_path, 'centers.mat'], 'centers');
-load([input_path, 'radii.mat'], 'radii');
-load([input_path, 'phalanges.mat'], 'phalanges');
-load([input_path, 'dofs.mat'], 'dofs');
+
 blocks = blocks(1:28);
 palm_blocks = {
     [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_fold')], ...
@@ -47,16 +38,48 @@ fingers_blocks{5} = {[names_map('thumb_top'), names_map('thumb_additional')], ..
     [names_map('thumb_top'), names_map('thumb_middle')], ...
     [names_map('thumb_bottom'), names_map('thumb_middle')]};
 
-%print_blocks_names(blocks, names_map);
+all_fingers_blocks = {};
+for i = 1:length(fingers_blocks)
+    for j = 1:length(fingers_blocks{i})
+        all_fingers_blocks{end + 1} = fingers_blocks{i}{j};
+    end
+end
 
-%% Pose the model
-num_thetas = 29;
-phalanges = initialize_offsets(centers, phalanges, names_map);
-theta = 0.2 * randn(num_thetas, 1);
-phalanges = htrack_move(theta, dofs, phalanges);
-[centers] = update_centers(centers, phalanges, names_map);
+fingers_blocks_indices = zeros(0, 1);
+for i = 1:length(all_fingers_blocks)
+    current_indices = all_fingers_blocks{i};
+    for index = 1:length(blocks)
+        block_indices = blocks{index};
+        if length(current_indices) ~= length(block_indices), continue; end       
+        if all(ismember(current_indices, block_indices))
+            fingers_blocks_indices{end + 1} = index;
+            break;
+        end
+    end
+end
+palm_blocks_indices = zeros(0, 1);
+for i = 1:length(palm_blocks)
+    current_indices = palm_blocks{i};
+    for index = 1:length(blocks)
+        block_indices = blocks{index};
+        if length(current_indices) ~= length(block_indices), continue; end       
+        if all(ismember(current_indices, block_indices))
+            palm_blocks_indices{end + 1} = index;
+            break;
+        end
+    end
+end
 
-
-%% Find outline
-[final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, camera_ray, names_map, true, true);
-
+neighbors = cell(length(blocks), 1);
+for i = 1:length(all_fingers_blocks)    
+    for j = 1:length(all_fingers_blocks)
+       if any(ismember(all_fingers_blocks{i}, all_fingers_blocks{j}))
+           neighbors{i} = [neighbors{i}, fingers_blocks_indices(j)];
+       end
+    end
+    for j = 1:length(palm_blocks)
+       if any(ismember(all_fingers_blocks{i}, palm_blocks{j}))
+           neighbors{i} = [neighbors{i}, palm_blocks_indices(j)];
+       end
+    end
+end

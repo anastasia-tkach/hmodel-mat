@@ -1,7 +1,7 @@
 
 
 clear; close all; clc;
-compare = true;
+compare = false;
 path = 'C:/Developer/hmodel-cuda-build/data/sensor/';
 
 fileID = fopen([path, 'hmodel_tracking_error.txt'], 'r');
