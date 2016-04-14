@@ -1,6 +1,6 @@
 function [centers] = update_centers(centers, phalanges, names_map)
 D = 3;
-num_phalanges = 16;
+num_phalanges = 17;
 for i = 1:num_phalanges
     centers{names_map(phalanges{i}.name)} = phalanges{i}.global(1:D, D + 1);    
     if isfield(phalanges{i}, 'rigid_names')

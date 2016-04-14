@@ -1,7 +1,7 @@
 function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha, figure_mode)
 
 %% Generating the volumetric domain data:
-n = 60; color = double([234; 189; 157]./255);
+n = 50; color = double([234; 189; 157]./255);
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);

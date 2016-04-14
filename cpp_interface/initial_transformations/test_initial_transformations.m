@@ -228,9 +228,8 @@ phalanges = htrack_move(P{pose_id}, dofs, phalanges);
 
 phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 
-%figure; hold on; axis off; axis equal;
-%display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'g');
-%display_result(poses{pose_id}.centers, [], [], blocks(1:29), radii, false, 1, 'big');
+%figure; hold on; axis off; axis equal; display_skeleton(poses{pose_id}.centers, radii, blocks, [], false, 'g');
+%display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
 
 %% Rotate model
 scaling_factor = 1.43;
@@ -250,14 +249,32 @@ radii{names_map('thumb_bottom')} = f * radii{names_map('thumb_bottom')};
 
 [centers, radii, phalanges] = rotate_and_scale_initial_transformations(poses{pose_id}.centers, radii, blocks, phalanges, dofs, theta, scaling_factor, names_map);
 
-%% Save the final model
+figure; hold on; axis off; axis equal; display_skeleton(centers, radii, blocks, [], false, 'b');
+
 output_path = '_my_hand/final/';
 save([output_path, 'centers.mat'], 'centers');
 save([output_path, 'radii.mat'], 'radii');
 save([output_path, 'phalanges.mat'], 'phalanges');
 save([output_path, 'dofs.mat'], 'dofs');
 
-display_result(centers, [], [], blocks(1:28), radii, false, 1, 'big'); view([-180, -90]); camlight;
+% display_result(centers, [], [], blocks(1:28), radii, false, 1, 'big'); view([-180, -90]); camlight;
+display_result(centers, [], [], blocks, radii, false, 0.4, 'big'); %view([-180, -90]); camlight;
+
+%% Adjust wrist
+theta = zeros(num_thetas, 1);
+mean_centers = [0; 0; 0];
+phalanges{17}.local = eye(4, 4); phalanges{17}.global = eye(4, 4);
+% centers{39} = [0; 0; 0];
+centers{35} = centers{names_map('palm_back')} + [12; -5; 0];
+centers{36} = centers{names_map('palm_back')} + [-8; -5; 0];
+centers{37} = centers{names_map('palm_back')} + [5; -60; 0];
+centers{38} = centers{names_map('palm_back')} + [-5; -60; 0];
+radii{35} = 16; radii{36} = 16; 
+radii{37} = 19; radii{38} = 19; 
+phalanges = initialize_offsets(centers, phalanges, names_map);
+for i = 1:length(phalanges), phalanges{i}.init_local = phalanges{i}.local; end
+[centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, mean_centers);
+display_result(centers, [], [], blocks, radii, false, 1, 'none'); view([-180, -90]); camlight;
 
 %% Find euler angles
 T1 = phalanges{14}.local(1:3, 1:3);
@@ -276,8 +293,10 @@ for i = 1:length(phalanges)
     I(i, :) = phalanges{i}.local(:)';
 end
 I = I';
-num_centers = 34;
-num_blocks = 28;
+% num_centers = 34;
+% num_blocks = 28;
+num_centers = 38;
+num_blocks = 30;
 RAND_MAX = 32767;
 R = zeros(1, num_centers);
 C = zeros(D, num_centers);
@@ -296,14 +315,11 @@ end
 path = 'C:\Developer\hmodel-cuda-build\data\hmodel\';
 write_input_parameters_to_files(path, C, R, B, I);
 
-% path = 'C:\Developer\hmodel-cuda-build\data\';
-% write_input_parameters_to_files(path, C, R, B, I);
+my_keys = keys(names_map);
+for i = 1:length(my_keys)
+    disp([my_keys{i}, ' ', num2str(names_map(my_keys{i}) - 1)]);
+end
 
-% my_keys = keys(names_map);
-% for i = 1:length(my_keys)
-%     disp([my_keys{i}, ' ', num2str(names_map(my_keys{i}) - 1)]);
-% end
-% 
-% for i = 1:num_blocks
-%     disp(blocks{i} - 1);
-% end
+for i = 1:num_blocks
+    disp(blocks{i} - 1);
+end

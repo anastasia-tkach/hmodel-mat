@@ -2,7 +2,7 @@ function [centers, radii, phalanges] = rotate_and_scale_initial_transformations(
 
 D = 3;
 num_thetas = 29;
-num_phalanges = 16;
+num_phalanges = 17;
 
 %% Rotate centers 
 for i = 1:length(phalanges)
@@ -13,8 +13,8 @@ phalanges = htrack_move(theta, dofs, phalanges);
 [centers] = update_centers(centers, phalanges, names_map);
 
 %% Rotate transformations
-T = phalanges{17}.local;
-phalanges{17}.local = eye(4, 4);
+T = phalanges{18}.local;
+phalanges{18}.local = eye(4, 4);
 
 Rx = @(alpha) [1, 0, 0; 0, cos(alpha), -sin(alpha); 0, sin(alpha), cos(alpha)];
 Ry = @(alpha) [cos(alpha), 0, sin(alpha); 0, 1, 0; -sin(alpha), 0, cos(alpha)];
@@ -28,6 +28,7 @@ phalanges{8}.local = T * phalanges{8}.local;
 phalanges{11}.local = T * phalanges{11}.local;
 phalanges{14}.local = T * phalanges{14}.local;
 
+phalanges{17}.local = T * phalanges{17}.local;
 
 %% Pose rotated model
 theta = zeros(num_thetas, 1);

@@ -1,6 +1,6 @@
 function [phalanges] = htrack_move(theta, dofs, phalanges)
 num_thetas = length(dofs);
-num_phalanges = 16;
+num_phalanges = 17;
 
 rotateX = zeros(num_thetas, 1);
 rotateZ = zeros(num_thetas, 1);

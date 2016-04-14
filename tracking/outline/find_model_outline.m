@@ -50,7 +50,7 @@ end
 
 final_outline = [];
 for f = 1:length(fingers_blocks_indices)
-    disp(f);
+
     %% Compute finger outline
     [finger_outline] = find_planar_outline(centers, blocks, fingers_blocks_indices{f}, radii, false);
     
