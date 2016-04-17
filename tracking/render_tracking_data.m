@@ -1,5 +1,5 @@
 function [rendered_data, back_map_for_rendered_data,P] = ...
-    render_tracking_data(points, camera_axis, camera_center, view_axis, closing_radius, settings)
+    render_tracking_data(points, camera_axis, camera_center, view_axis, closing_radius, dialation_radius, settings)
 
 fov = settings.fov; H = settings.H; W = settings.W;
 
@@ -29,7 +29,7 @@ for i = 1:length(points)
 end
 
 rendered_data = imfill(imclose(rendered_data, strel('disk', closing_radius, 0)));
-rendered_data = imdilate(rendered_data,  strel('disk', 2, 8));
+rendered_data = imdilate(rendered_data,  strel('disk', dialation_radius, 8));
 
 rendered_data([1:min_r, max_r:end], :) = 0; rendered_data(:, [1:min_c, max_c:end]) = 0;
 %figure; imshow(rendered_data, []); drawnow;

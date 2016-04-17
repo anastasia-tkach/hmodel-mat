@@ -122,31 +122,31 @@ end
 
 end
 
-function print_outline(outline, i)
-%for i = 1:length(outline)
-    disp(['outline[', num2str(i - 1), ']']);
-    if length(outline{i}.indices) == 2
-        disp(['   t1 = ' num2str(outline{i}.t1')]);
-        disp(['   t2 = ' num2str(outline{i}.t2')]);
-    end
-    disp(['   indices = ' num2str(outline{i}.indices - 1)]);
-    disp(['   start = ' num2str(outline{i}.start')]);
-    disp(['   end = ' num2str(outline{i}.end')]);
-    disp(' ');
-%end
-end
-
-
-function print_outline(outline)
-for i = 1:length(outline)
-    disp(['outline[', num2str(i - 1), ']']);
-    if length(outline{i}.indices) == 2
-        disp(['   t1 = ' num2str(outline{i}.t1')]);
-        disp(['   t2 = ' num2str(outline{i}.t2')]);
-    end
-    disp(['   indices = ' num2str(outline{i}.indices - 1)]);
-    disp(['   start = ' num2str(outline{i}.start')]);
-    disp(['   end = ' num2str(outline{i}.end')]);
-    disp(' ');
-end
-end
+% function print_outline(outline, i)
+% %for i = 1:length(outline)
+%     disp(['outline[', num2str(i - 1), ']']);
+%     if length(outline{i}.indices) == 2
+%         disp(['   t1 = ' num2str(outline{i}.t1')]);
+%         disp(['   t2 = ' num2str(outline{i}.t2')]);
+%     end
+%     disp(['   indices = ' num2str(outline{i}.indices - 1)]);
+%     disp(['   start = ' num2str(outline{i}.start')]);
+%     disp(['   end = ' num2str(outline{i}.end')]);
+%     disp(' ');
+% %end
+% end
+% 
+% 
+% function print_outline(outline)
+% for i = 1:length(outline)
+%     disp(['outline[', num2str(i - 1), ']']);
+%     if length(outline{i}.indices) == 2
+%         disp(['   t1 = ' num2str(outline{i}.t1')]);
+%         disp(['   t2 = ' num2str(outline{i}.t2')]);
+%     end
+%     disp(['   indices = ' num2str(outline{i}.indices - 1)]);
+%     disp(['   start = ' num2str(outline{i}.start')]);
+%     disp(['   end = ' num2str(outline{i}.end')]);
+%     disp(' ');
+% end
+% end

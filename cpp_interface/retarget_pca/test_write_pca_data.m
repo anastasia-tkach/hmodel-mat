@@ -1,5 +1,5 @@
 
-close all;
+%close all;
 clear; clc;
 
 num_thetas = 29;
@@ -11,13 +11,13 @@ if strcmp(mode, 'fingers')
     %load MData_Fingers1;
 end
 
-path = 'C:\Developer\hmodel-cuda-build\data\sensor\hmodel_solutions.txt';
+path = 'C:\Developer\data\experiments\hmodel_solutions.txt';
 fileID = fopen(path, 'r');
 Data = fscanf(fileID, '%f');
 N = length(Data)/num_thetas;
 Data = reshape(Data, num_thetas, N)';
 Data = Data(:, num_thetas_ignore + 1:end);
-
+Data = Data(400:end, :);
 mu = mean(Data)';
 Data = bsxfun(@minus, Data, mu');
 Y = Data;
@@ -56,7 +56,7 @@ x2 = linspace(min(Yk(:, 2))*1.1, max(Yk(:, 2))*1.1, 1000);
 [X1, X2] = meshgrid(x1, x2);
 C = mvnpdf([X1(:) X2(:)], [0, 0], 3 * s);
 C = reshape(C, size(X1));
-axis equal;
+figure; axis equal;
 imagesc(x1, x2, C); hold on;
 colormap jet; axis off;
 plot(Yk(1:end, 1), Yk(1:end, 2), 'ko', 'markerSize', 1, 'markerFaceColor', [1, 1, 1], 'markerEdgeColor', [1, 1, 1]);

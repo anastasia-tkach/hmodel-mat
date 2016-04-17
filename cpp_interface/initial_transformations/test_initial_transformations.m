@@ -232,7 +232,9 @@ phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 %display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
 
 %% Rotate model
-scaling_factor = 1.43;
+personal_scaling = 1.0;%1.1
+constant_scaling = 1.43;
+scaling_factor = constant_scaling * personal_scaling;
 theta = zeros(num_thetas, 1);
 theta(10) =  0.5;
 theta(11) = 0.5;
@@ -265,15 +267,19 @@ theta = zeros(num_thetas, 1);
 mean_centers = [0; 0; 0];
 phalanges{17}.local = eye(4, 4); phalanges{17}.global = eye(4, 4);
 % centers{39} = [0; 0; 0];
-centers{35} = centers{names_map('palm_back')} + [12; -5; 0];
-centers{36} = centers{names_map('palm_back')} + [-8; -5; 0];
-centers{37} = centers{names_map('palm_back')} + [5; -60; 0];
-centers{38} = centers{names_map('palm_back')} + [-5; -60; 0];
+centers{35} = centers{names_map('palm_back')} + personal_scaling * [12; -5; 0];
+centers{36} = centers{names_map('palm_back')} + personal_scaling * [-8; -5; 0];
+centers{37} = centers{names_map('palm_back')} + personal_scaling * [5; -60; 0];
+centers{38} = centers{names_map('palm_back')} + personal_scaling * [-5; -60; 0];
 radii{35} = 16; radii{36} = 16; 
 radii{37} = 19; radii{38} = 19; 
 phalanges = initialize_offsets(centers, phalanges, names_map);
 for i = 1:length(phalanges), phalanges{i}.init_local = phalanges{i}.local; end
 [centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, mean_centers);
+
+for i = 1:length(radii)
+    radii{i} = personal_scaling * radii{i};
+end
 display_result(centers, [], [], blocks, radii, false, 1, 'none'); view([-180, -90]); camlight;
 
 %% Find euler angles
