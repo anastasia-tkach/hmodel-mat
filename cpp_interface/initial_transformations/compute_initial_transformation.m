@@ -1,4 +1,4 @@
-function [M1, M2, M3, L, theta] = compute_initial_transformation(poses, indices, lb, ub, figure_title)
+function [M1, M2, M3, L, theta] = compute_initial_transformation(poses, indices, lb, ub, alpha_theta0, figure_title)
 
 D = 3;
 num_poses = length(poses);
@@ -95,7 +95,7 @@ f = @(alpha_theta) [
 
 %disp(f(alpha_theta_true));5
 
-alpha_theta0 = (lb + ub) / 2 + 0.1 * rand(num_alpha_thetas, 1);
+%alpha_theta0 = (lb + ub) / 2 + 0.1 * rand(num_alpha_thetas, 1);
 %alpha_theta0 = ub + 0.1 * rand(num_alpha_thetas, 1);
 
 [alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);

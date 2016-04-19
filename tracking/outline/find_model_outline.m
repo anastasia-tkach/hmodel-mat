@@ -46,6 +46,8 @@ else
 end
 
 %% Compute palm outline
+
+%[palm_outline] = find_planar_outline(centers, blocks, 1:length(blocks), radii, true);
 [palm_outline] = find_planar_outline(centers, blocks, palm_blocks_indices, radii, false);
 
 final_outline = [];
@@ -99,16 +101,14 @@ end
 %% Display
 if ~verbose, return; end
 
-display_result(centers, [], [], blocks, radii, false, 0.8, 'big');
-%figure; hold on; axis off; axis equal;
+display_result(centers, [], [], blocks, radii, false, 1.0, 'big'); 
 for i = 1:length(outline3D)
     if length(outline3D{i}.indices) == 2
-        myline(outline3D{i}.start, outline3D{i}.end, 'm');
+        myline(outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255);
     else
-        draw_circle_sector_in_plane(centers{outline3D{i}.indices}, radii{outline3D{i}.indices}, camera_ray, outline3D{i}.start, outline3D{i}.end, 'm');
+        draw_circle_sector_in_plane(centers{outline3D{i}.indices}, radii{outline3D{i}.indices}, camera_ray, outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255);
     end
 end
-
 view([-180, -90]); camlight;
 
 end

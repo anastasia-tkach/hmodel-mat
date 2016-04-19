@@ -44,9 +44,6 @@ fingers_blocks{5} = {[names_map('thumb_top'), names_map('thumb_additional')], ..
     [names_map('thumb_top'), names_map('thumb_middle')], ...
     [names_map('thumb_bottom'), names_map('thumb_middle')]};
 
-display_result(centers, [], [], blocks, radii, false, 1, 'big');
-view([-180, -90]);
-
 %% Find outline
 [final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, camera_ray, names_map, true, true);
 

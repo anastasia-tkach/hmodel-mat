@@ -159,14 +159,17 @@ lower_bound_thumb = -pi/2 * ones(num_alpha_thetas, 1);
 upper_bound_thumb = pi/2 * ones(num_alpha_thetas, 1);
 
 lower_bound_thumb(4:5) = - pi/3; upper_bound_thumb(4:5) = pi/3;
+theta_alpha0_thumb = (lower_bound_thumb + upper_bound_thumb) / 2 + 0.1 * rand(num_alpha_thetas, 1);
 
 lower_bound_fingers = -pi/9 * ones(num_alpha_thetas, 1);
 upper_bound_fingers = pi/2 * ones(num_alpha_thetas, 1);
 lower_bound_fingers(4:5) = -pi/40;
 upper_bound_fingers(4:5) = pi/40;
+theta_alpha0_fingers = (lower_bound_fingers + upper_bound_fingers) / 2 + 0.1 * rand(num_alpha_thetas, 1);
 
 thumb_indices = [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_middle'), names_map('thumb_top')];
-[M1, M2, M3, L, theta_thumb] = compute_initial_transformation(poses, thumb_indices, lower_bound_thumb, upper_bound_thumb, 'thumb');
+
+[M1, M2, M3, L, theta_thumb] = compute_initial_transformation(poses, thumb_indices, lower_bound_thumb, upper_bound_thumb, theta_alpha0_thumb, 'thumb');
 phalanges{2}.local = M1; phalanges{3}.local = M2; phalanges{4}.local = M3;
 phalanges{2}.length = L(1); phalanges{3}.length = L(2); phalanges{4}.length = L(3);
 
@@ -174,7 +177,7 @@ lower_bound_fingers(1:3) = -pi/4;
 upper_bound_fingers(1:3) = pi/4;
 
 index_indices = [names_map('index_base'), names_map('index_bottom'), names_map('index_middle'), names_map('index_top')];
-[M1, M2, M3, L, theta_index] = compute_initial_transformation(poses, index_indices, lower_bound_fingers, upper_bound_fingers, 'index');
+[M1, M2, M3, L, theta_index] = compute_initial_transformation(poses, index_indices, lower_bound_fingers, upper_bound_fingers, theta_alpha0_fingers, 'index');
 phalanges{14}.local = M1; phalanges{15}.local = M2; phalanges{16}.local = M3;
 phalanges{14}.length = L(1); phalanges{15}.length = L(2); phalanges{16}.length = L(3);
 
@@ -182,7 +185,7 @@ lower_bound_fingers(1:3) = -pi/6;
 upper_bound_fingers(1:3) = pi/6;
 
 middle_indices = [names_map('middle_base'), names_map('middle_bottom'), names_map('middle_middle'), names_map('middle_top')];
-[M1, M2, M3, L, theta_middle] = compute_initial_transformation(poses, middle_indices, lower_bound_fingers, upper_bound_fingers, 'middle');
+[M1, M2, M3, L, theta_middle] = compute_initial_transformation(poses, middle_indices, lower_bound_fingers, upper_bound_fingers, theta_alpha0_fingers, 'middle');
 phalanges{11}.local = M1; phalanges{12}.local = M2; phalanges{13}.local = M3;
 phalanges{11}.length = L(1); phalanges{12}.length = L(2); phalanges{13}.length = L(3);
 
@@ -190,7 +193,7 @@ lower_bound_fingers(1:3) = -pi/6;
 upper_bound_fingers(1:3) = pi/6;
 
 ring_indices = [names_map('ring_base'), names_map('ring_bottom'), names_map('ring_middle'), names_map('ring_top')];
-[M1, M2, M3, L, theta_ring] = compute_initial_transformation(poses, ring_indices, lower_bound_fingers, upper_bound_fingers, 'ring');
+[M1, M2, M3, L, theta_ring] = compute_initial_transformation(poses, ring_indices, lower_bound_fingers, upper_bound_fingers, theta_alpha0_fingers, 'ring');
 phalanges{8}.local = M1; phalanges{9}.local = M2; phalanges{10}.local = M3;
 phalanges{8}.length = L(1); phalanges{9}.length = L(2); phalanges{10}.length = L(3);
 
@@ -198,7 +201,7 @@ lower_bound_fingers(1:3) = -pi/6;
 upper_bound_fingers(1:3) = pi/6;
 
 pinky_indices = [names_map('pinky_base'), names_map('pinky_bottom'), names_map('pinky_middle'), names_map('pinky_top')];
-[M1, M2, M3, L, theta_pinky] = compute_initial_transformation(poses, pinky_indices, lower_bound_fingers, upper_bound_fingers, 'pinky');
+[M1, M2, M3, L, theta_pinky] = compute_initial_transformation(poses, pinky_indices, lower_bound_fingers, upper_bound_fingers, theta_alpha0_fingers, 'pinky');
 phalanges{5}.local = M1; phalanges{6}.local = M2; phalanges{7}.local = M3;
 phalanges{5}.length = L(1); phalanges{6}.length = L(2); phalanges{7}.length = L(3);
 
@@ -216,6 +219,23 @@ Rz = @(alpha)[cos(alpha), -sin(alpha), 0; sin(alpha), cos(alpha), 0; 0, 0, 1];
 
 P = {parameters1; parameters2; parameters3; parameters4; parameters5};
 
+%% Display all poses
+%{
+for p = 1:num_poses
+    phalanges_i = htrack_move(P{p}, dofs, phalanges);
+    points = {};
+    for i = 2:length(phalanges) - 2
+        base = transform([0; 0; 0], phalanges_i{i}.global);
+        tip = transform([0; phalanges_i{i}.length; 0], phalanges_i{i}.global);
+        points{end + 1} = base; points{end + 1} = tip;
+    end
+    figure; hold on; axis off; axis equal;
+    display_skeleton(poses{p}.centers, radii, blocks, [], false, 'b');
+    for i = 1:length(points)/2
+        myline(points{2 * (i - 1) + 1}, points{2 * i}, 'm');
+    end
+end
+%}
 %% Initialize rigid centers in pose 4
 pose_id = 4;
 
@@ -232,7 +252,7 @@ phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 %display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
 
 %% Rotate model
-personal_scaling = 1.0;%1.1
+personal_scaling = 1.1;%1.1
 constant_scaling = 1.43;
 scaling_factor = constant_scaling * personal_scaling;
 theta = zeros(num_thetas, 1);
@@ -260,7 +280,7 @@ save([output_path, 'phalanges.mat'], 'phalanges');
 save([output_path, 'dofs.mat'], 'dofs');
 
 % display_result(centers, [], [], blocks(1:28), radii, false, 1, 'big'); view([-180, -90]); camlight;
-display_result(centers, [], [], blocks, radii, false, 0.4, 'big'); %view([-180, -90]); camlight;
+%display_result(centers, [], [], blocks, radii, false, 0.4, 'big'); %view([-180, -90]); camlight;
 
 %% Adjust wrist
 theta = zeros(num_thetas, 1);
@@ -280,7 +300,7 @@ for i = 1:length(phalanges), phalanges{i}.init_local = phalanges{i}.local; end
 for i = 1:length(radii)
     radii{i} = personal_scaling * radii{i};
 end
-display_result(centers, [], [], blocks, radii, false, 1, 'none'); view([-180, -90]); camlight;
+display_result(centers, [], [], blocks, radii, false, 1, 'big'); view([-180, -90]); camlight;
 
 %% Find euler angles
 T1 = phalanges{14}.local(1:3, 1:3);
@@ -307,7 +327,6 @@ RAND_MAX = 32767;
 R = zeros(1, num_centers);
 C = zeros(D, num_centers);
 B = RAND_MAX * ones(3, num_blocks);
-scaling_factor = 1;
 for j = 1:num_centers
     R(j) =  radii{j};
     C(:, j) = centers{j};

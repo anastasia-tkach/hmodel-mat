@@ -2,7 +2,7 @@ function [] = display_energies(history, mode)
 
 switch mode
     case 'fitting'
-        names = {'1', '2', '3', '4', '5', '6'};
+        names = {'1', '2', '3', '4', '5', '6', '7'};
     case 'tracking'
         names = {'data-model', 'ARAP', 'collisions', 'joint-limits', 'silhouette', 'shape-existence'};
     case 'IK'
