@@ -62,7 +62,7 @@ for p = 1:num_poses
 end
 
 [alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);
-disp(alpha_theta_ls(1:5)');
+%disp(alpha_theta_ls(1:5)');
 
 %% Build initial transformations matrices
 M1 = eye(D + 1, D + 1);

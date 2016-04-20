@@ -1,9 +1,9 @@
-
-input_path = 'realsense_fitting/andrii/';
+close all;
+input_path = 'realsense_fitting/andrii/stage4/';
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 6;
+num_poses = 7;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 
@@ -16,15 +16,15 @@ for p = 1:num_poses
     UVD(:, :, 1) = U; UVD(:, :, 2) = V; UVD(:, :, 3) = D;
     uvd = reshape(UVD, size(UVD, 1) * size(UVD, 2), 3)';
     I = convert_uvd_to_xyz(tx, ty, fx, fy, uvd);
-
+    
     data_points = {};
     for i = 1:size(I, 2)
         if ~any(isnan(I(:, i))), data_points{end + 1} = I(:, i); end
     end
-
+    
     %% Read model
     [centers, radii, blocks, theta, mean_centers] = read_cpp_model([input_path,  num2str(p), '/']);
-
+    
     %% Filter data
     depth_image = reshape(I, 3, ty * 2, tx * 2);
     depth_image = shiftdim(depth_image, 1);
@@ -43,48 +43,40 @@ for p = 1:num_poses
             data_points{end + 1} = I2(:, i);
         end
     end
-
+    
     %% Display model
     for i = 1:length(data_points)
         data_points{i} = data_points{i} - mean_centers;
     end
-    %[model_indices, model_points, block_indices] = compute_frontfacing_correspondences(centers, radii, blocks, data_points, names_map, false);
+    
     display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
     mypoints(data_points, [0.8, 0.1, 0.9]);
     view([-180, -90]); camlight; drawnow;
-
+    
     poses{p}.points = data_points;
     poses{p}.centers = centers;
     poses{p}.initial_centers = centers;
     poses{p}.theta = theta;
+    poses{p}.init_theta = theta;
     poses{p}.mean_centers = mean_centers;
 end
 
-%% Unapply rigid degrees of freedom
+%% Shift together
 %figure; axis off; axis equal; hold on;
 for p = 1:num_poses
-    Rx = makehgtform('axisrotate', [1; 0; 0], - poses{p}.theta(4));
-    Ry = makehgtform('axisrotate', [0; 1; 0], - poses{p}.theta(5));
-    Rz = makehgtform('axisrotate', [0; 0; 1], - poses{p}.theta(6));
-
-    M =  Rz * Ry * Rx;
-    for i = 1:length(centers)
-        poses{p}.centers{i} = poses{p}.centers{i} - poses{p}.theta(1:3) + poses{p}.mean_centers;
-        poses{p}.centers{i} = transform(poses{p}.centers{i}, M);
+    for i = 1:length(poses{p}.centers)
+        poses{p}.centers{i} = poses{p}.centers{i} - poses{p}.init_theta(1:3) + poses{p}.mean_centers;
     end
-
     for i = 1:length(poses{p}.points)
-        poses{p}.points{i} = poses{p}.points{i} - poses{p}.theta(1:3) + poses{p}.mean_centers;
-        poses{p}.points{i} = transform(poses{p}.points{i}, M);
+        poses{p}.points{i} = poses{p}.points{i} - poses{p}.init_theta(1:3) + poses{p}.mean_centers;
     end
-    %display_result(poses{p}.centers, [], [], blocks, radii, false, 0.9, 'big');
-    %mypoints(poses{p}.points, [0.8, 0.1, 0.9]);
-    %view([-180, -90]); camlight; drawnow;
+    %display_skeleton(poses{p}.centers, [], blocks, [], false, 'b');
 end
 
-%% Read inital transformations 
-input_path = 'realsense_fitting/andrii/';
-fileID = fopen([input_path, '_I.txt'], 'r');
+
+%% Read inital transformations
+transformations_path = [input_path, '1/'];
+fileID = fopen([transformations_path, '_I.txt'], 'r');
 I = fscanf(fileID, '%f');
 I = reshape(I, 16, length(I)/16)';
 num_phalanges = 17;
@@ -102,14 +94,23 @@ for i = 1:size(I, 1)
     alpha{i} = zeros(3, 1);
     alpha{i}(1) = euler_angles(3);
     alpha{i}(2) = euler_angles(2);
-    alpha{i}(3) = euler_angles(1);   
+    alpha{i}(3) = euler_angles(1);
 end
-
+alpha{3}(1) = 0; alpha{4}(1) = 0;
 %% Synchronize initial transformations
-[poses, alpha] = synchronize_transformations(poses, blocks, alpha, names_map);
+[poses, alpha, ~] = synchronize_transformations(poses, blocks, alpha, names_map, true);
+
+%% Display result
+%{
+for p = 1:num_poses
+    display_result(poses{p}.centers, [], [], blocks, radii, false, 0.9, 'big');
+    mypoints(poses{p}.points, [0.8, 0.1, 0.9]);
+    view([-180, -90]); camlight; drawnow;
+end
+%}
 
 %% Save
-save([input_path, 'poses.mat'], 'poses');
-save([input_path, 'radii.mat'], 'radii');
-save([input_path, 'blocks.mat'], 'blocks');
-save([input_path, 'alpha.mat'], 'alpha');
+save([input_path, 'initial/poses.mat'], 'poses');
+save([input_path, 'initial/radii.mat'], 'radii');
+save([input_path, 'initial/blocks.mat'], 'blocks');
+save([input_path, 'initial/alpha.mat'], 'alpha');

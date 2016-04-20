@@ -1,4 +1,9 @@
-function mypoints(points, color)
+function mypoints(points, color, varargin)
+
+point_size = 8;
+if ~isempty(varargin)
+    point_size = varargin{1};
+end
 
 if isempty(points), return; end
 D = 1;
@@ -19,7 +24,7 @@ if D == 3
         end
     end
     P = P(1:k, :);
-    scatter3(P(:, 1), P(:, 2), P(:, 3), 8, color, 'o', 'filled');
+    scatter3(P(:, 1), P(:, 2), P(:, 3), point_size, color, 'o', 'filled');
 end
 if D == 2
     P = zeros(length(points), 2);
@@ -31,5 +36,5 @@ if D == 2
         end
     end
     P = P(1:k, :);
-    scatter(P(:, 1), P(:, 2), 25, color, 'o', 'filled');
+    scatter(P(:, 1), P(:, 2), point_size, color, 'o', 'filled');
 end

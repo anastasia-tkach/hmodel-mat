@@ -252,7 +252,7 @@ phalanges = initialize_offsets(poses{pose_id}.centers, phalanges, names_map);
 %display_result(poses{pose_id}.centers, [], [], blocks, radii, false, 1, 'big');
 
 %% Rotate model
-personal_scaling = 1.1;%1.1
+personal_scaling = 1.0;%1.1
 constant_scaling = 1.43;
 scaling_factor = constant_scaling * personal_scaling;
 theta = zeros(num_thetas, 1);
@@ -337,7 +337,7 @@ for j = 1:num_blocks
     end
 end
 
-path = 'C:\Developer\hmodel-cuda-build\data\hmodel\';
+path = 'C:/Developer/data/models/anastasia/';
 write_input_parameters_to_files(path, C, R, B, I);
 
 my_keys = keys(names_map);
