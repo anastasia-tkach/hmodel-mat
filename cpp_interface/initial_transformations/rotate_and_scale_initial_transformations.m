@@ -34,7 +34,7 @@ phalanges{17}.local = T * phalanges{17}.local;
 theta = zeros(num_thetas, 1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 f = 0.94;
-phalanges{3}.local(2, 4) = 27.6;
+phalanges{3}.local(2, 4) = 32;
 phalanges{4}.local(2, 4) = 24.5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 phalanges = htrack_move(theta, dofs, phalanges);

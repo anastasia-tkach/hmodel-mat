@@ -58,12 +58,12 @@ for i = 1:num_points
     if strcmp(fitting_type, 'point_to_plane')
         
         %% Reweight
-        w = 1;
-        %d = length(p - q);
-        %w = (d + 1e-3)^(-0.5);
-        %if (d > 1e-3)
-        %    w = w * 3.5;
-        %end
+        %w = 1;
+        d = length(p - q);
+        w = (d + 1e-3)^(-0.5);
+        if (d > 1e-3)
+            w = w * 3.5;
+        end
         
         %% Compute the cost function
         f(i) =  w * sqrt((p - q)' * (p - q));

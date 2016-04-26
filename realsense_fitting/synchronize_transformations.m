@@ -1,4 +1,8 @@
-function [poses, alpha, phalanges] = synchronize_transformations(poses, blocks, alpha, names_map, display)
+function [poses, alpha, phalanges] = synchronize_transformations(poses, radii, blocks, alpha, names_map, display)
+
+down = [0; -1; 0];
+left = [1; 0; 0];
+front = [0; 0; -1];
 
 num_poses = length(poses);
 num_alpha_thetas = 5 + num_poses * 4;
@@ -60,6 +64,11 @@ end
 max_finger_tilt = 0.05;
 trust_region = 0.15 * ones(num_alpha_thetas, 1);
 trust_region(4:5) = 0.05;
+max_negative_theta = -0.3;
+% max_finger_tilt = 1;
+% trust_region = 1 * ones(num_alpha_thetas, 1);
+% trust_region(4:5) = 1;
+
 
 alpha_theta_0_thumb = zeros(num_alpha_thetas, 1);
 alpha_theta_0_index = zeros(num_alpha_thetas, 1);
@@ -148,7 +157,7 @@ for p = 1:num_poses
     parameters{p}(22:25) = theta_ring(indices);
     parameters{p}(26:29) = theta_pinky(indices);
     
-    parameters{p}([16, 17, 20, 21, 24, 25, 28, 29]) = max(parameters{p}([16, 17, 20, 21, 24, 25, 28, 29]), -0.1);
+    parameters{p}([16, 17, 20, 21, 24, 25, 28, 29]) = max(parameters{p}([16, 17, 20, 21, 24, 25, 28, 29]), max_negative_theta);
 end
 
 %% Save
@@ -184,25 +193,37 @@ for p = 1:num_poses
     poses{p}.sync_centers{names_map('thumb_top')} = transform([0; phalanges_i{4}.length; 0], phalanges_i{4}.global);
     thumb_additional_length = norm(poses{p}.centers{names_map('thumb_additional')} - poses{p}.centers{names_map('thumb_middle')});
     poses{p}.sync_centers{names_map('thumb_additional')} = transform([0; thumb_additional_length; 0], phalanges_i{4}.global);
+    poses{p}.sync_centers{names_map('thumb_fold')} = project_point_on_triangle(poses{p}.centers{names_map('thumb_fold')}, ...
+        poses{p}.centers{names_map('palm_thumb')}, poses{p}.centers{names_map('thumb_base')}, poses{p}.centers{names_map('thumb_bottom')});
+    
     % Index
     poses{p}.sync_centers{names_map('index_bottom')} = transform([0; 0; 0], phalanges_i{15}.global);
     poses{p}.sync_centers{names_map('index_middle')} = transform([0; 0; 0], phalanges_i{16}.global);
-    poses{p}.sync_centers{names_map('index_top')} = transform([0; phalanges_i{16}.length; 0], phalanges_i{16}.global);
-    
+    poses{p}.sync_centers{names_map('index_top')} = transform([0; phalanges_i{16}.length; 0], phalanges_i{16}.global);  
+    q = project_point_on_segment(poses{p}.centers{names_map('index_membrane')}, poses{p}.centers{names_map('index_base')}, poses{p}.centers{names_map('index_bottom')});
+    poses{p}.sync_centers{names_map('index_membrane')} = q + (0.5 * radii{names_map('index_base')} + 0.5 * radii{names_map('index_bottom')} - 2 * radii{names_map('index_membrane')}) ...
+        * phalanges{14}.local(1:3, 1:3) * (- front);
     % Middle
     poses{p}.sync_centers{names_map('middle_bottom')} = transform([0; 0; 0], phalanges_i{12}.global);
     poses{p}.sync_centers{names_map('middle_middle')} = transform([0; 0; 0], phalanges_i{13}.global);
-    poses{p}.sync_centers{names_map('middle_top')} = transform([0; phalanges_i{13}.length; 0], phalanges_i{13}.global);
-    
+    poses{p}.sync_centers{names_map('middle_top')} = transform([0; phalanges_i{13}.length; 0], phalanges_i{13}.global);  
+    q = project_point_on_segment(poses{p}.centers{names_map('middle_membrane')}, poses{p}.centers{names_map('middle_base')}, poses{p}.centers{names_map('middle_bottom')});
+    poses{p}.sync_centers{names_map('middle_membrane')} = q + (0.5 * radii{names_map('middle_base')} + 0.5 * radii{names_map('middle_bottom')} - 2 * radii{names_map('middle_membrane')}) ...
+        * phalanges{11}.local(1:3, 1:3) * (- front);
     % Ring
     poses{p}.sync_centers{names_map('ring_bottom')} = transform([0; 0; 0], phalanges_i{9}.global);
     poses{p}.sync_centers{names_map('ring_middle')} = transform([0; 0; 0], phalanges_i{10}.global);
-    poses{p}.sync_centers{names_map('ring_top')} = transform([0; phalanges_i{10}.length; 0], phalanges_i{10}.global);
-    
+    poses{p}.sync_centers{names_map('ring_top')} = transform([0; phalanges_i{10}.length; 0], phalanges_i{10}.global);    
+    q = project_point_on_segment(poses{p}.centers{names_map('ring_membrane')}, poses{p}.centers{names_map('ring_base')}, poses{p}.centers{names_map('ring_bottom')});
+    poses{p}.sync_centers{names_map('ring_membrane')} = q + (0.5 * radii{names_map('ring_base')} + 0.5 * radii{names_map('ring_bottom')} - 2 * radii{names_map('ring_membrane')}) ...
+        * phalanges{8}.local(1:3, 1:3) * (- front);
     % Pinky
     poses{p}.sync_centers{names_map('pinky_bottom')} = transform([0; 0; 0], phalanges_i{6}.global);
     poses{p}.sync_centers{names_map('pinky_middle')} = transform([0; 0; 0], phalanges_i{7}.global);
     poses{p}.sync_centers{names_map('pinky_top')} = transform([0; phalanges_i{7}.length; 0], phalanges_i{7}.global);
+    q = project_point_on_segment(poses{p}.centers{names_map('pinky_membrane')}, poses{p}.centers{names_map('pinky_base')}, poses{p}.centers{names_map('pinky_bottom')});
+    poses{p}.sync_centers{names_map('pinky_membrane')} = q + (0.5 * radii{names_map('pinky_base')} + 0.5 * radii{names_map('pinky_bottom')} - 2 * radii{names_map('pinky_membrane')}) ...
+        * phalanges{5}.local(1:3, 1:3) * (- front);
     
     % Display
     % mypoints(poses{p}.sync_centers, 'c');

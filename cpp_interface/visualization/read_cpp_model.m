@@ -41,10 +41,15 @@ end
 blocks = reindex(radii, blocks);
 
 %% Read theta
-fileID = fopen([path, '_T.txt'], 'r');
-T = fscanf(fileID, '%f');
-T = T(2:end);
-theta = zeros(length(T), 1);
-for i = 1:length(T);
-    theta(i) = T(i);
+if exist([path, '_T.txt'], 'file')
+    fileID = fopen([path, '_T.txt'], 'r');
+    T = fscanf(fileID, '%f');
+    T = T(2:end);
+    theta = zeros(length(T), 1);
+    for i = 1:length(T);
+        theta(i) = T(i);
+    end
+else
+    disp('no thetas in the folder');
+    theta = zeros(29, 1);
 end

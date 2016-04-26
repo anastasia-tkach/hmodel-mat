@@ -26,7 +26,7 @@ pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 if (display)
     if settings.D == 3
         display_result(centers, data_points, model_points, blocks, radii, true, 1, 'big');%mypoints(pose.points, 'm'); drawnow;
-        set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);
+        %set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);
         view([-180, -90]); camlight; drawnow;
     else
         display_result_2D(pose, blocks, radii, true); drawnow;

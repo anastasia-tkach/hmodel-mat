@@ -1,10 +1,10 @@
 
 
 clear; close all; clc;
-compare = false;
+compare = true;
 hmodel = false;
 data_root = 'C:/Developer/data/';
-data_sequence = 'experiments/';
+data_sequence = 'teaser/';
 date_path = [data_root, data_sequence];
 
 if compare || hmodel

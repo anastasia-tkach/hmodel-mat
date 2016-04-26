@@ -1,16 +1,16 @@
+function [] = send_results_to_cpp(poses, radii, blocks, phalanges, names_map)
 
-output_path = 'realsense_fitting/andrii/stage2/final/';
-semantics_path = '_my_hand/semantics/';
-load([semantics_path, 'fitting/names_map.mat']);
-
-load([output_path, 'poses.mat']);
-load([output_path, 'radii.mat']);
-load([output_path, 'blocks.mat']);
-load([output_path, 'alpha.mat']);
-load([output_path, 'phalanges.mat']);
+% input_path = 'C:/Developer/data/MATLAB/anastasia/stage1/final/';
+% semantics_path = '_my_hand/semantics/';
+% load([semantics_path, 'fitting/names_map.mat']);
+% load([input_path, 'poses.mat']);
+% load([input_path, 'radii.mat']);
+% load([input_path, 'blocks.mat']);
+% load([input_path, 'alpha.mat']);
+% load([input_path, 'phalanges.mat']);
 
 %% Write model to cpp
-final_id = 7;
+final_id = 1;
 final_pose = poses{final_id};
 reference_id = 1;
 reference_pose = poses{reference_id};
@@ -77,6 +77,10 @@ theta = zeros(num_thetas, 1);
 phalanges = htrack_move(theta, dofs, phalanges);
 final_pose.centers = update_centers(final_pose.centers, phalanges, names_map);
 
+final_pose.theta([10, 11, 14, 15, 18, 19, 22, 23, 26, 27]) = 0;
+phalanges = htrack_move(-final_pose.theta, dofs, phalanges);
+final_pose.centers = update_centers(final_pose.centers, phalanges, names_map);
+
 %display_result(final_pose.centers, [], [], blocks, radii, false, 1, 'big');
 %view([-180, -90]); camlight; drawnow;
 display_skeleton(final_pose.centers, [], blocks, [], false, 'r');
@@ -93,28 +97,32 @@ for i = 1:num_phalanges
 end
 
 %% Write model
-D = 3;
+write_cpp_model('C:/Developer/data/models/anonymous/', final_pose.centers, radii, blocks, phalanges);
 
-I = zeros(length(phalanges), 4 * 4);
-for i = 1:length(phalanges)
-    I(i, :) = phalanges{i}.local(:)';
-end
-I = I';
-num_centers = 38;
-num_blocks = 30;
-RAND_MAX = 32767;
-R = zeros(1, num_centers);
-C = zeros(D, num_centers);
-B = RAND_MAX * ones(3, num_blocks);
-for j = 1:num_centers
-    R(j) =  radii{j};
-    C(:, j) = final_pose.centers{j};
-end
-for j = 1:num_blocks
-    for k = 1:length(blocks{j})
-        B(k, j) = blocks{j}(k) - 1;
-    end
-end
-path = 'C:/Developer/data/models/andrii/';
-write_input_parameters_to_files(path, C, R, B, I);
+% D = 3;
+% I = zeros(length(phalanges), 4 * 4);
+% for i = 1:length(phalanges)
+%     I(i, :) = phalanges{i}.local(:)';
+% end
+% I = I';
+% num_centers = 38;
+% num_blocks = 30;
+% RAND_MAX = 32767;
+% R = zeros(1, num_centers);
+% C = zeros(D, num_centers);
+% B = RAND_MAX * ones(3, num_blocks);
+% for j = 1:num_centers
+%     R(j) =  radii{j};
+%     C(:, j) = final_pose.centers{j};
+% end
+% for j = 1:num_blocks
+%     for k = 1:length(blocks{j})
+%         B(k, j) = blocks{j}(k) - 1;
+%     end
+% end
+% path = 'C:/Developer/data/models/andrii/';
+% write_input_parameters_to_files(path, C, R, B, I);
+
+
+
 

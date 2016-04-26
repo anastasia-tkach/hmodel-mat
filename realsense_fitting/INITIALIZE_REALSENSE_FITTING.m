@@ -1,9 +1,17 @@
-close all;
-input_path = 'realsense_fitting/andrii/stage4/';
+user_name = 'anastasia';
+stage = 1;
+
+data_root = 'C:/Developer/data/MATLAB/';
+save([data_root, '/stage.mat'],  'stage');
+save([data_root, '/user_name.mat'],  'user_name');
+
+%close all;
+input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
+
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 7;
+num_poses = 12;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 
@@ -25,7 +33,7 @@ for p = 1:num_poses
     %% Read model
     [centers, radii, blocks, theta, mean_centers] = read_cpp_model([input_path,  num2str(p), '/']);
     
-    %% Filter data
+    %% Filter data  
     depth_image = reshape(I, 3, ty * 2, tx * 2);
     depth_image = shiftdim(depth_image, 1);
     depth = depth_image(:, :, 3);
@@ -36,14 +44,13 @@ for p = 1:num_poses
     depth_image(:, :, 3) = depth;
     depth_image = shiftdim(depth_image, 2);
     I2 = reshape(depth_image, 3, ty * 2 * tx * 2);
-
+    
     data_points = {};
     for i = 1:size(I2, 2)
         if ~any(isnan(I2(:, i)))
             data_points{end + 1} = I2(:, i);
         end
     end
-    
     %% Display model
     for i = 1:length(data_points)
         data_points{i} = data_points{i} - mean_centers;
@@ -97,8 +104,17 @@ for i = 1:size(I, 1)
     alpha{i}(3) = euler_angles(1);
 end
 alpha{3}(1) = 0; alpha{4}(1) = 0;
+
+
 %% Synchronize initial transformations
-[poses, alpha, ~] = synchronize_transformations(poses, blocks, alpha, names_map, true);
+% close all;
+% semantics_path = '_my_hand/semantics/';
+% load([semantics_path, 'fitting/names_map.mat']);
+% load([input_path, 'initial/poses.mat']);
+% load([input_path, 'initial/blocks.mat']);
+% load([input_path, 'initial/alpha.mat']);
+
+[poses, alpha, ~] = synchronize_transformations(poses, radii, blocks, alpha, names_map, true);
 
 %% Display result
 %{

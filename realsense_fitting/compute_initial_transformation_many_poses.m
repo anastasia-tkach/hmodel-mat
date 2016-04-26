@@ -61,8 +61,9 @@ for p = 1:num_poses
     f  = @(alpha_theta) [f(alpha_theta); P{p}{2} - Q2{p}(alpha_theta); P{p}{3} - Q3{p}(alpha_theta); P{p}{4} - Q4{p}(alpha_theta)];
 end
 
-[alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub);
-%disp(alpha_theta_ls(1:5)');
+options = optimoptions(@lsqnonlin, 'display','off');
+[alpha_theta_ls] = lsqnonlin(f, alpha_theta0, lb, ub, options);
+%disp(alpha_theta_ls');
 
 %% Build initial transformations matrices
 M1 = eye(D + 1, D + 1);

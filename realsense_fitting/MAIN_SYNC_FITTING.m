@@ -19,8 +19,8 @@ settings.w4 = w4; settings.w5 = w5;
 settings.discard_threshold = 0.5;
 settings.block_safety_factor = 1.3;
 
-input_path = 'realsense_fitting/andrii/stage4/initial/';
-output_path = 'realsense_fitting/andrii/stage4/final/';
+input_path = 'C:/Developer/data/MATLAB/andrii/stage2/initial/';
+output_path = 'C:/Developer/data/MATLAB/andrii/stage2/final/';
 semantics_path = '_my_hand/semantics/';
 
 %% Load input
