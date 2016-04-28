@@ -1,9 +1,34 @@
-user_name = 'anastasia';
+user_name = 'andrii';
 stage = 1;
+
+%% Measured values
+scaling_factor = 0.811646;
+if strcmp(user_name, 'anastasia')
+    real_membrane_offset = [18, 22, 22, 18];
+    
+    real_phalanges_length = cell(5, 1);
+    real_phalanges_length{1} = scaling_factor * [42, 29, 15, 21];
+    real_phalanges_length{2} = scaling_factor * [42, 20, 15];
+    real_phalanges_length{3} = scaling_factor * [44, 24, 26];
+    real_phalanges_length{4} = scaling_factor * [40, 24, 16];
+    real_phalanges_length{5} = scaling_factor * [33, 18, 17];
+end
+if strcmp(user_name, 'andrii')
+    real_membrane_offset = [18, 22, 22, 18];
+    
+    real_phalanges_length = cell(5, 1);
+    real_phalanges_length{1} = scaling_factor * [38, 34, 15, 21];
+    real_phalanges_length{2} = scaling_factor * [50, 26, 17];
+    real_phalanges_length{3} = scaling_factor * [51, 31, 16];
+    real_phalanges_length{4} = scaling_factor * [52, 29, 19];
+    real_phalanges_length{5} = scaling_factor * [40, 19, 14];
+end
 
 data_root = 'C:/Developer/data/MATLAB/';
 save([data_root, '/stage.mat'],  'stage');
-save([data_root, '/user_name.mat'],  'user_name');
+save([data_root, '/user_name.mat'], 'user_name');
+save([data_root, '/real_membrane_offset.mat'], 'real_membrane_offset');
+save([data_root, '/real_phalanges_length.mat'], 'real_phalanges_length');
 
 %close all;
 input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
@@ -11,7 +36,7 @@ input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 12;
+num_poses = 7;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 
@@ -31,9 +56,10 @@ for p = 1:num_poses
     end
     
     %% Read model
-    [centers, radii, blocks, theta, mean_centers] = read_cpp_model([input_path,  num2str(p), '/']);
+    [centers, radii, blocks, theta, ~, mean_centers] = read_cpp_model([input_path,  num2str(p), '/']);
     
     %% Filter data  
+    %%{
     depth_image = reshape(I, 3, ty * 2, tx * 2);
     depth_image = shiftdim(depth_image, 1);
     depth = depth_image(:, :, 3);
@@ -44,17 +70,18 @@ for p = 1:num_poses
     depth_image(:, :, 3) = depth;
     depth_image = shiftdim(depth_image, 2);
     I2 = reshape(depth_image, 3, ty * 2 * tx * 2);
-    
     data_points = {};
     for i = 1:size(I2, 2)
         if ~any(isnan(I2(:, i)))
             data_points{end + 1} = I2(:, i);
         end
     end
+    %%}
     %% Display model
     for i = 1:length(data_points)
         data_points{i} = data_points{i} - mean_centers;
     end
+    data_points = data_points(1:2:end);
     
     display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
     mypoints(data_points, [0.8, 0.1, 0.9]);
@@ -83,8 +110,9 @@ end
 
 %% Read inital transformations
 transformations_path = [input_path, '1/'];
-fileID = fopen([transformations_path, '_I.txt'], 'r');
+fileID = fopen([transformations_path, 'I.txt'], 'r');
 I = fscanf(fileID, '%f');
+I = I(2:end);
 I = reshape(I, 16, length(I)/16)';
 num_phalanges = 17;
 scaling_factor = 0.811646;
@@ -103,7 +131,7 @@ for i = 1:size(I, 1)
     alpha{i}(2) = euler_angles(2);
     alpha{i}(3) = euler_angles(1);
 end
-alpha{3}(1) = 0; alpha{4}(1) = 0;
+alpha{4}(1) = 0;
 
 
 %% Synchronize initial transformations
@@ -113,8 +141,7 @@ alpha{3}(1) = 0; alpha{4}(1) = 0;
 % load([input_path, 'initial/poses.mat']);
 % load([input_path, 'initial/blocks.mat']);
 % load([input_path, 'initial/alpha.mat']);
-
-[poses, alpha, ~] = synchronize_transformations(poses, radii, blocks, alpha, names_map, true);
+[poses, alpha, phalanges] = synchronize_transformations(poses, radii, blocks, alpha, names_map, real_membrane_offset, true);
 
 %% Display result
 %{
@@ -130,3 +157,5 @@ save([input_path, 'initial/poses.mat'], 'poses');
 save([input_path, 'initial/radii.mat'], 'radii');
 save([input_path, 'initial/blocks.mat'], 'blocks');
 save([input_path, 'initial/alpha.mat'], 'alpha');
+save([input_path, 'initial/phalanges.mat'], 'phalanges');
+

@@ -3,7 +3,7 @@ format shortg;
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-downscaling_factor = 2;
+downscaling_factor = 4;
 settings.H = 480/downscaling_factor;
 settings.W = 640/downscaling_factor;
 
@@ -12,25 +12,36 @@ settings.W = 640/downscaling_factor;
     - Do not set w2 high, it interferes with other energies
     - Set w5 quite high
 %}
-w1 = 1;
-w2 = 20; %0.02
-w4 = 2;
+w1 = 4;
+w2 = 0.1; %0.02
+w4 = 16;
 w5 = 10; % 100
-w7 = 20;
+w7 = 600;
+w8 = 0.01;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3;
-settings.w4 = w4; settings.w5 = w5; settings.w7 = w7;
+settings.w4 = w4; settings.w5 = w5; settings.w7 = w7; settings.w8 = w8;
+settings.energy7 = false;
 settings.discard_threshold = 0.5;
 settings.block_safety_factor = 1.3;
 
 data_root = 'C:/Developer/data/MATLAB/';
 load([data_root, '/stage.mat']);
 load([data_root, '/user_name.mat']);
+load([data_root, '/real_membrane_offset.mat']);
+load([data_root, '/real_phalanges_length.mat']);
 input_path = [data_root, user_name, '/stage', num2str(stage), '/initial/'];
 output_path = [data_root, user_name, '/stage', num2str(stage), '/final/'];
 semantics_path = '_my_hand/semantics/';
 
 %% Load input
+load([input_path, 'blocks.mat']);
+load([input_path, 'poses.mat']);
+load([input_path, 'radii.mat']);
+load([input_path, 'alpha.mat']);
+load([input_path, 'phalanges.mat']);
+%poses = poses(4);
+
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers
@@ -47,16 +58,14 @@ solid_blocks = {
     names_map('pinky_base'), names_map('ring_base'), names_map('middle_base'), names_map('index_base'), names_map('thumb_base')];
     % wrist
     [names_map('wrist_top_left'), names_map('wrist_top_right'), names_map('wrist_bottom_left'), names_map('wrist_bottom_right')];
+    %{
     % membranes
     [names_map('palm_pinky'), names_map('pinky_membrane')];
     [names_map('palm_ring'), names_map('ring_membrane')];
     [names_map('palm_middle'), names_map('middle_membrane')];
     [names_map('palm_index'), names_map('index_membrane')];
+    %}
     };
-load([input_path, 'blocks.mat']);
-load([input_path, 'poses.mat']);
-load([input_path, 'radii.mat']);
-load([input_path, 'alpha.mat']);
 for i = 1:length(radii)
     radii{i} = radii{i} + 0.01 * randn;
 end
@@ -75,6 +84,8 @@ history{1}.poses = poses; history{1}.radii = radii;
 settings.num_centers = num_centers;
 settings.solid_blocks = solid_blocks;
 settings.names_map = names_map;
+settings.real_membrane_offset = real_membrane_offset;
+settings.real_phalanges_length = real_phalanges_length;
 
 X0 = zeros(num_poses * D * num_centers + num_centers, 1);
 Xl = -inf * ones(num_poses * D * num_centers + num_centers, 1);
@@ -90,15 +101,24 @@ for p = 1:num_poses
 end
 for o = 1:num_centers
     X0(D * num_poses * num_centers + o) = radii{o};
-    Xl(D * num_poses * num_centers + o) = 0.9 * radii{o};
-    Xu(D * num_poses * num_centers + o) = 1.3 * radii{o};
+    if o < 20
+        Xl(D * num_poses * num_centers + o) = 0.95 * radii{o};        
+        Xu(D * num_poses * num_centers + o) = 1.1 * radii{o};
+    else
+        Xl(D * num_poses * num_centers + o) = 0.7 * radii{o};
+        Xu(D * num_poses * num_centers + o) = 1.3 * radii{o};
+    end
 end
 
-options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'Jacobian','on', 'MaxIter', 100);
+options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.1, 'Jacobian','on', 'MaxIter', 100);
+iter = 1;
+save poses poses;
 save alpha alpha;
-iter = 1; save iter iter;
-X = lsqnonlin(@(X) energies_lsqnonlin(X, poses, radii, blocks, settings), X0, Xl, Xu, options);
+save phalanges phalanges;
+save iter iter;
+X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, Xl, Xu, options);
 
+%% Load result
 D = 3;
 load X;
 load phalanges;
@@ -127,25 +147,13 @@ end
 for p = 1:length(poses)
     %[poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
     %display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, true, 1, 'big');
-    %view([-180, -90]); camlight; drawnow;
-    
+    %view([-180, -90]); camlight; drawnow;    
     display_result(poses{p}.centers, [], [], blocks, radii, false, 0.9, 'big');
     mypoints(poses{p}.points, [0.8, 0.1, 0.9]);
-    view([-180, -90]); camlight; drawnow;
-    
+    view([-180, -90]); camlight; drawnow;    
     %figure; axis off; axis equal; hold on;
     %display_skeleton(poses{p}.centers, radii, blocks, poses{p}.points, false, []);
 end
-
-
-%% Display change
-%{
-for p = 1:length(poses)
-    figure; axis off; axis equal; hold on;
-    display_skeleton(poses{p}.init_centers, radii, blocks, [], false, 'b');
-    display_skeleton(poses{p}.centers, radii, blocks, [], false, 'r');
-end
-%}
 
 %% Store the results
 save([output_path, 'poses.mat'], 'poses');
@@ -154,6 +162,5 @@ save([output_path, 'blocks.mat'], 'blocks');
 save([output_path, 'alpha.mat'], 'alpha');
 save([output_path, 'phalanges.mat'], 'phalanges');
 
-%% Send data to hmodel-cpp
-%send_results_to_cpp;
+% Send data to hmodel-cpp
 send_results_to_cpp(poses, radii, blocks, phalanges, names_map);

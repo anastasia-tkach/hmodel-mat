@@ -7,11 +7,7 @@ num_thetas_ignore = 9;
 
 mode = 'fingers';
 
-if strcmp(mode, 'fingers')
-    %load MData_Fingers1;
-end
-
-path = 'C:\Developer\data\experiments\hmodel_solutions.txt';
+path = 'C:\Developer\data\fitting\anonymous\hmodel_solutions.txt';
 fileID = fopen(path, 'r');
 Data = fscanf(fileID, '%f');
 N = length(Data)/num_thetas;

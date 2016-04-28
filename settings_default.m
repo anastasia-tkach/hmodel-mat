@@ -27,6 +27,7 @@ settings.energy4 = true;
 settings.energy5 = true;
 settings.energy6 = true;
 settings.energy7 = true;
+settings.energy8 = true;
 
 %% Set up optimization
 num_poses = 5; 

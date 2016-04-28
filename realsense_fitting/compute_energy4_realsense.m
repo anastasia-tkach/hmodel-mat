@@ -5,8 +5,8 @@ centers = pose.centers;
 points = pose.points;
 data_bounding_box = pose.data_bounding_box;
 
-closing_radius = 2;
-dialation_radius = 1;
+closing_radius = 4;
+dialation_radius = 3;
 
 %% Render model and data
 [raytracing_matrix, camera_axis, camera_center] = ...
@@ -44,14 +44,15 @@ pose.f4 = fn; pose.Jc4 = Jcn; pose.Jr4 = Jrn;
 %% Display
 if (display)
     
-    %% 2D    
+    %% 2D  
+    %{
     rendered_intersection = zeros(size(rendered_model));
     rendered_intersection(:, :, 3) = (rendered_model(:, :, 3) > -settings.RAND_MAX);
     rendered_intersection(:, :, 1) = rendered_data;
     figure; imshow(rendered_intersection); hold on;
     mypoints(model_points_2D, [0, 0.7, 1]);
     mypoints(data_points_2D, [1, 0.7, 0.1]);   
-    
+    %}
     %% 3D
     correspondences = cell(length(closest_data_points));
     for i = 1:length(model_points)

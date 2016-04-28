@@ -1,4 +1,4 @@
-function [M1, M2, M3, L, alpha, theta] = compute_initial_transformation_many_poses(poses, indices, lb, ub, alpha_theta0, figure_title)
+function [M1, M2, M3, L, alpha, theta] = compute_initial_transformation_many_poses(poses, indices, lb, ub, alpha_theta0, type)
 
 D = 3;
 num_poses = length(poses);
@@ -27,7 +27,12 @@ t3 = L(2) * u;
 
 %% Initial transformations
 T1 = @(alpha_theta) Rz(alpha_theta(3)) * Ry(alpha_theta(2)) * Rx(alpha_theta(1));
-T2 = @(alpha_theta) Rz(alpha_theta(4));
+if strcmp(type, 'thumb')
+    T2 = @(alpha_theta) Ry(alpha_theta(4));
+end
+if strcmp(type, 'finger')
+    T2 = @(alpha_theta) Rz(alpha_theta(4));
+end
 T3 = @(alpha_theta) Rz(alpha_theta(5));
 
 %% Poses

@@ -36,6 +36,11 @@ for p = 1:length(poses)
             poses{p}.f = poses{p}.f7;
             poses{p}.Jc = poses{p}.Jc7;
             poses{p}.Jr = poses{p}.Jr7;
+        case '8'
+            if settings.energy7 == false, F = 0; J = 0; return; end
+            poses{p}.f = poses{p}.f8;
+            poses{p}.Jc = poses{p}.Jc8;
+            poses{p}.Jr = poses{p}.Jr8;
     end
 end
 

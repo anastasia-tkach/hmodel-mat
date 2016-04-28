@@ -1,8 +1,8 @@
-clc; clear; close all;
+%clc; clear; close all;
 
-input_path = 'C:/Developer/data/models/anonymous/';
+input_path = 'C:/Developer/data/models/anastasia/';
 
-[centers, radii, blocks, theta, mean_centers] = read_cpp_model(input_path);
+[centers, radii, blocks, theta, ~, mean_centers] = read_cpp_model(input_path);
 
 T = diag([1.2, 1, 1]);
 for i = 1:length(centers)
@@ -14,19 +14,14 @@ semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 [phalanges, dofs] = hmodel_parameters();
 
-%% Read initial transformations
-fileID = fopen([input_path, '_I.txt'], 'r');
-I = fscanf(fileID, '%f');
-I = I(2:end);
-I = reshape(I, 16, length(I)/16)';
-num_phalanges = 17;
-scaling_factor = 0.811646;
-alpha = cell(num_phalanges, 1);
-[template_phalanges, dofs] = hmodel_parameters();
-for i = 1:size(I, 1)
-    M = reshape(I(i, :), 4, 4)';
-    template_phalanges{i}.local = M;
-end
+%% Adjust fingers bases
+down = [0; -1; 0];
+left = [1; 0; 0];
+front = [0; 0; -1];
+centers{names_map('middle_base')} = centers{names_map('middle_base')} + 4 * left;
+centers{names_map('ring_base')} = centers{names_map('ring_base')} + 3 * left;
+centers{names_map('palm_middle')} = centers{names_map('palm_middle')} + 7 * left;
+centers{names_map('palm_ring')} = centers{names_map('palm_ring')} + 4 * left;
 
 %% Set up template transformations
 for i = 1:length(phalanges)   
@@ -34,18 +29,28 @@ for i = 1:length(phalanges)
     % thumb base
     if i == 2       
         Rx = makehgtform('axisrotate', [1; 0; 0], pi);
-        Ry = makehgtform('axisrotate', [0; 1; 0], 0);
         Rz = makehgtform('axisrotate', [0; 0; 1], pi/2);    
-        phalanges{i}.local = Rz * Ry * Rx;
+        phalanges{i}.local = Rz * Rx;
     end
+    % thumb bottom
     if i == 3
-        R = makehgtform('axisrotate', [0; 1; 0], pi/3);    
-        phalanges{i}.local = R;
+        phalanges{i}.local = makehgtform('axisrotate', [0; 1; 0], pi/3); 
     end
-    % finger base
-    if i == 5 || i == 8 || i == 11 || i == 14
-        phalanges{i}.local(1, 1) = -1;
-        phalanges{i}.local(3, 3) = -1;
+    % pinky base
+    if i == 5 
+        phalanges{i}.local = makehgtform('axisrotate', [0; 1; 0], -pi/5);  
+    end
+    % ring base
+    if i == 8
+        phalanges{i}.local = makehgtform('axisrotate', [0; 1; 0], -pi/10);    
+    end
+    % middle base
+    if i == 11
+        phalanges{i}.local = makehgtform('axisrotate', [0; 1; 0], pi/20);    
+    end
+    % index base
+    if i == 14
+        phalanges{i}.local = makehgtform('axisrotate', [0; 1; 0], pi/10);    
     end
 end
 % Thumb
@@ -70,6 +75,7 @@ phalanges{5}.local(1:3, 4) = centers{names_map('pinky_base')} - centers{names_ma
 phalanges{6}.local(2, 4) = norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_base')});
 phalanges{7}.local(2, 4) = norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_bottom')});
 
+%% Tips locations
 centers{names_map('thumb_additional')} = centers{names_map('thumb_middle')} + norm(centers{names_map('thumb_additional')} - centers{names_map('thumb_middle')}) * phalanges{2}.local(1:3, 1:3) *  [0; 1; 0];
 centers{names_map('thumb_top')} = centers{names_map('thumb_middle')} + norm(centers{names_map('thumb_top')} - centers{names_map('thumb_middle')}) *  phalanges{2}.local(1:3, 1:3) * [0; 1; 0];
 centers{names_map('index_top')} = centers{names_map('index_middle')} + norm(centers{names_map('index_top')} - centers{names_map('index_middle')}) * [0; 1; 0];
@@ -77,13 +83,13 @@ centers{names_map('middle_top')} = centers{names_map('middle_middle')} + norm(ce
 centers{names_map('ring_top')} = centers{names_map('ring_middle')} + norm(centers{names_map('ring_top')} - centers{names_map('ring_middle')}) * [0; 1; 0];
 centers{names_map('pinky_top')} = centers{names_map('pinky_middle')} + norm(centers{names_map('pinky_top')} - centers{names_map('pinky_middle')}) * [0; 1; 0];
 
+centers{names_map('thumb_fold')} = centers{names_map('thumb_bottom')} + 0.3 * radii{names_map('thumb_bottom')} * ...
+    (centers{names_map('thumb_fold')} - centers{names_map('thumb_bottom')}) / norm(centers{names_map('thumb_fold')} - centers{names_map('thumb_bottom')});
+
 %% Pose
 num_thetas = 29;
 theta = zeros(num_thetas, 1);
 phalanges = htrack_move(theta, dofs, phalanges);
-down = [0; -1; 0];
-left = [1; 0; 0];
-front = [0; 0; -1];
 phalanges = initialize_offsets(centers, phalanges, names_map);
 for i = 1:length(phalanges), phalanges{i}.init_local = phalanges{i}.local; end
 
@@ -134,7 +140,7 @@ display_skeleton(centers, [], blocks, [], false, 'b');
 %     display_skeleton(posed_centers, radii, blocks, [], false, 'r');
 % end
 
-write_cpp_model('C:/Developer/data/models/anonymous/', centers, radii, blocks, phalanges);
+write_cpp_model('C:/Developer/data/models/template/', centers, radii, blocks, phalanges);
 
 
 

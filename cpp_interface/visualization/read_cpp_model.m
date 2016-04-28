@@ -1,9 +1,9 @@
-function [centers, radii, blocks, theta, mean_centers] = read_cpp_model(path)
+function [centers, radii, blocks, theta, template_phalanges, mean_centers] = read_cpp_model(path)
 
 RAND_MAX = 32767;
 
 %% Read centers
-fileID = fopen([path, '_C.txt'], 'r');
+fileID = fopen([path, 'C.txt'], 'r');
 C = fscanf(fileID, '%f');
 C = C(2:end);
 C = reshape(C, 3, length(C)/3);
@@ -18,7 +18,7 @@ for i = 1:length(centers)
     centers{i} = centers{i} - mean_centers;
 end
 %% Read radii
-fileID = fopen([path, '_R.txt'], 'r');
+fileID = fopen([path, 'R.txt'], 'r');
 R = fscanf(fileID, '%f');
 R = R(2:end);
 radii = cell(0, 1);
@@ -26,7 +26,7 @@ for i = 1:length(R);
     radii{end + 1} = R(i);
 end
 %% Read blocks
-fileID = fopen([path, '_B.txt'], 'r');
+fileID = fopen([path, 'B.txt'], 'r');
 B = fscanf(fileID, '%f');
 B = B(2:end);
 B = reshape(B, 3, length(B)/3);
@@ -41,8 +41,8 @@ end
 blocks = reindex(radii, blocks);
 
 %% Read theta
-if exist([path, '_T.txt'], 'file')
-    fileID = fopen([path, '_T.txt'], 'r');
+if exist([path, 'T.txt'], 'file')
+    fileID = fopen([path, 'T.txt'], 'r');
     T = fscanf(fileID, '%f');
     T = T(2:end);
     theta = zeros(length(T), 1);
@@ -52,4 +52,20 @@ if exist([path, '_T.txt'], 'file')
 else
     disp('no thetas in the folder');
     theta = zeros(29, 1);
+end
+
+%% Read theta
+if exist([path, 'I.txt'], 'file')
+    fileID = fopen([path, 'I.txt'], 'r');
+    I = fscanf(fileID, '%f');
+    I = I(2:end);
+    I = reshape(I, 16, length(I)/16)';
+    [template_phalanges, ~] = hmodel_parameters();
+    for i = 1:size(I, 1)
+        M = reshape(I(i, :), 4, 4);
+        template_phalanges{i}.local = M;
+    end
+else
+    disp('no transformations in the folder');
+    template_phalanges = [];
 end
