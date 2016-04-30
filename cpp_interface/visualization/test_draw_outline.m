@@ -1,7 +1,7 @@
 clc; clear; close all;
 RAND_MAX = 32767;
 camera_ray = [0; 0; 1];
-path = 'C:\Developer\hmodel-cuda-build\data\';
+path = 'C:\Developer\data\MATLAB\outline\';
 
 [centers, radii, blocks, theta, mean_centers] = read_cpp_model(path);
 
@@ -46,5 +46,4 @@ fingers_blocks{5} = {[names_map('thumb_top'), names_map('thumb_additional')], ..
 
 %% Find outline
 [final_outline] = find_model_outline(centers, radii, blocks, palm_blocks, fingers_blocks, camera_ray, names_map, true, true);
-
 

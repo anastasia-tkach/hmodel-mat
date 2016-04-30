@@ -46,15 +46,15 @@ else
 end
 
 %% Compute palm outline
-
+figure; hold on; axis off; axis equal;
 %[palm_outline] = find_planar_outline(centers, blocks, 1:length(blocks), radii, true);
-[palm_outline] = find_planar_outline(centers, blocks, palm_blocks_indices, radii, false);
+[palm_outline] = find_planar_outline(centers, blocks, palm_blocks_indices, radii, true);
 
 final_outline = [];
 for f = 1:length(fingers_blocks_indices)
 
     %% Compute finger outline
-    [finger_outline] = find_planar_outline(centers, blocks, fingers_blocks_indices{f}, radii, false);
+    [finger_outline] = find_planar_outline(centers, blocks, fingers_blocks_indices{f}, radii, true);
     
     %print_outline(finger_outline);
     
@@ -101,12 +101,13 @@ end
 %% Display
 if ~verbose, return; end
 
+line_width = 4;
 display_result(centers, [], [], blocks, radii, false, 1.0, 'big'); 
 for i = 1:length(outline3D)
     if length(outline3D{i}.indices) == 2
-        myline(outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255);
+        myline(outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255, line_width);
     else
-        draw_circle_sector_in_plane(centers{outline3D{i}.indices}, radii{outline3D{i}.indices}, camera_ray, outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255);
+        draw_circle_sector_in_plane(centers{outline3D{i}.indices}, radii{outline3D{i}.indices}, camera_ray, outline3D{i}.start, outline3D{i}.end, [179, 81, 109]/255, line_width);
     end
 end
 view([-180, -90]); camlight;

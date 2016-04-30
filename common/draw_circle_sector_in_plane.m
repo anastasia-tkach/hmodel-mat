@@ -1,4 +1,10 @@
-function [] = draw_circle_sector_in_plane(c, r, n, t1, t2, color)
+function [] = draw_circle_sector_in_plane(c, r, n, t1, t2, color, varargin)
+
+line_width = 2;
+if ~isempty(varargin)
+    line_width = varargin{1};
+end
+
 
 D = 3;
 
@@ -29,4 +35,4 @@ for i = 1:length(phi_array)
     phi = phi_array(i);
     P(i, :) = c + r * (u * sin(phi) + v * cos(phi));
 end
-line(P(:, 1), P(:, 2), P(:, 3), 'lineWidth', 2, 'color', color);
+line(P(:, 1), P(:, 2), P(:, 3), 'lineWidth', line_width, 'color', color);

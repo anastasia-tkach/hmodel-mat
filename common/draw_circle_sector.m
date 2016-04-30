@@ -1,4 +1,4 @@
-function [] = draw_circle_sector(c, r, t1, t2, color)
+function [] = draw_circle_sector(c, r, t1, t2, color, varargin)
 % D = 2;
 % c = randn(D, 1);
 % r = rand(1, 1);
@@ -7,6 +7,11 @@ function [] = draw_circle_sector(c, r, t1, t2, color)
 % t1 = c + r * v1/norm(v1);
 % t2 = c + r * v2/norm(v2);
 % color = 'b';
+
+line_width = 2;
+if ~isempty(varargin)
+    line_width = varargin{1};
+end
 
 % Counter clock-wise
 
@@ -30,5 +35,5 @@ end
 
 %figure; axis off; axis equal; hold on;
 %draw_circle(c, r, 'c');
-line(P(:, 1), P(:, 2), 'lineWidth', 2, 'color', color);
+line(P(:, 1), P(:, 2), 'lineWidth', line_width, 'color', color);
 %mypoint(t1, 'm'); mypoint(t2, 'b');
