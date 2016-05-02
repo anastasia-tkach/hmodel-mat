@@ -9,7 +9,7 @@ if isempty(edge_color), edge_color = [0.1, 0.4, 0.7]; end
 % end
 if display_data, mypoints(points, 'b'); end
 for i = 1:length(blocks)
-%for i = 16:20  
+%for i = 1:14  
     %if length(blocks{i}) == 2 && i > 15, continue; end
     
     indices = nchoosek(blocks{i}, 2);

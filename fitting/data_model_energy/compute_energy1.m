@@ -1,4 +1,4 @@
-function [pose] = compute_energy1(pose, radii, blocks, settings, display)
+function [pose] = compute_energy1(pose, radii, blocks, settings, pose_id, display)
 
 if settings.energy1 == false, return; end;
 
@@ -19,8 +19,16 @@ pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 
 if (display)
     if settings.D == 3
-        display_result(pose.centers, pose.points, pose.projections, blocks, radii, true, 1, 'big'); drawnow;%mypoints(pose.points, 'm'); drawnow;
-        set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);
+        display_result(pose.centers, pose.points, pose.projections, blocks, radii, false, 1, 'big'); 
+        mypoints(pose.points, [179, 81, 109]/255, 8);
+        
+        if pose_id == 1, zoom(2); view([148, 7.264]); end
+        if pose_id == 2, zoom(2.3); view([150,  -2.7356]); end
+        if pose_id == 3, zoom(2); view([-2.662, 11.761]); end
+        if pose_id == 4, zoom(2.2); view([47, 33.264]); end
+        camlight;
+        drawnow;
+        print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(pose_id), '_iter', num2str(settings.iter)],'-dpng', '-r300');
     else
         display_result_2D(pose, blocks, radii, true); drawnow;
         set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);

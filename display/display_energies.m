@@ -9,11 +9,13 @@ switch mode
         names = {'data-model', 'joint-limits'};
 end
 
-E = zeros(length(history)-1, length(history{2}.energies));
-for h = 2:length(history)
+E = zeros(length(history), length(history{2}.energies));
+for h = 1:length(history)
     for k = 1:length(history{h}.energies)
-        E(h - 1, k) = history{h}.energies(k);
+        E(h, k) = log2(history{h}.energies(k));
     end
 end
-figure; hold on; plot(2:length(history), E, 'lineWidth', 2);
+figure; hold on; plot(1:length(history), E, 'lineWidth', 2);
+ylabel('iter');
+xlabel('log energy');
 legend(names);

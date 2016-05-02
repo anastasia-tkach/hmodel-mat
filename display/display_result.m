@@ -1,7 +1,7 @@
 function [] = display_result(centers, points, projections, blocks, radii, display_data, face_alpha, figure_mode)
 
 %% Generating the volumetric domain data:
-n = 90; color = double([240; 189; 157]./255);
+n = 70; color = double([240; 189; 157]./255);
 
 model_bounding_box = compute_model_bounding_box(centers, radii);
 xm = linspace(model_bounding_box.min_x, model_bounding_box.max_x, n);
@@ -53,17 +53,18 @@ isonormals(x, y, z, min_distances, h);
 set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', face_alpha);
 
 grid off; axis equal; lighting gouraud; axis off; 
-material([0.9, 0.20, 0.05, 5, 0]); 
-%material([0.4, 0.6, 0.1, 5, 1.0]); 
+%material([0.92, 0.12, 0.05, 5, 0]); 
+material([0.69, 0.35, 0.1, 5, 1.0]); 
+%material([0.6, 0.4, 0.1, 5, 1.0]); 
 
 view([-1, -1, -1]); 
-if ~strcmp(figure_mode, 'none')
-    camlight; 
-end
+% if ~strcmp(figure_mode, 'none')
+%     camlight; 
+% end
 view([+1, +1, +1]);
-if ~strcmp(figure_mode, 'none')
-    camlight; 
-end
+% if ~strcmp(figure_mode, 'none')
+%     camlight; 
+% end
 
 %% Display data
 data_color = [0.65, 0.1, 0.5];

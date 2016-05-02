@@ -2,7 +2,7 @@ function [f, Jc, Jr] = jacobian_fitting(centers, radii, blocks, model_points, mo
 
 D = settings.D;
 
-disp('loading fist skip blocks');
+%disp('loading fist skip blocks');
 load('_my_hand/semantics/fist_skip_blocks_indices');
 
 num_points = length(model_points);

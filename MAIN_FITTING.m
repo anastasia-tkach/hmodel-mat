@@ -1,9 +1,9 @@
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-num_poses = 5;
+num_poses = 2;%5;
 start_pose = 1;
-num_iters = 15;
+num_iters = 5;%15;
 damping = 100;
 %{
     From previou5s experience
