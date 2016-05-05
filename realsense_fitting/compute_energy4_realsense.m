@@ -5,8 +5,8 @@ centers = pose.centers;
 points = pose.points;
 data_bounding_box = pose.data_bounding_box;
 
-closing_radius = 4;
-dialation_radius = 3;
+closing_radius = 2;
+dialation_radius = 2;
 
 %% Render model and data
 [raytracing_matrix, camera_axis, camera_center] = ...

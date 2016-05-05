@@ -12,18 +12,20 @@ settings.W = 640/downscaling_factor;
     - Do not set w2 high, it interferes with other energies
     - Set w5 quite high
 %}
-w1 = 4;
-w2 = 0.1; %0.02
-w4 = 16;
+w1 = 1;
+w2 = 0.5; %0.02
+w4 = 1;
 w5 = 10; % 100
-w7 = 600;
+w7 = 500;%600;
 w8 = 0.01;
+w9 = 1;
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3;
-settings.w4 = w4; settings.w5 = w5; settings.w7 = w7; settings.w8 = w8;
+settings.w4 = w4; settings.w5 = w5; settings.w7 = w7; 
+settings.w8 = w8; settings.w9 = w9;
 settings.energy7 = false;
 settings.discard_threshold = 0.5;
-settings.block_safety_factor = 1.3;
+settings.block_safety_factor = 1.2;
 
 data_root = 'C:/Developer/data/MATLAB/';
 load([data_root, '/stage.mat']);
@@ -38,10 +40,8 @@ semantics_path = '_my_hand/semantics/';
 load([input_path, 'blocks.mat']);
 load([input_path, 'poses.mat']);
 load([input_path, 'radii.mat']);
-load([input_path, 'alpha.mat']);
-load([input_path, 'phalanges.mat']);
-%poses = poses(4);
-
+load([input_path, 'initial_rotations.mat']);
+%poses = poses(1);
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers
@@ -77,7 +77,7 @@ for p = 1:length(poses)
     poses{p}.data_bounding_box = compute_data_bounding_box(poses{p}.points);
     poses{p}.init_centers = poses{p}.centers;
 end
-history{1}.poses = poses; history{1}.radii = radii;
+
 
 %% Optimizaion
 
@@ -101,27 +101,27 @@ for p = 1:num_poses
 end
 for o = 1:num_centers
     X0(D * num_poses * num_centers + o) = radii{o};
-    if o < 20
-        Xl(D * num_poses * num_centers + o) = 0.95 * radii{o};        
-        Xu(D * num_poses * num_centers + o) = 1.1 * radii{o};
+    if o <= 20 || o == 33
+        Xl(D * num_poses * num_centers + o) = 0.98 * radii{o};        
+        Xu(D * num_poses * num_centers + o) = 1.02 * radii{o};
     else
         Xl(D * num_poses * num_centers + o) = 0.7 * radii{o};
         Xu(D * num_poses * num_centers + o) = 1.3 * radii{o};
     end
 end
 
-options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.1, 'Jacobian','on', 'MaxIter', 100);
+options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.1, 'Jacobian','on', 'MaxIter', 30);
 iter = 1;
 save poses poses;
-save alpha alpha;
-save phalanges phalanges;
+save initial_rotations initial_rotations;
 save iter iter;
 X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, Xl, Xu, options);
 
 %% Load result
 D = 3;
 load X;
-load phalanges;
+%load phalanges;
+load poses;
 num_centers = settings.num_centers;
 num_poses = length(poses);
 for p = 1:num_poses
@@ -144,23 +144,24 @@ for p = 1:num_poses
 end
 
 %% Display
-for p = 1:length(poses)
-    %[poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
-    %display_result(poses{p}.centers, poses{p}.points, poses{p}.projections, blocks, radii, true, 1, 'big');
-    %view([-180, -90]); camlight; drawnow;    
+for p = 1:length(poses) 
     display_result(poses{p}.centers, [], [], blocks, radii, false, 0.9, 'big');
-    mypoints(poses{p}.points, [0.8, 0.1, 0.9]);
-    view([-180, -90]); camlight; drawnow;    
-    %figure; axis off; axis equal; hold on;
-    %display_skeleton(poses{p}.centers, radii, blocks, poses{p}.points, false, []);
+    mypoints(poses{p}.points, [0.6759, 0.2088, 0.46373]);
+    view([-180, -90]); camlight; drawnow;   
 end
+
+%% Look at the change
+for p = 1:length(poses) 
+    figure; hold on; axis off; axis equal;
+    display_skeleton(poses{p}.initial_centers, poses{p}.initial_radii, blocks, [], false, 'b', 0.3);
+    display_skeleton(poses{p}.centers, radii, blocks, [], false, 'r', 1.0);
+end
+
 
 %% Store the results
 save([output_path, 'poses.mat'], 'poses');
 save([output_path, 'radii.mat'], 'radii');
 save([output_path, 'blocks.mat'], 'blocks');
-save([output_path, 'alpha.mat'], 'alpha');
-save([output_path, 'phalanges.mat'], 'phalanges');
 
-% Send data to hmodel-cpp
-send_results_to_cpp(poses, radii, blocks, phalanges, names_map);
+%% Send data to hmodel-cpp
+send_results_to_cpp(poses, radii, blocks, names_map);

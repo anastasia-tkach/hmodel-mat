@@ -31,6 +31,10 @@ end
 rendered_data = imfill(imclose(rendered_data, strel('disk', closing_radius, 0)));
 rendered_data = imdilate(rendered_data,  strel('disk', dialation_radius, 8));
 
+min_r = min_r - 8;
+max_r = max_r + 8;
+min_c = min_c - 8;
+max_c = max_c + 8;
 rendered_data([1:min_r, max_r:end], :) = 0; rendered_data(:, [1:min_c, max_c:end]) = 0;
 %figure; imshow(rendered_data, []); drawnow;
 

@@ -1,6 +1,6 @@
-function [sync_centers, parameters] = optimize_theta(pose, radii, blocks, alpha, phalanges, names_map, real_membrane_offset, display)
+function [sync_centers, parameters, phalanges] = optimize_theta(pose, radii, blocks, initial_rotations, names_map, real_membrane_offset, display)
 
-[~, dofs] = hmodel_parameters();
+[phalanges, dofs] = hmodel_parameters();
 
 %{
 display = true;
@@ -38,11 +38,11 @@ end
 %% Assemble initial guess
 trust_region = 0.2 * ones(4, 1);
 
-alpha_thumb = [alpha{2}; alpha{3}(2); alpha{4}(3)];
-alpha_index = [alpha{14}; alpha{15}(3); alpha{16}(3)];
-alpha_middle = [alpha{11}; alpha{12}(3); alpha{13}(3)];
-alpha_ring = [alpha{8}; alpha{9}(3); alpha{10}(3)];
-alpha_pinky = [alpha{5}; alpha{6}(3); alpha{7}(3)];
+% alpha_thumb = [alpha{2}; alpha{3}(2); alpha{4}(3)];
+% alpha_index = [alpha{14}; alpha{15}(3); alpha{16}(3)];
+% alpha_middle = [alpha{11}; alpha{12}(3); alpha{13}(3)];
+% alpha_ring = [alpha{8}; alpha{9}(3); alpha{10}(3)];
+% alpha_pinky = [alpha{5}; alpha{6}(3); alpha{7}(3)];
 
 theta_0_thumb = theta(10:13);
 theta_0_index = theta(14:17);
@@ -54,7 +54,7 @@ theta_0_pinky = theta(26:29);
 lower_bound = theta_0_thumb - trust_region;
 upper_bound = theta_0_thumb + trust_region;
 thumb_indices = [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_middle'), names_map('thumb_top')];
-[theta_thumb, M1, M2, M3, L] = optimize_theta_finger(centers, thumb_indices, lower_bound, upper_bound, alpha_thumb, theta_0_thumb, 'thumb');
+[theta_thumb, M1, M2, M3, L] = optimize_theta_finger(centers, thumb_indices, lower_bound, upper_bound, initial_rotations(2:4), theta_0_thumb, 'thumb');
 phalanges{2}.local = M1; phalanges{3}.local = M2; phalanges{4}.local = M3;
 phalanges{2}.length = L(1); phalanges{3}.length = L(2); phalanges{4}.length = L(3);
 
@@ -62,7 +62,7 @@ phalanges{2}.length = L(1); phalanges{3}.length = L(2); phalanges{4}.length = L(
 lower_bound = theta_0_index - trust_region;
 upper_bound = theta_0_index + trust_region;
 index_indices = [names_map('index_base'), names_map('index_bottom'), names_map('index_middle'), names_map('index_top')];
-[theta_index, M1, M2, M3, L] = optimize_theta_finger(centers, index_indices, lower_bound, upper_bound, alpha_index, theta_0_index, 'finger');
+[theta_index, M1, M2, M3, L] = optimize_theta_finger(centers, index_indices, lower_bound, upper_bound, initial_rotations(14:16), theta_0_index, 'finger');
 phalanges{14}.local = M1; phalanges{15}.local = M2; phalanges{16}.local = M3;
 phalanges{14}.length = L(1); phalanges{15}.length = L(2); phalanges{16}.length = L(3);
 
@@ -70,7 +70,7 @@ phalanges{14}.length = L(1); phalanges{15}.length = L(2); phalanges{16}.length =
 lower_bound = theta_0_middle - trust_region;
 upper_bound = theta_0_middle + trust_region;
 middle_indices = [names_map('middle_base'), names_map('middle_bottom'), names_map('middle_middle'), names_map('middle_top')];
-[theta_middle, M1, M2, M3, L] = optimize_theta_finger(centers, middle_indices, lower_bound, upper_bound, alpha_middle, theta_0_middle, 'finger');
+[theta_middle, M1, M2, M3, L] = optimize_theta_finger(centers, middle_indices, lower_bound, upper_bound, initial_rotations(11:13), theta_0_middle, 'finger');
 phalanges{11}.local = M1; phalanges{12}.local = M2; phalanges{13}.local = M3;
 phalanges{11}.length = L(1); phalanges{12}.length = L(2); phalanges{13}.length = L(3);
 
@@ -78,7 +78,7 @@ phalanges{11}.length = L(1); phalanges{12}.length = L(2); phalanges{13}.length =
 lower_bound = theta_0_ring - trust_region;
 upper_bound = theta_0_ring + trust_region;
 ring_indices = [names_map('ring_base'), names_map('ring_bottom'), names_map('ring_middle'), names_map('ring_top')];
-[theta_ring, M1, M2, M3, L] = optimize_theta_finger(centers, ring_indices, lower_bound, upper_bound, alpha_ring, theta_0_ring, 'finger');
+[theta_ring, M1, M2, M3, L] = optimize_theta_finger(centers, ring_indices, lower_bound, upper_bound, initial_rotations(8:10), theta_0_ring, 'finger');
 phalanges{8}.local = M1; phalanges{9}.local = M2; phalanges{10}.local = M3;
 phalanges{8}.length = L(1); phalanges{9}.length = L(2); phalanges{10}.length = L(3);
 
@@ -86,7 +86,7 @@ phalanges{8}.length = L(1); phalanges{9}.length = L(2); phalanges{10}.length = L
 lower_bound = theta_0_pinky - trust_region;
 upper_bound = theta_0_pinky + trust_region;
 pinky_indices = [names_map('pinky_base'), names_map('pinky_bottom'), names_map('pinky_middle'), names_map('pinky_top')];
-[theta_pinky, M1, M2, M3, L] = optimize_theta_finger(centers, pinky_indices, lower_bound, upper_bound, alpha_pinky, theta_0_pinky, 'finger');
+[theta_pinky, M1, M2, M3, L] = optimize_theta_finger(centers, pinky_indices, lower_bound, upper_bound, initial_rotations(5:7), theta_0_pinky, 'finger');
 phalanges{5}.local = M1; phalanges{6}.local = M2; phalanges{7}.local = M3;
 phalanges{5}.length = L(1); phalanges{6}.length = L(2); phalanges{7}.length = L(3);
 
@@ -100,9 +100,15 @@ parameters(26:29) = theta_pinky;
 
 
 %% Rewrite data
+transformations_indices = [1, 17, 18, 19];
+for i = 1:length(transformations_indices)
+    phalanges{transformations_indices(i)}.local = initial_rotations{transformations_indices(i)};
+end
+
 phalanges_i = htrack_move(parameters, dofs, phalanges);
 sync_centers = cell(length(centers), 1);
 %% Thumb
+sync_centers{names_map('thumb_base')} = centers{names_map('thumb_base')};
 sync_centers{names_map('thumb_bottom')} = transform([0; 0; 0], phalanges_i{3}.global);
 sync_centers{names_map('thumb_middle')} = transform([0; 0; 0], phalanges_i{4}.global);
 sync_centers{names_map('thumb_top')} = transform([0; phalanges_i{4}.length; 0], phalanges_i{4}.global);
@@ -156,17 +162,16 @@ for i = 1:length(centers)
     end
 end
 
-if (display)
-    figure; hold on; axis off; axis equal;
-    display_skeleton(centers, [], blocks, [], false, 'b');
-    mypoints(sync_centers, 'r', 50);
-    drawnow;
-end
-
 % for i = 1:length(sync_centers)
 %     if ~isempty(sync_centers{i})
 %         centers{i} = sync_centers{i};
 %     end
 % end
 
+if (display)
+    figure; hold on; axis off; axis equal;
+    display_skeleton(centers, [], blocks, [], false, 'b');
+    mypoints(sync_centers, 'r', 50);
+    drawnow;
+end
 

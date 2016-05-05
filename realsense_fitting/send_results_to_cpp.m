@@ -1,13 +1,15 @@
-function [] = send_results_to_cpp(poses, radii, blocks, phalanges, names_map)
+function [] = send_results_to_cpp(poses, radii, blocks, names_map)
 
-% input_path = 'C:/Developer/data/MATLAB/anastasia/stage1/final/';
-% semantics_path = '_my_hand/semantics/';
-% load([semantics_path, 'fitting/names_map.mat']);
-% load([input_path, 'poses.mat']);
-% load([input_path, 'radii.mat']);
-% load([input_path, 'blocks.mat']);
-% load([input_path, 'alpha.mat']);
-% load([input_path, 'phalanges.mat']);
+%{
+clear;
+input_path = 'C:/Developer/data/MATLAB/andrii/stage1/final/';
+semantics_path = '_my_hand/semantics/';
+load([semantics_path, 'fitting/names_map.mat']);
+load([input_path, 'poses.mat']);
+load([input_path, 'radii.mat']);
+load([input_path, 'blocks.mat']);
+%}
+
 
 %% Write model to cpp
 final_id = 1;
@@ -51,45 +53,67 @@ if (reference_id ~= final_id)
     end
 end
 
+%% Adjust initial transformations
+centers = final_pose.centers;
+theta = final_pose.theta;
+phalanges = final_pose.phalanges;
+% Thumb
+phalanges{2}.local(1:3, 4) = centers{names_map('thumb_base')} - centers{names_map('palm_back')};
+phalanges{3}.local(2, 4) = norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_base')});
+phalanges{4}.local(2, 4) = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_bottom')});
+
+% Index
+phalanges{14}.local(1:3, 4) = centers{names_map('index_base')} - centers{names_map('palm_back')};
+phalanges{15}.local(2, 4) = norm(centers{names_map('index_bottom')} - centers{names_map('index_base')});
+phalanges{16}.local(2, 4) = norm(centers{names_map('index_middle')} - centers{names_map('index_bottom')});
+
+% Middle
+phalanges{11}.local(1:3, 4) = centers{names_map('middle_base')} - centers{names_map('palm_back')};
+phalanges{12}.local(2, 4) = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_base')});
+phalanges{13}.local(2, 4) = norm(centers{names_map('middle_middle')} - centers{names_map('middle_bottom')});
+
+% Ring
+phalanges{8}.local(1:3, 4) = centers{names_map('ring_base')} - centers{names_map('palm_back')};
+phalanges{9}.local(2, 4) = norm(centers{names_map('ring_bottom')} - centers{names_map('ring_base')});
+phalanges{10}.local(2, 4) = norm(centers{names_map('ring_middle')} - centers{names_map('ring_bottom')});
+
+% Pinky
+phalanges{5}.local(1:3, 4) = centers{names_map('pinky_base')} - centers{names_map('palm_back')};
+phalanges{6}.local(2, 4) =  norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_base')});
+phalanges{7}.local(2, 4) =  norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_bottom')});
+
 %% Move palm_back to zero
-% shift = final_pose.centers{names_map('palm_back')};
-% for i = 1:length(final_pose.centers)
-%     final_pose.centers{i} = final_pose.centers{i} - shift;
-% end
+%{
+shift = final_pose.centers{names_map('palm_back')};
+for i = 1:length(final_pose.centers)
+    final_pose.centers{i} = final_pose.centers{i} - shift;
+end
+%}
 
-% figure; hold on; axis off; axis equal;
-% display_skeleton(poses{reference_id}.centers, [], blocks, [], false, 'b');
-% display_skeleton(final_pose.centers, [], blocks, [], false, 'r');
-
-
-%display_result(final_pose.centers, [], [], blocks, radii, false, 1, 'big');
-%view([-180, -90]); camlight; drawnow;
 figure; hold on; axis off; axis equal;
-display_skeleton(final_pose.centers, [], blocks, [], false, 'b');
+display_skeleton(centers, [], blocks, [], false, 'b');
 
 num_thetas = 29;
-theta = zeros(num_thetas, 1);
 [~, dofs] = hmodel_parameters();
-phalanges = htrack_move(final_pose.theta, dofs, phalanges);
-phalanges = initialize_offsets(final_pose.centers, phalanges, names_map);
-
-theta = zeros(num_thetas, 1);
 phalanges = htrack_move(theta, dofs, phalanges);
-final_pose.centers = update_centers(final_pose.centers, phalanges, names_map);
+phalanges = initialize_offsets(centers, phalanges, names_map);
 
-final_pose.theta([10, 11, 14, 15, 18, 19, 22, 23, 26, 27]) = 0;
-phalanges = htrack_move(-final_pose.theta, dofs, phalanges);
-final_pose.centers = update_centers(final_pose.centers, phalanges, names_map);
+phalanges = htrack_move(zeros(num_thetas, 1), dofs, phalanges);
+centers = update_centers(centers, phalanges, names_map);
 
-%display_result(final_pose.centers, [], [], blocks, radii, false, 1, 'big');
-%view([-180, -90]); camlight; drawnow;
-display_skeleton(final_pose.centers, [], blocks, [], false, 'r');
+%%%final_pose.theta([10, 11, 14, 15, 18, 19, 22, 23, 26, 27]) = 0;
+phalanges = htrack_move(-theta, dofs, phalanges);
+centers = update_centers(centers, phalanges, names_map);
+display_skeleton(centers, [], blocks, [], false, 'r');
+
+%% Adjust membranes
+centers{names_map('thumb_fold')} = centers{names_map('thumb_bottom')} + 0.01 * rand;
 
 %% Scale
 num_phalanges = 17;
 scaling_factor = 1/0.811646;
-for i = 1:length(final_pose.centers)
-    final_pose.centers{i} = scaling_factor * final_pose.centers{i};
+for i = 1:length(centers)
+    centers{i} = scaling_factor * centers{i};
     radii{i} = scaling_factor * radii{i};
 end
 for i = 1:num_phalanges
@@ -97,31 +121,7 @@ for i = 1:num_phalanges
 end
 
 %% Write model
-write_cpp_model('C:/Developer/data/models/anonymous/', final_pose.centers, radii, blocks, phalanges);
-
-% D = 3;
-% I = zeros(length(phalanges), 4 * 4);
-% for i = 1:length(phalanges)
-%     I(i, :) = phalanges{i}.local(:)';
-% end
-% I = I';
-% num_centers = 38;
-% num_blocks = 30;
-% RAND_MAX = 32767;
-% R = zeros(1, num_centers);
-% C = zeros(D, num_centers);
-% B = RAND_MAX * ones(3, num_blocks);
-% for j = 1:num_centers
-%     R(j) =  radii{j};
-%     C(:, j) = final_pose.centers{j};
-% end
-% for j = 1:num_blocks
-%     for k = 1:length(blocks{j})
-%         B(k, j) = blocks{j}(k) - 1;
-%     end
-% end
-% path = 'C:/Developer/data/models/andrii/';
-% write_input_parameters_to_files(path, C, R, B, I);
+write_cpp_model('C:/Developer/data/models/anonymous/', centers, radii, blocks, phalanges);
 
 
 

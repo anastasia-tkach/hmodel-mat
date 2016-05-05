@@ -36,7 +36,7 @@ input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 7;
+num_poses = 4;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 
@@ -83,8 +83,9 @@ for p = 1:num_poses
     end
     data_points = data_points(1:2:end);
     
+    %figure; hold on; axis off; axis equal;
     display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
-    mypoints(data_points, [0.8, 0.1, 0.9]);
+    mypoints(data_points,  [0.6759, 0.2088, 0.46373]);
     view([-180, -90]); camlight; drawnow;
     
     poses{p}.points = data_points;
@@ -94,7 +95,7 @@ for p = 1:num_poses
     poses{p}.init_theta = theta;
     poses{p}.mean_centers = mean_centers;
 end
-
+5
 %% Shift together
 %figure; axis off; axis equal; hold on;
 for p = 1:num_poses
@@ -104,11 +105,14 @@ for p = 1:num_poses
     for i = 1:length(poses{p}.points)
         poses{p}.points{i} = poses{p}.points{i} - poses{p}.init_theta(1:3) + poses{p}.mean_centers;
     end
+    poses{p}.initial_centers =  poses{p}.centers;
+    poses{p}.initial_radii = radii;
     %display_skeleton(poses{p}.centers, [], blocks, [], false, 'b');
 end
 
 
 %% Read inital transformations
+%{
 transformations_path = [input_path, '1/'];
 fileID = fopen([transformations_path, 'I.txt'], 'r');
 I = fscanf(fileID, '%f');
@@ -133,29 +137,26 @@ for i = 1:size(I, 1)
 end
 alpha{4}(1) = 0;
 
-
 %% Synchronize initial transformations
-% close all;
-% semantics_path = '_my_hand/semantics/';
-% load([semantics_path, 'fitting/names_map.mat']);
-% load([input_path, 'initial/poses.mat']);
-% load([input_path, 'initial/blocks.mat']);
-% load([input_path, 'initial/alpha.mat']);
-[poses, alpha, phalanges] = synchronize_transformations(poses, radii, blocks, alpha, names_map, real_membrane_offset, true);
-
-%% Display result
-%{
-for p = 1:num_poses
-    display_result(poses{p}.centers, [], [], blocks, radii, false, 0.9, 'big');
-    mypoints(poses{p}.points, [0.8, 0.1, 0.9]);
-    view([-180, -90]); camlight; drawnow;
-end
+%[poses, alpha, phalanges] = synchronize_transformations(poses, radii, blocks, alpha, names_map, real_membrane_offset, true);
 %}
+
+%% Save initial rotations
+num_phalanges = 17;
+transformations_path = [input_path, '1/'];
+fileID = fopen([transformations_path, 'I.txt'], 'r');
+I = fscanf(fileID, '%f');
+I = I(2:end);
+I = reshape(I, 16, length(I)/16)';
+initial_rotations = cell(num_phalanges + 2, 1);
+for i = 1:num_phalanges
+    initial_rotations{i} = reshape(I(i, :), 4, 4)';
+end
+initial_rotations{18} = eye(4, 4);
+initial_rotations{19} = eye(4, 4);
 
 %% Save
 save([input_path, 'initial/poses.mat'], 'poses');
 save([input_path, 'initial/radii.mat'], 'radii');
 save([input_path, 'initial/blocks.mat'], 'blocks');
-save([input_path, 'initial/alpha.mat'], 'alpha');
-save([input_path, 'initial/phalanges.mat'], 'phalanges');
-
+save([input_path, 'initial/initial_rotations.mat'], 'initial_rotations');

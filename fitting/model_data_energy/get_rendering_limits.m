@@ -54,3 +54,8 @@ bounding_box.min_y = min_y; bounding_box.max_y = max_y;
 if (D == 3)
     bounding_box.min_z = min_z; bounding_box.max_z = max_z;
 end
+
+% bounding_box.max_x = bounding_box.max_x + 10;
+% bounding_box.max_y = bounding_box.max_y + 10;
+% bounding_box.min_x = bounding_box.min_x - 10;
+% bounding_box.min_y = bounding_box.min_y - 10;

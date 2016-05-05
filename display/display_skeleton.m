@@ -1,11 +1,11 @@
-function [] = display_skeleton(centers, radii, blocks, points, display_data, edge_color)
+function [] = display_skeleton(centers, radii, blocks, points, display_data, edge_color, transparency)
 
 D = length(centers{1});
 if isempty(edge_color), edge_color = [0.1, 0.4, 0.7]; end
 
 %figure; axis off; axis equal; hold on;
-% for i = 1:36
-%     draw_sphere(centers{i}, radii{i}, 'c');
+% for i = 1:length(centers)
+%     draw_sphere(centers{i}, radii{i}, edge_color, transparency);
 % end
 if display_data, mypoints(points, 'b'); end
 for i = 1:length(blocks)

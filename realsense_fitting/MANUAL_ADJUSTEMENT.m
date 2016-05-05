@@ -24,30 +24,30 @@ if strcmp(user_name, 'anastasia')
 end
 
 if strcmp(user_name, 'andrii')
-    vertical_scaling = 1.07;
-    horisontal_scaling = 0.95;
+    vertical_scaling = 1.09;
+    horisontal_scaling = 0.97;
     width_scaling = 1.12;
     
-    thumb_1_length = 38;
-    thumb_2_length = 34;
-    thumb_3_length = 15;
-    thumb_4_length = 21;
+    thumb_1_length = 33;
+    thumb_2_length = 32;
+    thumb_3_length = 28;
+    thumb_4_length = 37;
     
     index_1_length = 50;
-    index_2_length = 26;
-    index_3_length = 17;
+    index_2_length = 24;
+    index_3_length = 21;
     
     middle_1_length = 51;
-    middle_2_length = 31;
-    middle_3_length = 16;
+    middle_2_length = 29;
+    middle_3_length = 20;
     
-    ring_1_length = 52;
-    ring_2_length = 29;
-    ring_3_length = 19;
+    ring_1_length = 45;
+    ring_2_length = 26;
+    ring_3_length = 22;
     
-    pinky_1_length = 40;
-    pinky_2_length = 19;
-    pinky_3_length = 14;
+    pinky_1_length = 33;
+    pinky_2_length = 23;
+    pinky_3_length = 20;
     
     thumb_rotation = 1;
 end
@@ -69,7 +69,29 @@ centers{names_map('thumb_bottom')} = centers{names_map('thumb_bottom')}  - thumb
 centers{names_map('thumb_middle')} = centers{names_map('thumb_middle')}  - thumb_base_before + centers{names_map('thumb_base')};
 centers{names_map('thumb_top')} = centers{names_map('thumb_top')}  - thumb_base_before + centers{names_map('thumb_base')};
 centers{names_map('thumb_additional')} = centers{names_map('thumb_additional')}  - thumb_base_before + centers{names_map('thumb_base')};
-centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 20 * [1; 0; 0];
+
+if strcmp(user_name, 'andrii')
+    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 10 * [1; 0; 0] + 7 * [0; 0; 1] + 7 * [0; 1; 0];
+    centers{names_map('index_base')} = centers{names_map('index_base')} + 3 * [1; 0; 0];
+    %centers{names_map('middle_base')} = centers{names_map('middle_base')} - 5 * [0; 1; 0];
+    %centers{names_map('ring_base')} = centers{names_map('ring_base')} - 5 * [0; 1; 0];
+    centers{names_map('pinky_base')} = centers{names_map('pinky_base')} - 2 * [0; 1; 0] -  1 * [1; 0; 0];
+    
+    centers{names_map('palm_index')} = centers{names_map('palm_index')} + 4 * [1; 0; 0];
+    centers{names_map('palm_thumb')} = centers{names_map('palm_thumb')} + 4 * [1; 0; 0];
+    
+    radii{names_map('thumb_base')} = 27;
+    radii{names_map('thumb_bottom')} = 18;
+    radii{names_map('thumb_middle')} = 10;
+    radii{names_map('index_top')} = 8;
+    radii{names_map('index_middle')} = 8.7;
+    radii{names_map('middle_top')} = 8;
+    radii{names_map('middle_middle')} = 9;
+    radii{names_map('ring_top')} = 7.5;
+    radii{names_map('ring_middle')} = 8.2;
+    radii{names_map('pinky_top')} = 7;
+    radii{names_map('pinky_middle')} = 7.3;
+end
 
 %% Adjust up template transformations
 [phalanges, dofs] = hmodel_parameters();
@@ -87,12 +109,12 @@ for i = 1:length(phalanges)
     end
     % pinky base
     if i == 5
-        R = makehgtform('axisrotate', [0; 1; 0], -pi/10);
+        R = makehgtform('axisrotate', [0; 1; 0], -pi/15);
         phalanges{i}.local(1:3, 1:3) = R(1:3, 1:3);
     end
     % ring base
     if i == 8
-        R = makehgtform('axisrotate', [0; 1; 0], -pi/15);
+        R = makehgtform('axisrotate', [0; 1; 0], -pi/30);
         phalanges{i}.local(1:3, 1:3) = R(1:3, 1:3);
     end
     % middle base

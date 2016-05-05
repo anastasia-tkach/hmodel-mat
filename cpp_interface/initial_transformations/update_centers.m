@@ -6,8 +6,8 @@ for i = 1:num_phalanges
     if isfield(phalanges{i}, 'rigid_names')
         for j = 1:length(phalanges{i}.rigid_names)
             index = names_map(phalanges{i}.rigid_names{j});
-            T = phalanges{i}.global(1:D, 1:D) * phalanges{i}.offsets{j};
-            centers{index} = centers{names_map(phalanges{i}.name)} + T;
+            t = phalanges{i}.global(1:D, 1:D) * phalanges{i}.offsets{j};
+            centers{index} = centers{names_map(phalanges{i}.name)} + t;
         end
     end
 end

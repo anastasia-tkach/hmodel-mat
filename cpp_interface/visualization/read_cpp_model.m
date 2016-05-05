@@ -11,12 +11,17 @@ centers = cell(0, 1);
 mean_centers = [0; 0; 0];
 for i = 1:size(C, 2);
     centers{end + 1} = C(:, i);
+end
+%{
+for i = 1:size(C, 2);
+    centers{end + 1} = C(:, i);
     mean_centers = mean_centers + centers{end};
 end
 mean_centers = mean_centers ./ length(centers);
 for i = 1:length(centers)
     centers{i} = centers{i} - mean_centers;
 end
+%}
 %% Read radii
 fileID = fopen([path, 'R.txt'], 'r');
 R = fscanf(fileID, '%f');
