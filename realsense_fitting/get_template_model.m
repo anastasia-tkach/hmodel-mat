@@ -4,6 +4,10 @@ input_path = 'C:/Developer/data/models/anastasia/';
 
 [centers, radii, blocks, theta, ~, mean_centers] = read_cpp_model(input_path);
 
+
+figure; hold on; axis off; axis equal;
+display_skeleton(centers, [], blocks, [], false, 'g');
+
 T = diag([1.2, 1, 1]);
 for i = 1:length(centers)
     centers{i} = T * centers{i};
@@ -120,26 +124,27 @@ centers = update_centers(centers, phalanges, names_map);
 % display_result(centers, [], [], blocks, radii, false, 1, 'big');
 % view([-180, -90]); camlight; drawnow;
 
-figure; hold on; axis off; axis equal;
+%figure; hold on; axis off; axis equal;
 display_skeleton(centers, [], blocks, [], false, 'b');
 
 %% Explore thumb poses
-% figure; hold on; axis off; axis equal;
-% for i = -1.5:0.3:1.5
-%     theta(10) = i;
-%     theta(11) = 0;
-%     [posed_centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, [0; 0; 0]);
-%     display_skeleton(posed_centers, radii, blocks, [], false, 'b');
-% end
-% 
-% figure; hold on; axis off; axis equal;
-% for i = -1.5:0.3:1.5
-%     theta(10) = -0.6;
-%     theta(11) = i;    
-%     [posed_centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, [0; 0; 0]);
-%     display_skeleton(posed_centers, radii, blocks, [], false, 'r');
-% end
+%{
+figure; hold on; axis off; axis equal;
+for i = -1.5:0.3:1.5
+    theta(10) = i;
+    theta(11) = 0;
+    [posed_centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, [0; 0; 0]);
+    display_skeleton(posed_centers, radii, blocks, [], false, 'b');
+end
 
+figure; hold on; axis off; axis equal;
+for i = -1.5:0.3:1.5
+    theta(10) = -0.6;
+    theta(11) = i;    
+    [posed_centers] = pose_hand_model(theta, dofs, phalanges, centers, names_map, [0; 0; 0]);
+    display_skeleton(posed_centers, radii, blocks, [], false, 'r');
+end
+%}
 write_cpp_model('C:/Developer/data/models/template/', centers, radii, blocks, phalanges);
 
 

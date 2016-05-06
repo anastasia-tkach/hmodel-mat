@@ -3,10 +3,14 @@ function [] = display_skeleton(centers, radii, blocks, points, display_data, edg
 D = length(centers{1});
 if isempty(edge_color), edge_color = [0.1, 0.4, 0.7]; end
 
-%figure; axis off; axis equal; hold on;
-% for i = 1:length(centers)
-%     draw_sphere(centers{i}, radii{i}, edge_color, transparency);
-% end
+%% Draw spheres
+%{
+for i = 1:length(centers)
+    draw_sphere(centers{i}, radii{i}, edge_color, transparency);
+end
+%}
+
+%% Draw edges
 if display_data, mypoints(points, 'b'); end
 for i = 1:length(blocks)
 %for i = 1:14  

@@ -44,7 +44,7 @@ if length(index) == 3
         s = ray_triangle_intersection (c1, c2, c3, p, -n);
     end
     if norm(s) == Inf
-        disp('still outside');
+        %disp('still outside');
         [s, ~] = closest_point_in_triangle_mex(c1, c2, c3, p, 0, 0, 0);
     end
 end

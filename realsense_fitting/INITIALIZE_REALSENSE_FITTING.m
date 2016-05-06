@@ -3,6 +3,7 @@ stage = 1;
 
 %% Measured values
 scaling_factor = 0.811646;
+%{
 if strcmp(user_name, 'anastasia')
     real_membrane_offset = [18, 22, 22, 18];
     
@@ -23,14 +24,14 @@ if strcmp(user_name, 'andrii')
     real_phalanges_length{4} = scaling_factor * [52, 29, 19];
     real_phalanges_length{5} = scaling_factor * [40, 19, 14];
 end
-
+%}
 data_root = 'C:/Developer/data/MATLAB/';
 save([data_root, '/stage.mat'],  'stage');
 save([data_root, '/user_name.mat'], 'user_name');
-save([data_root, '/real_membrane_offset.mat'], 'real_membrane_offset');
-save([data_root, '/real_phalanges_length.mat'], 'real_phalanges_length');
+save([data_root, '/scaling_factor.mat'], 'scaling_factor');
+%save([data_root, '/real_membrane_offset.mat'], 'real_membrane_offset');
+%save([data_root, '/real_phalanges_length.mat'], 'real_phalanges_length');
 
-%close all;
 input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
 
 semantics_path = '_my_hand/semantics/';
@@ -95,7 +96,7 @@ for p = 1:num_poses
     poses{p}.init_theta = theta;
     poses{p}.mean_centers = mean_centers;
 end
-5
+
 %% Shift together
 %figure; axis off; axis equal; hold on;
 for p = 1:num_poses

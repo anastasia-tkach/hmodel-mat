@@ -23,7 +23,7 @@ f1 = 0; f2 = 0; f4 = 0; f5 = 0; f7 = 0; f8 = 0;
 
 
 %% Synchronize transfromations
-%%{
+%{
 if settings.energy7
     disp('DEAL WITH THE SHIFT');
     for p = 1:num_poses
@@ -37,7 +37,7 @@ if settings.energy7
     end
     [poses, alpha, phalanges] = synchronize_transformations(poses, radii, blocks, alpha, settings.names_map, settings.real_membrane_offset, true);
 end
-%%}
+%}
 
 for p = 1:num_poses
     settings.p = p;
@@ -54,7 +54,7 @@ for p = 1:num_poses
     end
     
     %% Data fitting energy
-    poses{p} = compute_energy1_realsense(poses{p}, radii, blocks, settings, false);
+    poses{p} = compute_energy1_realsense(poses{p}, radii, blocks, settings, p, iter, true);
     
     %% Silhouette energy
     poses{p} = compute_energy4_realsense(poses{p}, radii, blocks, settings, false);
@@ -63,7 +63,7 @@ for p = 1:num_poses
     poses{p} = compute_energy5(poses{p}, radii, blocks, settings);
     
     %% Synch transformations energy
-    %%{
+    %{
     if settings.energy7
         poses{p}.f7 = zeros(D * length(poses{p}.centers), 1);
         poses{p}.Jc7 = eye(D * length(poses{p}.centers), D * length(poses{p}.centers));
@@ -74,7 +74,7 @@ for p = 1:num_poses
             end
         end
     end
-    %%}
+    %}
     
     %% Real length energy
     %poses{p} = compute_energy8(poses{p}, settings);
@@ -91,8 +91,10 @@ settings.energy7 = true;
 [f7, J7] = assemble_energy(poses, '7', settings);
 %[f8, J8] = assemble_energy(poses, '8', settings);
 f9 = zeros(num_poses * num_centers * D + num_centers, 1);
-J9 = zeros(num_poses * num_centers * D + num_centers, num_poses * num_centers * D + num_centers);
-J9(num_poses * num_centers * D + 1:end, num_poses * num_centers * D + 1:end) = 100;
+J9 = eye(num_poses * num_centers * D + num_centers, num_poses * num_centers * D + num_centers);
+% stop thumb bottom
+J9(num_poses * num_centers * D + settings.names_map('thumb_bottom'), num_poses * num_centers * D + settings.names_map('thumb_bottom')) = 10000;
+%J9(num_poses * num_centers * D + 1:end, num_poses * num_centers * D + 1:end) = 10 * eye(num_centers, num_centers);
 
 %% Stack the energies together
 f = [];

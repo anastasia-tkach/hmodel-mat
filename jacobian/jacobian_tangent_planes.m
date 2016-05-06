@@ -30,7 +30,7 @@ for i = 1:length(blocks)
         tangent_gradients{i}.u3 = u3;  
         tangent_gradients{i}.Ju1 = Ju1;
         tangent_gradients{i}.Ju2 = Ju2;
-        tangent_gradients{i}.Ju3 = Ju3;
+        tangent_gradients{i}.Ju3 = Ju3;       
        
     end
 end

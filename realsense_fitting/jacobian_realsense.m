@@ -24,11 +24,14 @@ for i = 1:num_points
     b = block_indices{i};
     tangent_gradient = tangent_gradients{b};
     
-    if isempty(index) || isempty(p) || isempty(q), continue; end
+    if isempty(index) || isempty(p) || isempty(q), continue; end    
     
-    if strcmp(fitting_type, 'point_to_point') && b == 29 || b == 30
-        % do not use silhouette term for the wrist
-        continue;
+    %if strcmp(fitting_type, 'point_to_point') && b == 29 || b == 30
+    %    % do not use silhouette term for the wrist
+    %    continue;
+    %end
+    if b == 15
+        index = [20, 19];        
     end
     
     %% Compute gradients of the model point
@@ -100,7 +103,8 @@ for i = 1:num_points
             Jr(i, abs(index(1))) = df.dr1;
             Jr(i, abs(index(2))) = df.dr2;
             Jr(i, abs(index(3))) = df.dr3;
-        end
+        end       
+
     end
     if strcmp(fitting_type, 'point_to_point')
         f(D * i - D + 1:D * i) = (q - p);

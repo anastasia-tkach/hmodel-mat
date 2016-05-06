@@ -3,9 +3,9 @@ format shortg;
 clear; clc; close all;
 settings.mode = 'fitting';
 settings_default;
-downscaling_factor = 4;
+downscaling_factor = 3;
 settings.H = 480/downscaling_factor;
-settings.W = 640/downscaling_factor;
+settings.W = 639/downscaling_factor;
 
 %{
     From previou5s experience
@@ -14,11 +14,12 @@ settings.W = 640/downscaling_factor;
 %}
 w1 = 1;
 w2 = 0.5; %0.02
-w4 = 1;
-w5 = 10; % 100
-w7 = 500;%600;
-w8 = 0.01;
+w4 = 1.2;
+w5 = 10; %300; 
+w7 = 100;%600;
+w8 = 0;
 w9 = 1;
+
 settings.damping = damping;
 settings.w1 = w1; settings.w2 = w2; settings.w3 = w3;
 settings.w4 = w4; settings.w5 = w5; settings.w7 = w7; 
@@ -30,6 +31,7 @@ settings.block_safety_factor = 1.2;
 data_root = 'C:/Developer/data/MATLAB/';
 load([data_root, '/stage.mat']);
 load([data_root, '/user_name.mat']);
+load([data_root, '/scaling_factor.mat']);
 load([data_root, '/real_membrane_offset.mat']);
 load([data_root, '/real_phalanges_length.mat']);
 input_path = [data_root, user_name, '/stage', num2str(stage), '/initial/'];
@@ -102,16 +104,16 @@ end
 for o = 1:num_centers
     X0(D * num_poses * num_centers + o) = radii{o};
     if o <= 20 || o == 33
-        Xl(D * num_poses * num_centers + o) = 0.98 * radii{o};        
-        Xu(D * num_poses * num_centers + o) = 1.02 * radii{o};
+        Xl(D * num_poses * num_centers + o) = 0.8 * radii{o};        
+        Xu(D * num_poses * num_centers + o) = 1.1 * radii{o};
     else
-        Xl(D * num_poses * num_centers + o) = 0.7 * radii{o};
-        Xu(D * num_poses * num_centers + o) = 1.3 * radii{o};
+        Xl(D * num_poses * num_centers + o) = 0.5 * radii{o};
+        Xu(D * num_poses * num_centers + o) = 1.2 * radii{o};
     end
 end
 
 options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.1, 'Jacobian','on', 'MaxIter', 30);
-iter = 1;
+iter = 0;
 save poses poses;
 save initial_rotations initial_rotations;
 save iter iter;
@@ -120,7 +122,8 @@ X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, Xl, Xu, options)
 %% Load result
 D = 3;
 load X;
-%load phalanges;
+X = real(X);
+
 load poses;
 num_centers = settings.num_centers;
 num_poses = length(poses);
@@ -132,15 +135,6 @@ for p = 1:num_poses
 end
 for o = 1:num_centers
     radii{o} = X(D * num_poses * num_centers + o);
-end
-for p = 1:num_poses
-    shift = poses{p}.centers{settings.names_map('palm_back')};
-    for i = 1:length(poses{p}.centers)
-        poses{p}.centers{i} = poses{p}.centers{i} - shift;
-    end
-    for i = 1:length(poses{p}.points)
-        poses{p}.points{i} = poses{p}.points{i} - shift;
-    end
 end
 
 %% Display
@@ -157,6 +151,16 @@ for p = 1:length(poses)
     display_skeleton(poses{p}.centers, radii, blocks, [], false, 'r', 1.0);
 end
 
+%% Shift too zero
+for p = 1:num_poses
+    shift = poses{p}.centers{settings.names_map('palm_back')};
+    for i = 1:length(poses{p}.centers)
+        poses{p}.centers{i} = poses{p}.centers{i} - shift;
+    end
+    for i = 1:length(poses{p}.points)
+        poses{p}.points{i} = poses{p}.points{i} - shift;
+    end
+end
 
 %% Store the results
 save([output_path, 'poses.mat'], 'poses');
@@ -164,4 +168,4 @@ save([output_path, 'radii.mat'], 'radii');
 save([output_path, 'blocks.mat'], 'blocks');
 
 %% Send data to hmodel-cpp
-send_results_to_cpp(poses, radii, blocks, names_map);
+send_neutral_results_to_cpp(poses, radii, blocks, names_map, scaling_factor);
