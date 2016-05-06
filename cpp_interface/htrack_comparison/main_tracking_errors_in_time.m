@@ -51,13 +51,13 @@ if compare
     
     %% Metric 1
     figure('units', 'normalized', 'outerposition', figure_size); hold on;
-    plot(1:length(htrack_error), htrack_error(:, 1), 'lineWidth', line_width);
-    plot(1:length(hmodel_error), hmodel_error(:, 1), 'lineWidth', line_width);
+    plot(1:length(htrack_error), htrack_error(:, 1), 'lineWidth', line_width, 'color', [61, 131, 119]/255);
+    plot(1:length(hmodel_error), hmodel_error(:, 1), 'lineWidth', line_width, 'color', [179, 81, 109]/255);
     
     max_distance = max([htrack_error(:, 1); hmodel_error(:, 1)]);
     %ylim([0, min(max_distance, 15)]);
     xlim([0, length(hmodel_error)]);
-    legend({'htrack', 'hmodel'}, 'Location','northeast');
+    legend({'E3D for [Tagliasacchi et al. 2015]', 'E3D for [Proposed Method]'}, 'Location','northeast', 'edgecolor', 'none');
     if display_title
         title('data-model distance');
         xlabel('frame number');
@@ -67,12 +67,12 @@ if compare
     
     %% Metric 2
     figure('units', 'normalized', 'outerposition', figure_size); hold on;
-    plot(1:length(htrack_error), htrack_error(:, 2), 'lineWidth', line_width);
-    plot(1:length(hmodel_error), hmodel_error(:, 2), 'lineWidth', line_width);
+    plot(1:length(htrack_error), htrack_error(:, 2), 'lineWidth', line_width, 'color', [61, 131, 119]/255);
+    plot(1:length(hmodel_error), hmodel_error(:, 2), 'lineWidth', line_width, 'color', [179, 81, 109]/255);
     
     %ylim([0, 1]);
     xlim([0, length(hmodel_error)]);
-    legend({'htrack', 'hmodel'}, 'Location','northeast');
+    legend({'E2D for [Tagliasacchi et al. 2015]', 'E2D for [Proposed Method]'}, 'Location','northeast', 'edgecolor', 'none');
     if display_title
         title('1 - normalized silhouettes overlap');
         xlabel('frame number');
@@ -99,4 +99,5 @@ if ~compare
     title('1 - normalized silhouettes overlap');
     set(gca,'position', figure_borders, 'units','normalized');
 end
+
 
