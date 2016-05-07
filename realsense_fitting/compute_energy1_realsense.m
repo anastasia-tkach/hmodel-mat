@@ -8,6 +8,8 @@ data_points = pose.points;
 %% Compute projections
 [model_indices, model_points, block_indices] = compute_projections(pose.points, pose.centers, blocks, radii); 
 
+%% Discard backfacing
+%{
 model_normals = compute_model_normals(centers, radii, blocks, data_points, model_indices);
 camera_ray = [0; 0; 1];
 for i = 1:length(model_points)
@@ -16,6 +18,7 @@ for i = 1:length(model_points)
         model_points{i} = [];
     end
 end
+%}
 
 %% Compute jacobian
 [f, Jc, Jr] = jacobian_realsense(centers, radii, blocks, model_points, model_indices, block_indices, data_points, settings, 'point_to_plane');
@@ -27,8 +30,10 @@ if (display)
     if settings.D == 3
         display_result(centers, data_points, model_points, blocks, radii, false, 0.95, 'big');%mypoints(pose.points, 'm'); drawnow;
         mypoints(pose.points, [179, 81, 109]/255, 3);
-        zoom(2);
+        zoom(2); 
         view([-180, -90]);   
+        xlim([ -190, 225]); ylim([-80, 170]); zlim([-55, 50]);
+        
         
         %if pose_id == 1, zoom(2); view([148, 7.264]); end
         %if pose_id == 2, zoom(2.3); view([150,  -2.7356]); end

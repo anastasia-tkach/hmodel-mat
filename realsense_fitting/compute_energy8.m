@@ -1,7 +1,44 @@
-function [pose] = compute_energy8(pose, settings)
+function [pose] = compute_energy8(pose, blocks)
 
 D = 3;
+centers = pose.centers;
+initial_centers = pose.initial_centers;
 
+F = zeros(16, 1);
+Jc = zeros(16, D * length(centers));
+Jr = zeros(16, length(centers));
+count = 1;
+
+for b = 1:length(blocks)
+    if b > 15 && b ~= 28, continue; end
+    
+    i = blocks{b}(1);
+    j = blocks{b}(2);
+    
+    ci = centers{i};
+    cj = centers{j};
+    
+    c0i = initial_centers{i};
+    c0j = initial_centers{j};
+    
+    f = (ci - cj)' * (ci - cj) - (c0i - c0j)' * (c0i - c0j);
+    
+    j_ci = 2 *  ci' - 2 * cj';
+    j_cj = 2 *  cj' - 2 * ci';
+    
+    F(count) = f;
+    
+    Jc(count, D * (i - 1) + 1 : D * i) = j_ci;
+    Jc(count, D * (j - 1) + 1 : D * j) = j_cj;
+    
+    count = count + 1;    
+end
+
+pose.f8 = F;
+pose.Jc8 = Jc;
+pose.Jr8 = Jr;
+
+%{
 centers = pose.centers;
 real_phalanges_length = settings.real_phalanges_length;
 names_map = settings.names_map;
@@ -44,7 +81,7 @@ for u = 1:length(finger_indices)
         F(count) = f;
                
         Jc(count, D * (i - 1) + 1 : D * i) = j_ci;
-        Jc(count, D * (j - 1) + 1 : D * j) = j_cj;        
+        Jc(count, D * (j - 1) + 1 : D * j) = j_cj;
         
         count = count + 1;
         
@@ -54,3 +91,4 @@ end
 pose.f8 = F;
 pose.Jc8 = Jc;
 pose.Jr8 = Jr;
+%}

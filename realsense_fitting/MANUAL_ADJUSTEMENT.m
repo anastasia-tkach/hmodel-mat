@@ -1,5 +1,5 @@
 clc; clear; close all;
-user_name = 'thomas';
+user_name = 'andrii';
 
 input_path = 'C:/Developer/data/models/template/';
 semantics_path = '_my_hand/semantics/';
@@ -17,9 +17,9 @@ if strcmp(user_name, 'anastasia')
 end
 
 if strcmp(user_name, 'andrii')    
-    vertical_scaling = 1.12;
+    vertical_scaling = 1.05;
     horisontal_scaling = 1.05;
-    width_scaling = 1.1;%1.4;  
+    width_scaling = 1.2;%1.4;  
 end
 
 if strcmp(user_name, 'thomas')
@@ -72,30 +72,18 @@ if strcmp(user_name, 'anastasia')
     centers{names_map('palm_index')} = centers{names_map('palm_index')} + 4 * [1; 0; 0];
     centers{names_map('palm_thumb')} = centers{names_map('palm_thumb')} + 4 * [1; 0; 0];
     
-    radii{names_map('thumb_base')} = 27;
-    radii{names_map('thumb_bottom')} = 18;
-    radii{names_map('thumb_middle')} = 10;
-    radii{names_map('index_top')} = 8;
-    radii{names_map('index_middle')} = 8.7;
-    radii{names_map('middle_top')} = 8;
-    radii{names_map('middle_middle')} = 9;
-    radii{names_map('ring_top')} = 7.5;
-    radii{names_map('ring_middle')} = 8.2;
-    radii{names_map('pinky_top')} = 7;
-    radii{names_map('pinky_middle')} = 7.3;
-
     radii{names_map('thumb_base')} = 23;
     radii{names_map('thumb_bottom')} = 15;
 end
    
 %% Non-uniform Andrii
 if strcmp(user_name, 'andrii')
-    thumb_1_length = 1.12 * 33;
-    thumb_2_length = 1.12 * 32;
-    thumb_3_length = 1.12 * 28;
-    thumb_4_length = 1.12 * 37;
+    thumb_1_length = 33;
+    thumb_2_length = 35;
+    thumb_3_length = 17;
+    thumb_4_length = 25;
     
-    index_1_length = 50;
+    index_1_length = 46;
     index_2_length = 24;
     index_3_length = 21;
     
@@ -113,8 +101,39 @@ if strcmp(user_name, 'andrii')
     
     thumb_rotation = 1;
     
+    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 20 * [1; 0; 0] + 7 * [0; 0; 1] + 1 * [0; 1; 0];
+    centers{names_map('index_base')} = centers{names_map('index_base')} + 3 * [1; 0; 0];
+    centers{names_map('pinky_base')} = centers{names_map('pinky_base')} - 2 * [0; 1; 0] -  1 * [1; 0; 0];
+    
+    centers{names_map('palm_thumb')} = centers{names_map('palm_thumb')} + 4 * [1; 0; 0];
+    centers{names_map('palm_index')} = centers{names_map('palm_index')} - 3 * [0; 1; 0];
+    centers{names_map('palm_middle')} = centers{names_map('palm_middle')} - 3 * [0; 1; 0];
+    centers{names_map('palm_ring')} = centers{names_map('palm_ring')} - 3 * [0; 1; 0];
+    centers{names_map('palm_pinky')} = centers{names_map('palm_pinky')} - 3 * [0; 1; 0];
+    
+    
     radii{names_map('thumb_base')} = 27;
-    radii{names_map('thumb_bottom')} = 18;
+    radii{names_map('thumb_bottom')} = 13.5;
+    radii{names_map('thumb_middle')} = 10.5;
+    radii{names_map('thumb_top')} = 10.5;
+    radii{names_map('thumb_additional')} = 7.2;
+   
+    radii{names_map('index_top')} = 8;
+    radii{names_map('index_middle')} = 9.2;
+    radii{names_map('index_base')} = 11.5;
+    
+    radii{names_map('middle_top')} = 8;
+    radii{names_map('middle_middle')} = 9;
+    radii{names_map('middle_base')} = 11.3;
+    
+    radii{names_map('ring_top')} = 7.5;
+    radii{names_map('ring_middle')} = 8.2;
+    radii{names_map('ring_base')} = 10.5;
+    
+    radii{names_map('pinky_top')} = 7;
+    radii{names_map('pinky_middle')} = 7.3;
+    radii{names_map('pinky_base')} = 10;
+    
 end
 
 %% Non-uniform Thomas
@@ -216,6 +235,10 @@ phalanges = initialize_offsets(centers, phalanges, names_map);
 theta = zeros(29, 1); theta(10) = -0.3;
 phalanges = htrack_move(theta, dofs, phalanges);
 centers = update_centers(centers, phalanges, names_map);
+
+%% Wrist
+centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + 0.55 * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
+centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + 0.55 * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
 
 %% Pass to cpp
 figure; hold on; axis off; axis equal;

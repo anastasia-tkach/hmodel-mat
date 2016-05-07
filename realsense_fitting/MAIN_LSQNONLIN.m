@@ -13,11 +13,11 @@ settings.W = 639/downscaling_factor;
     - Set w5 quite high
 %}
 w1 = 1;
-w2 = 0.5; %0.02
-w4 = 1.2;
-w5 = 10; %300; 
+w2 = 1; %0.02
+w4 = 4;
+w5 = 0; %300; 
 w7 = 100;%600;
-w8 = 0;
+w8 = 100;
 w9 = 1;
 
 settings.damping = damping;
@@ -43,7 +43,7 @@ load([input_path, 'blocks.mat']);
 load([input_path, 'poses.mat']);
 load([input_path, 'radii.mat']);
 load([input_path, 'initial_rotations.mat']);
-%poses = poses(1);
+poses = poses([1, 2, 3, 5]);
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers
@@ -103,9 +103,9 @@ for p = 1:num_poses
 end
 for o = 1:num_centers
     X0(D * num_poses * num_centers + o) = radii{o};
-    if o <= 20 || o == 33
-        Xl(D * num_poses * num_centers + o) = 0.8 * radii{o};        
-        Xu(D * num_poses * num_centers + o) = 1.1 * radii{o};
+    if o < 20 %|| o == 33
+        Xl(D * num_poses * num_centers + o) = 0.9 * radii{o};        
+        Xu(D * num_poses * num_centers + o) = 1 * radii{o};
     else
         Xl(D * num_poses * num_centers + o) = 0.5 * radii{o};
         Xu(D * num_poses * num_centers + o) = 1.2 * radii{o};
@@ -117,7 +117,8 @@ iter = 0;
 save poses poses;
 save initial_rotations initial_rotations;
 save iter iter;
-X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, Xl, Xu, options);
+%X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, Xl, Xu, options);
+X = lsqnonlin(@(X) energies_lsqnonlin(X, blocks, settings), X0, [], [], options);
 
 %% Load result
 D = 3;

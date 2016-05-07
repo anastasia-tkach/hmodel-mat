@@ -3,6 +3,7 @@ stage = 1;
 
 %% Measured values
 scaling_factor = 0.811646;
+width_increase = 1;
 %{
 if strcmp(user_name, 'anastasia')
     real_membrane_offset = [18, 22, 22, 18];
@@ -37,7 +38,7 @@ input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 4;
+num_poses = 5;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 
@@ -58,6 +59,9 @@ for p = 1:num_poses
     
     %% Read model
     [centers, radii, blocks, theta, ~, mean_centers] = read_cpp_model([input_path,  num2str(p), '/']);
+    for i = 1:length(radii)
+        radii{i} = width_increase * radii{i};
+    end
     
     %% Filter data  
     %%{
@@ -78,13 +82,14 @@ for p = 1:num_poses
         end
     end
     %%}
+        
     %% Display model
     for i = 1:length(data_points)
         data_points{i} = data_points{i} - mean_centers;
     end
     data_points = data_points(1:2:end);
     
-    %figure; hold on; axis off; axis equal;
+    
     display_result(centers, [], [], blocks, radii, false, 0.9, 'big');
     mypoints(data_points,  [0.6759, 0.2088, 0.46373]);
     view([-180, -90]); camlight; drawnow;

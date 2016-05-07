@@ -101,7 +101,20 @@ centers{names_map('middle_membrane')} = adjust_membrane(centers, radii, names_ma
 centers{names_map('ring_membrane')} = adjust_membrane(centers, radii, names_map, 'ring_membrane', 'ring_base', 'ring_bottom');
 centers{names_map('pinky_membrane')} = adjust_membrane(centers, radii, names_map, 'pinky_membrane', 'pinky_base', 'pinky_bottom');
 
-%% Put to initial pose
+%% Adjust wrist
+%{
+personal_scaling = 1;
+centers{35} = centers{names_map('palm_back')} + personal_scaling * [12; -5; 0];
+centers{36} = centers{names_map('palm_back')} + personal_scaling * [-8; -5; 0];
+centers{37} = centers{names_map('palm_back')} + personal_scaling * [5; -60; 0];
+centers{38} = centers{names_map('palm_back')} + personal_scaling * [-5; -60; 0];
+%}
+%{
+centers(35:38) = poses{1}.initial_centers(35:38);
+radii(35:38) = poses{1}.initial_radii(35:38);
+%}
+
+%% Display
 figure; hold on; axis off; axis equal;
 display_skeleton(centers, [], blocks, [], false, 'b');
 
@@ -115,6 +128,7 @@ end
 for i = 1:num_phalanges
     phalanges{i}.local(1:3, 4) = scaling_factor * phalanges{i}.local(1:3, 4);
 end
+
 
 %% Write model
 write_cpp_model('C:/Developer/data/models/reverse/', centers, radii, blocks, phalanges);
