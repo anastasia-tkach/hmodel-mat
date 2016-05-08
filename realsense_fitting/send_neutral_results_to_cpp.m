@@ -1,4 +1,4 @@
-function [] = send_neutral_results_to_cpp(poses, radii, blocks, names_map, scaling_factor)
+function [] = send_neutral_results_to_cpp(poses, radii, blocks, names_map, scaling_factor, user_name)
 
 %{
 clear;
@@ -17,11 +17,11 @@ final_pose = poses{final_id};
 %% Rotate final pose to initial position
 Rx = makehgtform('axisrotate', [1; 0; 0], - final_pose.init_theta(4));
 Ry = makehgtform('axisrotate', [0; 1; 0], - final_pose.init_theta(5));
-Rz = makehgtform('axisrotate', [0; 0; 1], - final_pose.init_theta(6));    
+Rz = makehgtform('axisrotate', [0; 0; 1], - final_pose.init_theta(6));
 final_pose.init_transform =  Rz * Ry * Rx;
 for i = 1:length(final_pose.centers)
     final_pose.centers{i} = transform(final_pose.centers{i}, final_pose.init_transform);
-end    
+end
 
 %% Adjust initial transformations
 centers = final_pose.centers;
@@ -42,7 +42,7 @@ phalanges{16}.local(2, 4) = norm(centers{names_map('index_middle')} - centers{na
 phalanges{11}.local(1:3, 4) = centers{names_map('middle_base')} - centers{names_map('palm_back')};
 phalanges{12}.local(2, 4) = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_base')});
 phalanges{13}.local(2, 4) = norm(centers{names_map('middle_middle')} - centers{names_map('middle_bottom')});
-phalanges{13}.local(1:3, 1:3) = eye(3, 3); 
+phalanges{13}.local(1:3, 1:3) = eye(3, 3);
 
 % Ring
 phalanges{8}.local(1:3, 4) = centers{names_map('ring_base')} - centers{names_map('palm_back')};
@@ -101,25 +101,44 @@ centers{names_map('middle_membrane')} = adjust_membrane(centers, radii, names_ma
 centers{names_map('ring_membrane')} = adjust_membrane(centers, radii, names_map, 'ring_membrane', 'ring_base', 'ring_bottom');
 centers{names_map('pinky_membrane')} = adjust_membrane(centers, radii, names_map, 'pinky_membrane', 'pinky_base', 'pinky_bottom');
 
-%% Adjust wrist
-%{
-personal_scaling = 1;
-centers{35} = centers{names_map('palm_back')} + personal_scaling * [12; -5; 0];
-centers{36} = centers{names_map('palm_back')} + personal_scaling * [-8; -5; 0];
-centers{37} = centers{names_map('palm_back')} + personal_scaling * [5; -60; 0];
-centers{38} = centers{names_map('palm_back')} + personal_scaling * [-5; -60; 0];
-%}
-%{
-centers(35:38) = poses{1}.initial_centers(35:38);
-radii(35:38) = poses{1}.initial_radii(35:38);
-%}
+if strcmp(user_name, 'andrii');
+    centers{names_map('middle_membrane')} = centers{names_map('middle_membrane')} + 5 * [0; 1; 0];
+    centers{names_map('palm_middle')} = centers{names_map('palm_middle')} - 5 * [0; 1; 0];
+    radii{names_map('thumb_top')} = 0.95 * radii{names_map('thumb_top')};
+    radii{names_map('thumb_additional')} = 1.05 * radii{names_map('thumb_additional')};
+    centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_bottom_right')} + 6 * [0; 0; 1] - 6 * [0; 1; 0];
+    radii{names_map('wrist_bottom_right')}  = 0.9 * radii{names_map('wrist_bottom_right')};
+end
+
+%% Adjust radii
+factor = 1;
+radii{names_map('thumb_base')} = factor * radii{names_map('thumb_base')};
+radii{names_map('thumb_bottom')} = factor * radii{names_map('thumb_bottom')};
+radii{names_map('thumb_middle')} = factor * radii{names_map('thumb_middle')};
+radii{names_map('thumb_top')} = factor * radii{names_map('thumb_top')};
+radii{names_map('thumb_additional')} = factor * radii{names_map('thumb_additional')};
+radii{names_map('index_top')} = factor * radii{names_map('index_top')};
+radii{names_map('index_middle')} = factor * radii{names_map('index_middle')};
+radii{names_map('index_base')} = factor * radii{names_map('index_base')};
+radii{names_map('middle_top')} = factor * radii{names_map('middle_top')};
+radii{names_map('middle_middle')} = factor * radii{names_map('middle_middle')};
+radii{names_map('middle_base')} = factor * radii{names_map('middle_base')};
+radii{names_map('ring_top')} = factor * radii{names_map('ring_top')};
+radii{names_map('ring_middle')} = factor * radii{names_map('ring_middle')};
+radii{names_map('ring_base')} = factor * radii{names_map('ring_base')};
+radii{names_map('pinky_top')} = factor * radii{names_map('pinky_top')};
+radii{names_map('pinky_middle')} = factor * radii{names_map('pinky_middle')};
+radii{names_map('pinky_base')} = factor * radii{names_map('pinky_base')};
+
 
 %% Display
 figure; hold on; axis off; axis equal;
 display_skeleton(centers, [], blocks, [], false, 'b');
 
+
 %% Scale
 num_phalanges = 17;
+scaling_factor = 0.78;
 scaling_factor = 1/scaling_factor;
 for i = 1:length(centers)
     centers{i} = scaling_factor * centers{i};
@@ -131,7 +150,7 @@ end
 
 
 %% Write model
-write_cpp_model('C:/Developer/data/models/reverse/', centers, radii, blocks, phalanges);
+write_cpp_model(['C:/Developer/data/models/', user_name, '/'], centers, radii, blocks, phalanges);
 
 
 

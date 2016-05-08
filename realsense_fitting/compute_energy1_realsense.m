@@ -32,7 +32,7 @@ if (display)
         mypoints(pose.points, [179, 81, 109]/255, 3);
         zoom(2); 
         view([-180, -90]);   
-        xlim([ -190, 225]); ylim([-80, 170]); zlim([-55, 50]);
+        xlim([ -190, 225]); ylim([-30, 170]); zlim([-100, 50]);
         
         
         %if pose_id == 1, zoom(2); view([148, 7.264]); end

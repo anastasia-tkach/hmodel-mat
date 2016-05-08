@@ -1,4 +1,4 @@
-user_name = 'andrii';
+user_name = 'thomas';
 stage = 1;
 
 %% Measured values
@@ -26,7 +26,7 @@ if strcmp(user_name, 'andrii')
     real_phalanges_length{5} = scaling_factor * [40, 19, 14];
 end
 %}
-data_root = 'C:/Developer/data/MATLAB/';
+data_root = 'C:/Developer/data/MATLAB/fitting_cpp_initialization/';
 save([data_root, '/stage.mat'],  'stage');
 save([data_root, '/user_name.mat'], 'user_name');
 save([data_root, '/scaling_factor.mat'], 'scaling_factor');
@@ -38,7 +38,7 @@ input_path = [data_root, user_name, '/stage', num2str(stage), '/'];
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-num_poses = 5;
+num_poses = 7;
 poses = cell(1, num_poses);
 tx = 640 / 4; ty = 480 / 4; fx = 287.26; fy = 287.26;
 

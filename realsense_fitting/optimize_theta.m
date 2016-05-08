@@ -98,6 +98,71 @@ parameters(18:21) = theta_middle;
 parameters(22:25) = theta_ring;
 parameters(26:29) = theta_pinky;
 
+%% Clip parameters
+% thumb abduction
+if parameters(10) < -0.75, parameters(10) = -0.75; end
+if parameters(10) >  0.2, parameters(10) = 0.2; end
+% thumb flexion 1
+if parameters(11) < -0.3, parameters(11) = -0.3; end	
+if parameters(11) > 1.8, parameters(11) = 1.8; end
+% thumb flexion 2
+if parameters(12) < -0.35, parameters(12) = -0.35; end	
+if parameters(12) > 1.70, parameters(12) = 1.70; end
+% thumb flexion 3
+if parameters(13) < -0.35, parameters(13) = -0.35; end	
+if parameters(13) > 1.50, parameters(13) = 1.50; end
+
+% index abductions
+if parameters(14) < -0.50, parameters(14) = -0.50; end	
+if parameters(14) > 0.35, parameters(14) = 0.35; end
+% index flexion 1
+if parameters(15) < -2.00, parameters(15) = -2.00; end	
+if parameters(15) > 1.00, parameters(15) = 1.00; end
+% index flexion 2
+if parameters(16) < -2.00, parameters(16) = -2.00; end	
+if parameters(16) > 0.30, parameters(16) = 0.30; end
+% index flexion 3
+if parameters(17) < -2.00, parameters(17) = -2.00; end	
+if parameters(17) > 0.30, parameters(17) = 0.30; end
+
+%middle abduction
+if parameters(18) < -0.50, parameters(18) = -0.50; end	
+if parameters(18) > 0.25, parameters(18) = 0.25; end
+% middle flexion 1
+if parameters(19) < -2.00, parameters(19) = -2.00; end	
+if parameters(19) > 1.00, parameters(19) = 1.00; end
+% middle flexion 2
+if parameters(20) < -2.00, parameters(20) = -2.00; end	
+if parameters(20) > 0.30, parameters(20) = 0.30; end
+% middle flexion 3
+if parameters(21) < -2.00, parameters(21) = -2.00; end	
+if parameters(21) > 0.30, parameters(21) = 0.30; end
+
+% ring abduction
+if parameters(22) < -0.20, parameters(22) = -0.20; end	
+if parameters(22) > 0.30, parameters(22) = 0.30; end
+% ring flexion 1
+if parameters(23) < -2.00, parameters(23) = -2.00; end	
+if parameters(23) > 1.00, parameters(23) = 1.00; end
+% ring flexion 2
+if parameters(24) < -2.00, parameters(24) = -2.00; end
+if parameters(24) > 0.30, parameters(24) = 0.30; end
+% ring flexion 3
+if parameters(25) < -2.00, parameters(25) = -2.00; end	
+if parameters(25) > 0.30, parameters(25) = 0.3; end
+
+% pinky abduction
+if parameters(26) < -0.30, parameters(26) = -0.30; end   
+if parameters(26) > 0.60, parameters(26) = 0.60; end
+% pinky flexion 1
+if parameters(27) < -2.00, parameters(27) = -2.00; end
+if parameters(27) > 1.00, parameters(27) = 1.00; end
+% pinky flexion 2
+if parameters(28) < -2.00, parameters(28) = -2.00; end	
+if parameters(28) > 0.30, parameters(28) = 0.30; end
+% pinky flexion 3
+if parameters(29) < -2.00, parameters(29) = -2.00; end	
+if parameters(29) > 0.30, parameters(29) = 0.30; end
 
 %% Rewrite data
 transformations_indices = [1, 17, 18, 19];

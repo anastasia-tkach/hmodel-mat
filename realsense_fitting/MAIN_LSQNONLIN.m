@@ -2,6 +2,10 @@
 format shortg;
 clear; clc; close all;
 settings.mode = 'fitting';
+absolute_path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\'];
+absolute_path = [absolute_path, 'HModel\'];
+addpath(genpath(absolute_path));
+cd(absolute_path);
 settings_default;
 downscaling_factor = 3;
 settings.H = 480/downscaling_factor;
@@ -12,12 +16,13 @@ settings.W = 639/downscaling_factor;
     - Do not set w2 high, it interferes with other energies
     - Set w5 quite high
 %}
+
 w1 = 1;
 w2 = 1; %0.02
 w4 = 4;
-w5 = 0; %300; 
-w7 = 100;%600;
-w8 = 100;
+w5 = 0; 
+w7 = 150;%75;
+w8 = 1;
 w9 = 1;
 
 settings.damping = damping;
@@ -28,7 +33,7 @@ settings.energy7 = false;
 settings.discard_threshold = 0.5;
 settings.block_safety_factor = 1.2;
 
-data_root = 'C:/Developer/data/MATLAB/';
+data_root = 'C:/Developer/data/MATLAB/fitting_cpp_initialization/';
 load([data_root, '/stage.mat']);
 load([data_root, '/user_name.mat']);
 load([data_root, '/scaling_factor.mat']);
@@ -43,7 +48,7 @@ load([input_path, 'blocks.mat']);
 load([input_path, 'poses.mat']);
 load([input_path, 'radii.mat']);
 load([input_path, 'initial_rotations.mat']);
-poses = poses([1, 2, 3, 5]);
+%poses = poses([1, 2, 3, 5]);
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers
@@ -169,4 +174,4 @@ save([output_path, 'radii.mat'], 'radii');
 save([output_path, 'blocks.mat'], 'blocks');
 
 %% Send data to hmodel-cpp
-send_neutral_results_to_cpp(poses, radii, blocks, names_map, scaling_factor);
+send_neutral_results_to_cpp(poses, radii, blocks, names_map, scaling_factor, user_name);

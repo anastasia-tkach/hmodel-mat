@@ -1,13 +1,11 @@
 clc; clear; close all;
-user_name = 'andrii';
+user_name = 'thomas';
 
 input_path = 'C:/Developer/data/models/template/';
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 [centers, radii, blocks, ~, ~, mean_centers] = read_cpp_model(input_path);
 disp('DEAL WITH MEAN CENTERS');
-
-thumb_rotation = 1;
 
 %% Uniform scaling
 if strcmp(user_name, 'anastasia')
@@ -16,16 +14,16 @@ if strcmp(user_name, 'anastasia')
     width_scaling = 1.1;
 end
 
-if strcmp(user_name, 'andrii')    
+if strcmp(user_name, 'andrii')
     vertical_scaling = 1.05;
     horisontal_scaling = 1.05;
-    width_scaling = 1.2;%1.4;  
+    width_scaling = 1.2;%1.4;
 end
 
 if strcmp(user_name, 'thomas')
     vertical_scaling = 1.07;
-    horisontal_scaling = 1;
-    width_scaling = 1.02;  
+    horisontal_scaling = 0.95;
+    width_scaling = 1.07;
     
     factor = 1;
 end
@@ -40,32 +38,39 @@ for i = 1:length(radii)
     radii{i} = width_scaling * radii{i};
 end
 
+%% Template length
+thumb_rotation = 1;
+
+wrist_scaling = 0.55;
+
+thumb_1_length = norm(centers{names_map('thumb_base')} - centers{names_map('thumb_bottom')});
+thumb_2_length = norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_middle')});
+thumb_3_length = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_top')});
+thumb_4_length = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_additional')});
+
+index_1_length = norm(centers{names_map('index_base')} - centers{names_map('index_bottom')});
+index_2_length = norm(centers{names_map('index_bottom')} - centers{names_map('index_middle')});
+index_3_length = norm(centers{names_map('index_middle')} - centers{names_map('index_top')});
+
+middle_1_length = norm(centers{names_map('middle_base')} - centers{names_map('middle_bottom')});
+middle_2_length = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_middle')});
+middle_3_length = norm(centers{names_map('middle_middle')} - centers{names_map('middle_top')});
+
+ring_1_length = norm(centers{names_map('ring_base')} - centers{names_map('ring_bottom')});
+ring_2_length = norm(centers{names_map('ring_bottom')} - centers{names_map('ring_middle')});
+ring_3_length = norm(centers{names_map('ring_middle')} - centers{names_map('ring_top')});
+
+pinky_1_length = norm(centers{names_map('pinky_base')} - centers{names_map('pinky_bottom')});
+pinky_2_length = norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_middle')});
+pinky_3_length = norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_top')});
+
+
 %% Non-uniform Anastasia
 if strcmp(user_name, 'anastasia')
-    thumb_1_length = norm(centers{names_map('thumb_base')} - centers{names_map('thumb_bottom')});
-    thumb_2_length = norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_middle')});
-    thumb_3_length = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_top')});
-    thumb_4_length = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_additional')});
     
-    index_1_length = norm(centers{names_map('index_base')} - centers{names_map('index_bottom')});
-    index_2_length = norm(centers{names_map('index_bottom')} - centers{names_map('index_middle')});
-    index_3_length = norm(centers{names_map('index_middle')} - centers{names_map('index_top')});
-    
-    middle_1_length = norm(centers{names_map('middle_base')} - centers{names_map('middle_bottom')});
-    middle_2_length = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_middle')});
-    middle_3_length = norm(centers{names_map('middle_middle')} - centers{names_map('middle_top')});
-    
-    ring_1_length = norm(centers{names_map('ring_base')} - centers{names_map('ring_bottom')});
-    ring_2_length = norm(centers{names_map('ring_bottom')} - centers{names_map('ring_middle')});
-    ring_3_length = norm(centers{names_map('ring_middle')} - centers{names_map('ring_top')});
-    
-    pinky_1_length = norm(centers{names_map('pinky_base')} - centers{names_map('pinky_bottom')});
-    pinky_2_length = norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_middle')});
-    pinky_3_length = norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_top')});
-  
     thumb_rotation = 1;
     
-    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 10 * [1; 0; 0] + 7 * [0; 0; 1] + 7 * [0; 1; 0];
+    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 12 * [1; 0; 0] + 7 * [0; 0; 1] + 7 * [0; 1; 0];
     centers{names_map('index_base')} = centers{names_map('index_base')} + 3 * [1; 0; 0];
     centers{names_map('pinky_base')} = centers{names_map('pinky_base')} - 2 * [0; 1; 0] -  1 * [1; 0; 0];
     
@@ -75,14 +80,15 @@ if strcmp(user_name, 'anastasia')
     radii{names_map('thumb_base')} = 23;
     radii{names_map('thumb_bottom')} = 15;
 end
-   
+
 %% Non-uniform Andrii
-if strcmp(user_name, 'andrii')
+if strcmp(user_name, 'andrii')  
+
     thumb_1_length = 33;
     thumb_2_length = 35;
-    thumb_3_length = 17;
-    thumb_4_length = 25;
-    
+    thumb_3_length = 15;
+    thumb_4_length = 23;
+
     index_1_length = 46;
     index_2_length = 24;
     index_3_length = 21;
@@ -95,11 +101,12 @@ if strcmp(user_name, 'andrii')
     ring_2_length = 26;
     ring_3_length = 22;
     
-    pinky_1_length = 33;
-    pinky_2_length = 23;
+    pinky_1_length = 31;
+    pinky_2_length = 21;
     pinky_3_length = 20;
     
     thumb_rotation = 1;
+    wrist_scaling = 0.55;
     
     centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 20 * [1; 0; 0] + 7 * [0; 0; 1] + 1 * [0; 1; 0];
     centers{names_map('index_base')} = centers{names_map('index_base')} + 3 * [1; 0; 0];
@@ -109,10 +116,9 @@ if strcmp(user_name, 'andrii')
     centers{names_map('palm_index')} = centers{names_map('palm_index')} - 3 * [0; 1; 0];
     centers{names_map('palm_middle')} = centers{names_map('palm_middle')} - 3 * [0; 1; 0];
     centers{names_map('palm_ring')} = centers{names_map('palm_ring')} - 3 * [0; 1; 0];
-    centers{names_map('palm_pinky')} = centers{names_map('palm_pinky')} - 3 * [0; 1; 0];
+    centers{names_map('palm_pinky')} = centers{names_map('palm_pinky')} - 3 * [0; 1; 0];    
     
-    
-    radii{names_map('thumb_base')} = 27;
+    radii{names_map('thumb_base')} = 24;
     radii{names_map('thumb_bottom')} = 13.5;
     radii{names_map('thumb_middle')} = 10.5;
     radii{names_map('thumb_top')} = 10.5;
@@ -133,33 +139,53 @@ if strcmp(user_name, 'andrii')
     radii{names_map('pinky_top')} = 7;
     radii{names_map('pinky_middle')} = 7.3;
     radii{names_map('pinky_base')} = 10;
-    
+    %}
 end
 
 %% Non-uniform Thomas
-if strcmp(user_name, 'thomas')    
-    thumb_1_length = factor * norm(centers{names_map('thumb_base')} - centers{names_map('thumb_bottom')});
-    thumb_2_length = factor * norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_middle')});
-    thumb_3_length = factor * norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_top')});
-    thumb_4_length = factor * norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_additional')});
+if strcmp(user_name, 'thomas')
     
-    index_1_length = norm(centers{names_map('index_base')} - centers{names_map('index_bottom')});
-    index_2_length = norm(centers{names_map('index_bottom')} - centers{names_map('index_middle')});
-    index_3_length = norm(centers{names_map('index_middle')} - centers{names_map('index_top')});
+    wrist_scaling = 0.17;
+
+    thumb_1_length = 38;
+    thumb_2_length = 29;
+    thumb_3_length = 21;
+    thumb_4_length = 27;
     
-    middle_1_length = norm(centers{names_map('middle_base')} - centers{names_map('middle_bottom')});
-    middle_2_length = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_middle')});
-    middle_3_length = norm(centers{names_map('middle_middle')} - centers{names_map('middle_top')});
+    index_1_length = 46;
+    %index_2_length = ;
+    %index_3_length = ;
     
-    ring_1_length = norm(centers{names_map('ring_base')} - centers{names_map('ring_bottom')});
-    ring_2_length = norm(centers{names_map('ring_bottom')} - centers{names_map('ring_middle')});
-    ring_3_length = norm(centers{names_map('ring_middle')} - centers{names_map('ring_top')});
+    middle_1_length = 47;
+    middle_2_length = 34;
+    %middle_3_length = ;
     
-    pinky_1_length = norm(centers{names_map('pinky_base')} - centers{names_map('pinky_bottom')});
-    pinky_2_length = norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_middle')});
-    pinky_3_length = norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_top')});
+    ring_1_length = 45;
+    ring_2_length = 34.5;
+    %ring_3_length = ;
+    
+    pinky_1_length = 33;
+    %pinky_2_length = ;
+    pinky_3_length = 15;
+  
+    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 12 * [1; 0; 0] - 4 * [0; 0; 1] + 12 * [0; 1; 0];
+    
+    centers{names_map('index_base')} = centers{names_map('index_base')} + 8 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('middle_base')} = centers{names_map('middle_base')} + 5 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('ring_base')} = centers{names_map('ring_base')} + 9 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('pinky_base')} = centers{names_map('pinky_base')} + 5 * [0; 1; 0];
+    
+    centers{names_map('palm_index')} = centers{names_map('palm_index')} + 6 * [0; 1; 0];
+    centers{names_map('palm_middle')} = centers{names_map('palm_middle')} + 6 * [0; 1; 0];
+    centers{names_map('palm_ring')} = centers{names_map('palm_ring')} + 6 * [0; 1; 0];
+    centers{names_map('palm_pinky')} = centers{names_map('palm_pinky')} + 0 * [0; 1; 0];
+
+    centers{names_map('index_membrane')} = centers{names_map('index_membrane')} + 10 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('middle_membrane')} = centers{names_map('middle_membrane')} + 8 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('ring_membrane')} = centers{names_map('ring_membrane')} + 8 * [0; 1; 0] + 4 * [0; 0; 1];
+    centers{names_map('pinky_membrane')} = centers{names_map('pinky_membrane')} + 2 * [0; 1; 0];
 end
-    
+
 %% Adjust up template transformations
 [phalanges, dofs] = hmodel_parameters();
 for i = 1:length(phalanges)
@@ -237,8 +263,8 @@ phalanges = htrack_move(theta, dofs, phalanges);
 centers = update_centers(centers, phalanges, names_map);
 
 %% Wrist
-centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + 0.55 * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
-centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + 0.55 * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
+centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + wrist_scaling * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
+centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + wrist_scaling * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
 
 %% Pass to cpp
 figure; hold on; axis off; axis equal;
