@@ -23,9 +23,9 @@ for i = 1:length(blocks)
         c2 = centers{index2(j)};
         
         if D == 3
-            %scatter3(c1(1), c1(2), c1(3), 50, edge_color, 'o', 'filled');
-            %scatter3(c2(1), c2(2), c2(3), 50, edge_color, 'o', 'filled');
-            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', edge_color, 'lineWidth', 4);
+            scatter3(c1(1), c1(2), c1(3), 11, edge_color, 'o', 'filled');
+            scatter3(c2(1), c2(2), c2(3), 11, edge_color, 'o', 'filled');
+            line([c1(1), c2(1)], [c1(2), c2(2)], [c1(3), c2(3)], 'color', edge_color, 'lineWidth', 2);
         end
         
         if D == 2

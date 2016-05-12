@@ -20,6 +20,6 @@ mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', face_alpha);
 z0 = - (radius.^2 - rho.^2).^0.5;
 z = z0 + center(3);
 mesh(x, y, z, 'FaceColor', color, 'EdgeColor', 'none', 'FaceAlpha', face_alpha);
-
+material([0.82, 0.22, 0.05, 5, 0]); 
 hold on; axis equal; grid off; lighting gouraud;
 

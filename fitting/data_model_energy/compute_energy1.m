@@ -20,13 +20,15 @@ pose.f1 = f; pose.Jc1 = Jc; pose.Jr1 = Jr;
 if (display)
     if settings.D == 3
         display_result(pose.centers, pose.points, pose.projections, blocks, radii, false, 1, 'big'); 
-        mypoints(pose.points, [179, 81, 109]/255, 8);
+        mypoints(pose.points, [179, 81, 109]/255, 1);
         
-        if pose_id == 1, zoom(2); view([148, 7.264]); end
-        if pose_id == 2, zoom(2.3); view([150,  -2.7356]); end
-        if pose_id == 3, zoom(2); view([-2.662, 11.761]); end
-        if pose_id == 4, zoom(2.2); view([47, 33.264]); end
-        camlight;
+        if pose_id == 1, view([148, 7.264]); end
+        if pose_id == 2, view([150,  -2.7356]); end
+        if pose_id == 3, view([-2.662, 11.761]); end
+        if pose_id == 4, view([47, 33.264]); end
+        xlim([ -4 4]); ylim([-5 5]); zlim([-4 4]);
+        if pose_id == 4,  xlim([ -2 2]); end
+        %camlight;
         drawnow;
         print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(pose_id), '_iter', num2str(settings.iter)],'-dpng', '-r300');
     else

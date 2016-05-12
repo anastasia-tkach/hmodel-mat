@@ -291,6 +291,7 @@ centers{35} = centers{names_map('palm_back')} + personal_scaling * [12; -5; 0];
 centers{36} = centers{names_map('palm_back')} + personal_scaling * [-8; -5; 0];
 centers{37} = centers{names_map('palm_back')} + personal_scaling * [5; -60; 0];
 centers{38} = centers{names_map('palm_back')} + personal_scaling * [-5; -60; 0];
+
 radii{35} = 16; radii{36} = 16; 
 radii{37} = 19; radii{38} = 19; 
 phalanges = initialize_offsets(centers, phalanges, names_map);

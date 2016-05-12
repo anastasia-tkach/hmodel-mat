@@ -48,7 +48,7 @@ load([input_path, 'blocks.mat']);
 load([input_path, 'poses.mat']);
 load([input_path, 'radii.mat']);
 load([input_path, 'initial_rotations.mat']);
-%poses = poses([1, 2, 3, 5]);
+poses = poses([1, 2, 3, 4, 5]);
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers

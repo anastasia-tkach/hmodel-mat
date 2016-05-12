@@ -59,12 +59,16 @@ num_centers = length(radii); num_poses = length(poses);
 
 %% Modify
 for i = 1:length(radii)
-    radii{i} = 0.15 + 0.001 * randn;
+    if i < 20 || i == 25 || (i >= 29 && i <= 34)
+        radii{i} = 0.2 + 0.001 * randn;
+    else
+        radii{i} = 0.4 +  + 0.001 * randn;
+    end
 end
 scales = [0.95, 0.96, 0.98, 1];
 for p = 1:length(poses)
-    poses{p}.points = poses{p}.points(1:2:end);
-    poses{p}.normals = poses{p}.normals(1:2:end);
+    %poses{p}.points = poses{p}.points(1:2:end);
+    %poses{p}.normals = poses{p}.normals(1:2:end);
     T = scales(p) * eye(3, 3);
     for i = 1:length(poses{p}.centers)
         poses{p}.centers{i} = T * poses{p}.centers{i};
@@ -72,16 +76,21 @@ for p = 1:length(poses)
     for i = 1:length(poses{p}.points)
         poses{p}.points{i} = T * poses{p}.points{i};
     end 
-    %{
+    
     for i = 1:length(poses{p}.centers)
         if i == 33, continue; end
-        if i < 20
-            poses{p}.centers{i} = poses{p}.centers{i} + max(0.08, 0.1 * randn);
-        else
-            poses{p}.centers{i} = poses{p}.centers{i} + max(0.12, 0.1 * randn);
-        end
+        poses{p}.centers{i} = poses{p}.centers{i} + min(0.01, 0.01 * randn);        
     end
-    %}
+    
+end
+for p = 1:length(poses)
+    shift = poses{p}.centers{names_map('palm_back')};
+    for i = 1:length(poses{p}.centers)
+        poses{p}.centers{i} = poses{p}.centers{i} - shift;
+    end
+    for i = 1:length(poses{p}.points)
+        poses{p}.points{i} = poses{p}.points{i} - shift;
+    end
 end
 blocks{15} = [28; 19; 34];
 blocks{27} = [28; 25; 34];
@@ -119,7 +128,7 @@ for o = 1:num_centers
     X0(D * num_poses * num_centers + o) = radii{o};
 end
 
-options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.01, 'Jacobian','on', 'MaxIter', 30);
+options = optimoptions(@lsqnonlin, 'Algorithm', 'levenberg-marquardt', 'InitDamping', 0.01, 'Jacobian','on', 'MaxIter', 100);
 X = lsqnonlin(@(X) ITERATION_LSQNONLIN(X, blocks), X0, Xl, Xu, options);
 
 %% Load result
@@ -140,6 +149,7 @@ end
 
 
 %% Display
+%{
 for p = 1:length(poses)
     %[poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
     display_result(poses{p}.centers, [], [], blocks, radii, false, 1, 'big');
@@ -153,7 +163,7 @@ for p = 1:length(poses)
     drawnow;
     print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(p), '_iter', num2str(settings.iter + 1)],'-dpng', '-r300');
 end
-
+%}
 %% Follow energies
 display_energies(settings.history, 'fitting');
 

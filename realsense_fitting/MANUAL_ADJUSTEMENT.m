@@ -1,29 +1,46 @@
-clc; clear; close all;
-user_name = 'thomas';
+%clc; clear; close all;
+user_name = 'andrii';
 
 input_path = 'C:/Developer/data/models/template/';
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 [centers, radii, blocks, ~, ~, mean_centers] = read_cpp_model(input_path);
-disp('DEAL WITH MEAN CENTERS');
+
+%% Wrist
+wrist_scaling = 0.7;
+centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + wrist_scaling * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
+centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + wrist_scaling * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
 
 %% Uniform scaling
 if strcmp(user_name, 'anastasia')
+    thumb_rotation = 1;
     vertical_scaling = 1;
     horisontal_scaling = 0.83;
     width_scaling = 1.1;
 end
 
 if strcmp(user_name, 'andrii')
+    thumb_rotation = 1;
     vertical_scaling = 1.05;
     horisontal_scaling = 1.05;
     width_scaling = 1.2;%1.4;
 end
 
 if strcmp(user_name, 'thomas')
+    thumb_rotation = 1;
     vertical_scaling = 1.07;
     horisontal_scaling = 0.95;
     width_scaling = 1.07;
+    
+    factor = 1;
+end
+
+if strcmp(user_name, 'pei-i')
+    thumb_rotation = 1.3;
+    vertical_scaling = 0.91;
+    horisontal_scaling = 0.88;
+    width_scaling = 0.95;
+    %wrist_scaling = 0.8;
     
     factor = 1;
 end
@@ -39,10 +56,6 @@ for i = 1:length(radii)
 end
 
 %% Template length
-thumb_rotation = 1;
-
-wrist_scaling = 0.55;
-
 thumb_1_length = norm(centers{names_map('thumb_base')} - centers{names_map('thumb_bottom')});
 thumb_2_length = norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_middle')});
 thumb_3_length = norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_top')});
@@ -82,6 +95,7 @@ if strcmp(user_name, 'anastasia')
 end
 
 %% Non-uniform Andrii
+
 if strcmp(user_name, 'andrii')  
 
     thumb_1_length = 33;
@@ -139,10 +153,11 @@ if strcmp(user_name, 'andrii')
     radii{names_map('pinky_top')} = 7;
     radii{names_map('pinky_middle')} = 7.3;
     radii{names_map('pinky_base')} = 10;
-    %}
 end
 
+
 %% Non-uniform Thomas
+%{
 if strcmp(user_name, 'thomas')
     
     wrist_scaling = 0.17;
@@ -185,6 +200,27 @@ if strcmp(user_name, 'thomas')
     centers{names_map('ring_membrane')} = centers{names_map('ring_membrane')} + 8 * [0; 1; 0] + 4 * [0; 0; 1];
     centers{names_map('pinky_membrane')} = centers{names_map('pinky_membrane')} + 2 * [0; 1; 0];
 end
+%}
+
+%{
+if strcmp(user_name, 'pei-i')
+    factor = 0.97;
+    thumb_1_length = factor * norm(centers{names_map('thumb_base')} - centers{names_map('thumb_bottom')});
+    thumb_2_length = factor * norm(centers{names_map('thumb_bottom')} - centers{names_map('thumb_middle')});
+    thumb_3_length = factor * norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_top')});
+    thumb_4_length = factor * norm(centers{names_map('thumb_middle')} - centers{names_map('thumb_additional')});
+    
+    factor = 0.85;
+    pinky_1_length = factor * norm(centers{names_map('pinky_base')} - centers{names_map('pinky_bottom')});
+    pinky_2_length = factor * norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_middle')});
+    pinky_3_length = factor * norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_top')});
+    
+    centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 8 * [1; 0; 0] + 5 * [0; 1; 0];
+    
+    centers{names_map('middle_base')} = centers{names_map('middle_base')} - 2 * [1; 0; 1];
+    centers{names_map('middle_membrane')} = centers{names_map('middle_membrane')} - 2 * [1; 0; 1];
+end
+%}
 
 %% Adjust up template transformations
 [phalanges, dofs] = hmodel_parameters();
@@ -262,19 +298,12 @@ theta = zeros(29, 1); theta(10) = -0.3;
 phalanges = htrack_move(theta, dofs, phalanges);
 centers = update_centers(centers, phalanges, names_map);
 
-%% Wrist
-centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + wrist_scaling * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
-centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + wrist_scaling * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
 
 %% Pass to cpp
 figure; hold on; axis off; axis equal;
 display_skeleton(centers, [], blocks, [], false, 'b');
 
 write_cpp_model('C:/Developer/data/models/anonymous/', centers, radii, blocks, phalanges);
-
-
-
-
 
 
 

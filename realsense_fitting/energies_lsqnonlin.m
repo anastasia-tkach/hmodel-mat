@@ -60,7 +60,7 @@ settings.energy7 = true;
 [f8, J8] = assemble_energy(poses, '8', settings);
 f9 = zeros(num_poses * num_centers * D + num_centers, 1);
 J9 = eye(num_poses * num_centers * D + num_centers, num_poses * num_centers * D + num_centers);
-J9(num_poses * num_centers * D + 1:end, num_poses * num_centers * D + 1:end) = 100 * eye(num_centers, num_centers);
+J9(num_poses * num_centers * D + 1:end, num_poses * num_centers * D + 1:end) = 150 * eye(num_centers, num_centers);
 % stop thumb bottom
 %J9(num_poses * num_centers * D + settings.names_map('thumb_bottom'), num_poses * num_centers * D + settings.names_map('thumb_bottom')) = 1000;
 

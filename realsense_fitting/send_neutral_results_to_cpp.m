@@ -46,13 +46,15 @@ phalanges{13}.local(1:3, 1:3) = eye(3, 3);
 
 % Ring
 phalanges{8}.local(1:3, 4) = centers{names_map('ring_base')} - centers{names_map('palm_back')};
-phalanges{9}.local(2, 4) = norm(centers{names_map('ring_bottom')} - centers{names_map('ring_base')});
+phalanges{9}.local(2, 4) = 0.9 * (norm(centers{names_map('ring_bottom')} - centers{names_map('ring_base')}));
 phalanges{10}.local(2, 4) = norm(centers{names_map('ring_middle')} - centers{names_map('ring_bottom')});
 
 % Pinky
 phalanges{5}.local(1:3, 4) = centers{names_map('pinky_base')} - centers{names_map('palm_back')};
 phalanges{6}.local(2, 4) =  norm(centers{names_map('pinky_bottom')} - centers{names_map('pinky_base')});
 phalanges{7}.local(2, 4) =  norm(centers{names_map('pinky_middle')} - centers{names_map('pinky_bottom')});
+
+centers{names_map('thumb_additional')} = centers{names_map('thumb_middle')} + 0.9 * (centers{names_map('thumb_additional')} - centers{names_map('thumb_middle')});
 
 %% Put to initial pose
 figure; hold on; axis off; axis equal;
@@ -110,8 +112,32 @@ if strcmp(user_name, 'andrii');
     radii{names_map('wrist_bottom_right')}  = 0.9 * radii{names_map('wrist_bottom_right')};
 end
 
+if strcmp(user_name, 'thomas');
+    centers{names_map('palm_index')} = centers{names_map('palm_index')} - 4 * [1; 0; 0];
+    centers{names_map('palm_thumb')} = centers{names_map('palm_thumb')} + 3 * [0; 1; 0] + 2 * [1; 0; 0];
+    centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_bottom_right')} - 15 * [0; 1; 0] + 3 * [1; 0; 0];
+    centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_bottom_left')} - 20 * [0; 1; 0] - 3 * [1; 0; 0];
+    radii{names_map('thumb_additional')} = 0.95 * radii{names_map('thumb_additional')};
+    radii{names_map('thumb_top')} = 0.95 * radii{names_map('thumb_top')};
+    radii{names_map('middle_top')} = 0.92 * radii{names_map('middle_top')};
+    radii{names_map('index_top')} = 0.95 * radii{names_map('index_top')};
+end
+
+if strcmp(user_name, 'pei-i');
+    radii{names_map('thumb_top')} = 0.93 * radii{names_map('thumb_top')};
+    radii{names_map('thumb_additional')} = 0.93 * radii{names_map('thumb_additional')};
+end
+
 %% Adjust radii
-factor = 1;
+if strcmp(user_name, 'andrii') 
+    factor = 1;
+end
+if strcmp(user_name, 'thomas') 
+    factor = 1;
+end
+if strcmp(user_name, 'pei-i') 
+    factor = 1;
+end
 radii{names_map('thumb_base')} = factor * radii{names_map('thumb_base')};
 radii{names_map('thumb_bottom')} = factor * radii{names_map('thumb_bottom')};
 radii{names_map('thumb_middle')} = factor * radii{names_map('thumb_middle')};
@@ -138,7 +164,15 @@ display_skeleton(centers, [], blocks, [], false, 'b');
 
 %% Scale
 num_phalanges = 17;
-scaling_factor = 0.78;
+if strcmp(user_name, 'andrii')    
+    scaling_factor = 0.78;
+end
+if strcmp(user_name, 'thomas')    
+    scaling_factor = 0.79;
+end
+if strcmp(user_name, 'pei-i')    
+    scaling_factor = 0.8;
+end
 scaling_factor = 1/scaling_factor;
 for i = 1:length(centers)
     centers{i} = scaling_factor * centers{i};
