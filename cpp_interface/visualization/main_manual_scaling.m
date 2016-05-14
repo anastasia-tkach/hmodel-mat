@@ -43,9 +43,6 @@ adjusted_centers{names_map('thumb_fold')} = adjusted_centers{names_map('thumb_bo
 %% Interpolation
 output_path = 'C:\Developer\data\MATLAB\convolution_feel\';
 num_frames = 3;
-d1 = 1; 
-d2 = 7;
-n = num_frames - 1;
 y = zeros(num_frames, 1);
 intermediate_centers = cell(length(centers), 1);
 intermediate_radii = cell(length(centers), 1);

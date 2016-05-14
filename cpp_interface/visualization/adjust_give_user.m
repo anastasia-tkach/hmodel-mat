@@ -1,11 +1,4 @@
-clc; clear; %close all;
-semantics_path = '_my_hand/semantics/';
-load([semantics_path, 'fitting/names_map.mat']);
-
-user_name = 'pei-i';
-input_path = ['C:\Developer\data\MATLAB\convolution_feel\', user_name, '\'];
-output_path = ['C:\Developer\data\MATLAB\convolution_feel\'];
-[centers, radii, blocks, ~, mean_centers] = read_cpp_model(input_path);
+function [centers] = adjust_give_user(centers, user_name, names_map)
 
 shift = centers{26};
 for i = 1:length(centers)
@@ -85,32 +78,4 @@ if strcmp(user_name, 'thomas')
     centers{names_map('thumb_base')} = centers{names_map('thumb_base')} + 2 * to_pinky;
     
     centers{names_map('index_membrane')} = centers{names_map('index_membrane')} + 1 * back;  
-end
-
-Ry = @(alpha) [cos(alpha), 0, sin(alpha); 0, 1, 0; -sin(alpha), 0, cos(alpha)];
-xlimit = [-195.11, 185.43];
-ylimit = [-60, 150];
-zlimit = [-86.933, 50.376];
-
-display_result(centers, [], [], blocks, radii, false, 1, 'big');
-view([-180, -90]);
-xlim(xlimit); ylim(ylimit); zlim(zlimit);
-camlight;
-return
-
-rotated_centers = cell(length(centers), 1);
-count = 0;
-num_frames = 2;
-alpha = linspace(0, 2 * pi, num_frames);
-for i = 1:num_frames
-    count = count + 1;
-    for o = 1:length(centers)
-        rotated_centers{o} = Ry(alpha(i)) * centers{o};
-    end
-    display_result(rotated_centers, [], [], blocks, radii, false, 1, 'big');
-    %zoom(2);
-    view([-180, -90]);
-    xlim(xlimit); ylim(ylimit); zlim(zlimit);
-    camlight; drawnow;
-    print([output_path, user_name, '_', num2str(count)],'-dpng', '-r300');
 end
