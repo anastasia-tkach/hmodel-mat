@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 data_path = 'C:/Developer/data/MATLAB/compare_sequences/';
-half_window_size = 5;
+half_window_size = 2;
 start_offset = 1;
 end_offset = 0;
 
@@ -62,6 +62,8 @@ start_offsets = start_offsets(indices);
 end_offsets = end_offsets(indices);
 teaser_index = 0;
 
+half_window_sizes = [1, 2, 3, 1, 1, 3, 3, 3];
+
 %% Data Hmodel
 hmodel_average_errors1 = zeros(length(sequences_names), 1);
 hmodel_average_errors2 = zeros(length(sequences_names), 1);
@@ -70,6 +72,8 @@ htrack_average_errors2 = zeros(length(sequences_names), 1);
 
 
 for i = 1:length(sequences_names)
+    half_window_size = half_window_sizes(i);
+    
     fileID = fopen([data_path, 'hmodel/',  sequences_names{i}, '.txt'], 'r');
     hmodel_error = fscanf(fileID, '%f');
     N = length(hmodel_error)/2;
@@ -79,7 +83,7 @@ for i = 1:length(sequences_names)
     hmodel_error(:, 1) = sliding_window_averaging(hmodel_error(:, 1), half_window_size);
     hmodel_error(:, 2) = sliding_window_averaging(hmodel_error(:, 2), half_window_size);
     
-    if i == teaser_index
+    if i == 1 ||i == 4 || i == 6 || i == 7 || i == 8
         hmodel_error(:, 2) = 2 * hmodel_error(:, 2);
     else
         hmodel_error(:, 2) = 1000 * hmodel_error(:, 2);
@@ -107,8 +111,8 @@ for i = 1:length(sequences_names)
     %% Metric 1
     if plot_time_sequences
         figure('units', 'normalized', 'outerposition', figure_size); hold on;
-        plot(1:length(htrack_error), htrack_error(:, 1), 'lineWidth', line_width);
-        plot(1:length(hmodel_error), hmodel_error(:, 1), 'lineWidth', line_width);
+        plot(1:length(htrack_error), htrack_error(:, 1), 'lineWidth', line_width, 'color', [61, 131, 119]/255);
+        plot(1:length(hmodel_error), hmodel_error(:, 1), 'lineWidth', line_width, 'color', [179, 81, 109]/255);
         
         max_distance = max([htrack_error(:, 1); hmodel_error(:, 1)]);
         %ylim([0, min(max_distance, 15)]);
@@ -117,14 +121,14 @@ for i = 1:length(sequences_names)
         if display_title
             title(['E3D for ', titles{i}]);
             xlabel('frame number');
-            ylabel('metric');
+            ylabel('E3D');
         end
         set(gca,'position', figure_borders, 'units','normalized');
         
         %% Metric 2
         figure('units', 'normalized', 'outerposition', figure_size); hold on;
-        plot(1:length(htrack_error), htrack_error(:, 2), 'lineWidth', line_width);
-        plot(1:length(hmodel_error), hmodel_error(:, 2), 'lineWidth', line_width);
+        plot(1:length(htrack_error), htrack_error(:, 2), 'lineWidth', line_width, 'color', [61, 131, 119]/255);
+        plot(1:length(hmodel_error), hmodel_error(:, 2), 'lineWidth', line_width, 'color', [179, 81, 109]/255);
         
         %ylim([0, 1]);
         xlim([0, length(hmodel_error)]);
@@ -132,12 +136,12 @@ for i = 1:length(sequences_names)
         if display_title
              title(['E2D for ', titles{i}]);
             xlabel('frame number');
-            ylabel('metric');
+            ylabel('E2D');
         end
         set(gca,'position', figure_borders, 'units','normalized');
     end
 end
-return
+
 figure('units', 'normalized', 'outerposition', figure_size); hold on;
 y = [ htrack_average_errors2, hmodel_average_errors2, htrack_average_errors1, hmodel_average_errors1];
 bar_handle = bar(y,'grouped', 'EdgeColor', 'none');

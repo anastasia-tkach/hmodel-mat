@@ -1,14 +1,23 @@
 clc; clear; close all;
 RAND_MAX = 32767;
 camera_ray = [0; 0; 1];
+semantics_path = '_my_hand/semantics/';
+load([semantics_path, 'fitting/names_map.mat']);
 path = 'C:\Developer\data\MATLAB\outline\';
 
 [centers, radii, blocks, theta, mean_centers] = read_cpp_model(path);
+wrist_scaling = 0.5;
+centers{names_map('wrist_bottom_left')} = centers{names_map('wrist_top_left')} + ...
+    wrist_scaling * (centers{names_map('wrist_bottom_left')} - centers{names_map('wrist_top_left')});
+centers{names_map('wrist_bottom_right')} = centers{names_map('wrist_top_right')} + ...
+    wrist_scaling * (centers{names_map('wrist_bottom_right')} - centers{names_map('wrist_top_right')});
+radii{names_map('wrist_bottom_left')} = 0.93 * radii{names_map('wrist_bottom_left')};
+radii{names_map('wrist_bottom_right')} = 0.93 * radii{names_map('wrist_bottom_right')};
 
+%blocks = blocks(1:28);
 %% Read semantics
 input_path = '_my_hand/final/';
-semantics_path = '_my_hand/semantics/';
-load([semantics_path, 'fitting/names_map.mat']);
+
 %blocks = blocks(1:28);
 palm_blocks = {
     [names_map('thumb_base'), names_map('thumb_bottom'), names_map('thumb_fold')], ...

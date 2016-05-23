@@ -94,6 +94,8 @@ final_outline = [final_outline, palm_outline];
 if (hmodel_model)
     [final_outline] = adjust_fingers_outline(centers, radii, final_outline, names_map);
 end
+figure; hold on; axis off; axis equal;
+%display_2D_outline(segments, circles, outline);
 
 %% Find 3D outline
 [outline3D] = find_3D_outline(centers, final_outline);

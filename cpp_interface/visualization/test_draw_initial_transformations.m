@@ -24,9 +24,9 @@ for i = 2:16%[2, 5, 8, 11, 14]
     Z = R * z;    
     
     c = centers{names_map(phalanges{i}.name)};
-    myvector(c, X, factor, axis_color, line_width);
-    myvector(c, Y, factor, axis_color, line_width);
-    myvector(c, Z, factor, axis_color, line_width);
+    myvector(c, X, 2 * factor, axis_color, line_width);
+    myvector(c, Y, 2 * factor, axis_color, line_width);
+    myvector(c, Z, 2 * factor, axis_color, line_width);
 end
 
 
