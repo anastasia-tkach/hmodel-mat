@@ -160,7 +160,7 @@ class Convolution_renderer {
 		void process_mouse_movement(GLfloat cursor_x, GLfloat cursor_y) {
 			if (left_button_pressed) {
 				float delta_x = cursor_position[0] - cursor_x;
-				float delta_y = cursor_y - cursor_position[1];
+				float delta_y = cursor_y - cursor_position[1];				
 				float theta = initial_euler_angles[0] + cursor_sensitivity * delta_x;
 				float phi = initial_euler_angles[1] + cursor_sensitivity * delta_y;
 
