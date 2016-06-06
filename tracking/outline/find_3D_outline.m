@@ -22,7 +22,7 @@ for i = 1:length(outline)
     end   
 end
 
-%print_outline(outline);
+print_outline(outline);
 
 end
 

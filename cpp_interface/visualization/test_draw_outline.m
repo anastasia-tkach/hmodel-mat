@@ -3,7 +3,7 @@ RAND_MAX = 32767;
 camera_ray = [0; 0; 1];
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
-path = 'C:\Developer\data\MATLAB\outline\';
+path = 'C:\Developer\data\MATLAB\debug_opengl\';
 
 [centers, radii, blocks, theta, mean_centers] = read_cpp_model(path);
 wrist_scaling = 0.5;
