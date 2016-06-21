@@ -12,9 +12,9 @@ figure_borders = [0.05 0.08 0.93 0.90];
 display_title = false;
 
 if hmodel
-    data_path = 'C:/Developer/data/MATLAB/energy_terms/hmodel/';
+    data_path = 'E:/Data/MATLAB/energy_terms/hmodel/';
 else
-    data_path = 'C:/Developer/data/MATLAB/energy_terms/htrack_easy/';
+    data_path = 'E:/Data/MATLAB/energy_terms/htrack_easy/';
 end
 
 experiments_names = {'no_data', 'no_silhouette', 'no_pca', 'no_jointlimits', 'no_collisions', 'no_temporal', 'all'};

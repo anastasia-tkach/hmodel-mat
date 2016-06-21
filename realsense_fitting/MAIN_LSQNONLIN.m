@@ -2,7 +2,7 @@
 format shortg;
 clear; clc; close all;
 settings.mode = 'fitting';
-absolute_path = ['C:\Users\', getenv('USERNAME'), '\OneDrive\EPFL\Code\'];
+absolute_path = 'E:\OneDrive\EPFL\Code\';
 absolute_path = [absolute_path, 'HModel\'];
 addpath(genpath(absolute_path));
 cd(absolute_path);
@@ -33,7 +33,7 @@ settings.energy7 = false;
 settings.discard_threshold = 0.5;
 settings.block_safety_factor = 1.2;
 
-data_root = 'C:/Developer/data/MATLAB/fitting_cpp_initialization/';
+data_root = 'E:/Data/MATLAB/fitting_cpp_initialization/';
 load([data_root, '/stage.mat']);
 load([data_root, '/user_name.mat']);
 load([data_root, '/scaling_factor.mat']);
@@ -48,7 +48,7 @@ load([input_path, 'blocks.mat']);
 load([input_path, 'poses.mat']);
 load([input_path, 'radii.mat']);
 load([input_path, 'initial_rotations.mat']);
-poses = poses([1, 2, 3, 4, 5]);
+%poses = poses([1, 2, 3, 4, 5]);
 load([semantics_path, 'fitting/names_map.mat']);
 solid_blocks = {
     % fingers

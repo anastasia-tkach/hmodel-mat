@@ -35,7 +35,7 @@ if (display)
         xlim([ -190, 225]); ylim([-50, 150]); zlim([-100, 50]);
         camlight;
         drawnow;
-        print(['C:/Developer/data/MATLAB/realsense_fitting/pose', num2str(pose_id), '_iter', num2str(iter)],'-dpng', '-r300');
+        %print(['C:/Developer/data/MATLAB/realsense_fitting/pose', num2str(pose_id), '_iter', num2str(iter)],'-dpng', '-r300');
         %}
     else
         display_result_2D(pose, blocks, radii, true); drawnow;

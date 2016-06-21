@@ -1,7 +1,7 @@
 
 clear; close all; clc;
 
-data_path = 'C:/Developer/data/MATLAB/compare_sequences/';
+data_path = 'E:/Data/MATLAB/compare_sequences/';
 half_window_size = 2;
 start_offset = 1;
 end_offset = 0;
