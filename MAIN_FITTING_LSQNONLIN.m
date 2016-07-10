@@ -149,7 +149,6 @@ end
 
 
 %% Display
-%{
 for p = 1:length(poses)
     %[poses{p}.indices, poses{p}.projections, poses{p}.block_indices] = compute_projections(poses{p}.points, poses{p}.centers, blocks, radii);
     display_result(poses{p}.centers, [], [], blocks, radii, false, 1, 'big');
@@ -159,11 +158,11 @@ for p = 1:length(poses)
     if p == 2, zoom(2.3); view([150,  -2.7356]); end
     if p == 3, zoom(2); view([-2.662, 11.761]); end
     if p == 4, zoom(2.2); view([47, 33.264]); end
-    camlight;
+    %camlight;
     drawnow;
-    print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(p), '_iter', num2str(settings.iter + 1)],'-dpng', '-r300');
+    %print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(p), '_iter', num2str(settings.iter + 1)],'-dpng', '-r300');
 end
-%}
+
 %% Follow energies
 display_energies(settings.history, 'fitting');
 

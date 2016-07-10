@@ -30,7 +30,7 @@ if (display)
         if pose_id == 4,  xlim([ -2 2]); end
         %camlight;
         drawnow;
-        print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(pose_id), '_iter', num2str(settings.iter)],'-dpng', '-r300');
+        %print(['C:/Developer/data/MATLAB/photoscan_fitting/pose', num2str(pose_id), '_iter', num2str(settings.iter)],'-dpng', '-r300');
     else
         display_result_2D(pose, blocks, radii, true); drawnow;
         set(gcf, 'Name', ['energy 1, iter ', num2str(settings.iter)]);

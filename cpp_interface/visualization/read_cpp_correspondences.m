@@ -1,6 +1,6 @@
-function [data_points, model_points] = read_cpp_correspondences(path, mean_centers)
+function [data_points, model_points] = read_cpp_correspondences(path, frame_number, mean_centers)
 
-fileID = fopen([path, '_M.txt'], 'r');
+fileID = fopen([path, 'corresp-', num2str(frame_number), '.txt'], 'r');
 Q = fscanf(fileID, '%f');
 Q = reshape(Q, 3, length(Q)/3);
 Q = Q';

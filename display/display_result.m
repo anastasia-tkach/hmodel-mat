@@ -57,8 +57,8 @@ set(h,'FaceColor',color,'EdgeColor','none', 'FaceAlpha', face_alpha);
 
 grid off; axis equal; lighting gouraud; axis off; 
 %material([0.82, 0.22, 0.05, 5, 0]); 
-%material([0.7, 0.35, 0.05, 5, 0.1]); 
-material([0.4, 0.6, 0.1, 5, 1.0]); 
+material([0.7, 0.35, 0.05, 5, 0.1]); 
+%material([0.4, 0.6, 0.1, 5, 1.0]); 
 
 view([-1, -1, -1]); 
 if ~strcmp(figure_mode, 'none')

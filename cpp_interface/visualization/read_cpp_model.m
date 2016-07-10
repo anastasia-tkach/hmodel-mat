@@ -1,9 +1,18 @@
-function [centers, radii, blocks, theta, template_phalanges, mean_centers] = read_cpp_model(path)
+function [centers, radii, blocks, theta, template_phalanges, mean_centers] = read_cpp_model(path, varargin)
+
+frame_number = 0;
+if ~isempty(varargin)
+    frame_number = varargin{1};
+end
 
 RAND_MAX = 32767;
 
 %% Read centers
-fileID = fopen([path, 'C.txt'], 'r');
+if ~isempty(varargin)
+    fileID = fopen([path, 'C-', num2str(frame_number), '.txt'], 'r');
+else
+    fileID = fopen([path, 'C.txt'], 'r');
+end
 C = fscanf(fileID, '%f');
 C = C(2:end);
 C = reshape(C, 3, length(C)/3);
@@ -22,8 +31,13 @@ for i = 1:length(centers)
     centers{i} = centers{i} - mean_centers;
 end
 %}
+
 %% Read radii
-fileID = fopen([path, 'R.txt'], 'r');
+if ~isempty(varargin)
+    fileID = fopen([path, 'R-', num2str(frame_number), '.txt'], 'r');
+else
+    fileID = fopen([path, 'R.txt'], 'r');
+end
 R = fscanf(fileID, '%f');
 R = R(2:end);
 radii = cell(0, 1);
@@ -31,7 +45,11 @@ for i = 1:length(R);
     radii{end + 1} = R(i);
 end
 %% Read blocks
-fileID = fopen([path, 'B.txt'], 'r');
+if ~isempty(varargin)
+    fileID = fopen([path, 'B-', num2str(frame_number), '.txt'], 'r');
+else
+    fileID = fopen([path, 'B.txt'], 'r');
+end
 B = fscanf(fileID, '%f');
 B = B(2:end);
 B = reshape(B, 3, length(B)/3);
@@ -47,7 +65,11 @@ blocks = reindex(radii, blocks);
 
 %% Read theta
 if exist([path, 'T.txt'], 'file')
-    fileID = fopen([path, 'T.txt'], 'r');
+    if ~isempty(varargin)
+        fileID = fopen([path, 'T-', num2str(frame_number), '.txt'], 'r');
+    else
+        fileID = fopen([path, 'T.txt'], 'r');
+    end
     T = fscanf(fileID, '%f');
     T = T(2:end);
     theta = zeros(length(T), 1);

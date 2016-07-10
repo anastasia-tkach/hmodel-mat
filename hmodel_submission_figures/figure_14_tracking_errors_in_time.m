@@ -3,7 +3,7 @@ clear; %close all; clc;
 compare = true;
 hmodel = true;
 data_root = 'E:/Data/';
-data_sequence = 'MATLAB/energy_terms/';
+data_sequence = 'MATLAB/figure_13_energy_terms/';
 date_path = [data_root, data_sequence];
 half_window_size = 20;
 start_offset = 20;

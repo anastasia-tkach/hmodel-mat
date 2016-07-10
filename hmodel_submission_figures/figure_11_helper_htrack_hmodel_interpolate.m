@@ -121,7 +121,7 @@ for i = 1:length(centers)
     centers{i} = centers{i}';
 end
 
-input_path = 'C:/Developer/data/models/anastasia/';
+input_path = 'E:/Data/models/anastasia/';
 [hmodel_centers, hmodel_radii, blocks, ~, phalanges, ~] = read_cpp_model(input_path);
 centers(35:38) = hmodel_centers(35:38);
 radii(35:38) = hmodel_radii(35:38);
@@ -129,7 +129,7 @@ radii(35:38) = hmodel_radii(35:38);
 %% Intepolate
 interplated_radii = cell(length(centers), 1);
 interplated_centers = cell(length(centers), 1);
-num_frames = 5; i = 4; % i = 1 - hmodel, i = 5 - htrack
+num_frames = 5; i = 3; % i = 1 - hmodel, i = 5 - htrack
 
 for o = 1:length(centers)
     d1 = hmodel_centers{o};
@@ -219,7 +219,7 @@ display_skeleton(centers, [], blocks, [], false, 'b');
 % view([-180, -90]);
 % camlight; drawnow;
 
-write_cpp_model(['C:/Developer/data/models/htrack/'], centers, radii, blocks, phalanges);
+write_cpp_model('E:/Data/models/htrack/', centers, radii, blocks, phalanges);
 
 
 

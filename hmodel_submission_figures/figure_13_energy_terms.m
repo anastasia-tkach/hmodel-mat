@@ -11,10 +11,16 @@ figure_borders = [0.05 0.08 0.93 0.90];
 
 display_title = false;
 
-data_path = 'E:/Data/MATLAB/htrack_hmodel_interpolation/';
+if hmodel
+    data_path = 'E:/Data/MATLAB/figure_13_energy_terms/hmodel/';
+else
+    data_path = 'E:/Data/MATLAB/figure_13_energy_terms/htrack_easy/';
+end
 
-experiments_names = {'hmodel - interpolation1', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
-legend_names = {'hmodel', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
+%experiments_names = {'no_data', 'no_silhouette', 'no_pca', 'no_jointlimits', 'no_collisions', 'no_temporal', 'all'};
+experiments_names = {'r_all', 'r_no_collision'};
+legend_names = {'all', 'no'};%, 'no jointlimits', 'no collisions', 'no temporal', 'all'};
+%legend_names = {'all', 'no silhouette'};
 
 %% Data Hmodel
 errors1 = cell(length(experiments_names), 1);
@@ -29,8 +35,19 @@ for i = 1:length(experiments_names)
     errors1{i} = error(:, 1);
     
     errors2{i} = 2 * error(:, 2);
-
-
+    
+    %if i == 1
+    %    errors1{i} = errors1{i} * 1000;
+    %end
+    %if i == 2
+    %    errors2{i} = errors2{i} * 5000;
+    %end
+    
+    %if i == 2
+    %    errors2{i} = errors2{i};
+    %end
+    %
+    %errors2{i} = 1 - error(:, 2);
     errors1{i} = sliding_window_averaging(errors1{i}, half_window_size);
     errors2{i} = sliding_window_averaging(errors2{i}, half_window_size);
     
@@ -50,6 +67,7 @@ ylabel('metric');
 set(gca,'position', figure_borders, 'units','normalized');
 
 %% Plot silhouette metric
+%{
 figure('units', 'normalized', 'outerposition', figure_size); hold on;
 for i = 1:length(experiments_names)
     plot(1:length(errors2{i}), errors2{i}(:, 1), 'lineWidth', 1);
@@ -59,23 +77,33 @@ if display_title, title('average silhouettes distance'); end
 xlabel('frame number');
 ylabel('metric');
 set(gca,'position', figure_borders, 'units','normalized');
-
+%}
 
 %% Statistics
 
-num_bins = 100; 
-for t = 1:2
+num_bins = 100;
+for t = 1:1%2
     %% Data error
     if t == 1
-       min_error = 3;
-       max_error = 7;        
-       errors = errors1;
+        if hmodel
+            min_error = 3.3;
+            max_error = 5.1;
+        else
+            min_error = 4.2;
+            max_error = 6.4;%8.5;
+        end
+        errors = errors1;
     end
     
     %% Silhoette error
     if t == 2
-        min_error = 0.5;
-        max_error = 4;
+        if hmodel
+            min_error = 2 * 0.3;
+            max_error = 2 * 1.3;
+        else
+            min_error = 0.2;
+            max_error = 0.45;%0.7;
+        end
         errors = errors2;
     end
     
