@@ -2,7 +2,7 @@
 clear; close all; clc;
 
 data_path = 'E:/Data/MATLAB/figure_16_compare_sequences/';
-half_window_size = 2;
+half_window_size = 0;
 start_offset = 1;
 end_offset = 0;
 
@@ -25,9 +25,7 @@ plot_time_sequences = true;
 6-sharp3 - rotating fist
 %}
 
-%sequences_names = {'teaser', '2-concerto1', '2-concerto2', '4-sridhar1', '4-sridhar2', '4-sridhar3', '4-sridhar4', '4-sridhar5', '5-qian1', '6-sharp1', '6-sharp2', '6-sharp3'};
-sequences_names = {'teaser', 'p-2-concerto1', 'p-2-concerto2', 'p-4-sridhar1', 'p-4-sridhar2', 'p-4-shidhar3', 'p-4-sridhar4', 'p-4-sridhar5', 'p-5-qian1', 'p-6-sharp1', 'p-6-sharp2', 'p-6-sharp3'};
-%sequences_names = {'teaser', 'r-2-concerto1', 'r-2-concerto2', 'r-4-sridhar1', 'r-4-sridhar2', 'r-4-shidhar3', 'r-4-sridhar4', 'r-4-sridhar5', 'r-5-qian1', 'r-6-sharp1', 'r-6-sharp2', 'r-6-sharp3'};
+sequences_names = {'concerto1', 'sridhar1', 'sridhar2', 'sridhar4', 'sridhar5', 'sharp1', 'sharp2', 'sharp3'};
 
 start_offsets = [
     150,...%'teaser',
@@ -59,13 +57,12 @@ end_offsets = [
     ];
 
 indices = [2, 4, 5, 7, 8, 10, 11, 12];
-sequences_names = sequences_names(indices);
 titles = {'tayl1', 'srid1', 'srid2', 'srid3', 'srid4', 'shar1', 'shar2', 'shar3'};
 start_offsets = start_offsets(indices);
 end_offsets = end_offsets(indices);
 teaser_index = 0;
 
-half_window_sizes = [1, 2, 3, 1, 1, 3, 3, 3];
+half_window_sizes = [1, 1, 1, 0, 0, 1, 2, 2];
 
 %% Data Hmodel
 hmodel_average_errors1 = zeros(length(sequences_names), 1);
@@ -77,27 +74,21 @@ htrack_average_errors2 = zeros(length(sequences_names), 1);
 for i = 1:length(sequences_names)
     half_window_size = half_window_sizes(i);
     
-    fileID = fopen([data_path, 'hmodel/',  sequences_names{i}, '.txt'], 'r');
+    fileID = fopen([data_path, 'new_hmodel/',  sequences_names{i}, '.txt'], 'r');
     hmodel_error = fscanf(fileID, '%f');
     N = length(hmodel_error)/2;
     hmodel_error = reshape(hmodel_error, 2, N)';
     hmodel_error = hmodel_error(start_offsets(i):N - end_offsets(i), :);
     
     hmodel_error(:, 1) = sliding_window_averaging(hmodel_error(:, 1), half_window_size);
-    hmodel_error(:, 2) = sliding_window_averaging(hmodel_error(:, 2), half_window_size);
-    
-    if i == 1 ||i == 4 || i == 6 || i == 7 || i == 8
-        hmodel_error(:, 2) = 2 * hmodel_error(:, 2);
-    else
-        hmodel_error(:, 2) = 1000 * hmodel_error(:, 2);
-    end
+    hmodel_error(:, 2) = sliding_window_averaging(hmodel_error(:, 2), half_window_size);    
     
     hmodel_error = hmodel_error(half_window_size + 1:end - half_window_size - 1, :);
     hmodel_average_errors1(i) = mean(hmodel_error(:, 1));
     hmodel_average_errors2(i) = mean(hmodel_error(:, 2));
     
     %% Data Htrack
-    fileID = fopen([data_path, 'htrack/',  sequences_names{i}, '.txt'], 'r');
+    fileID = fopen([data_path, 'new_htrack/',  sequences_names{i}, '.txt'], 'r');
     htrack_error = fscanf(fileID, '%f');
     N = length(htrack_error)/2;
     htrack_error = reshape(htrack_error, 2, N)';
@@ -105,7 +96,6 @@ for i = 1:length(sequences_names)
     
     htrack_error(:, 1) = sliding_window_averaging(htrack_error(:, 1), half_window_size);
     htrack_error(:, 2) = sliding_window_averaging(htrack_error(:, 2), half_window_size);
-    htrack_error(:, 2) = 2 * htrack_error(:, 2);
     
     htrack_error = htrack_error(half_window_size + 1:end - half_window_size - 1, :);
     htrack_average_errors1(i) = mean(htrack_error(:, 1));

@@ -2,7 +2,7 @@
 clear; close all; clc;
 compare = true;
 hmodel = true;
-half_window_size = 20;
+half_window_size = 0;
 start_offset = 150;
 end_offset = 80;
 line_width = 1;
@@ -15,8 +15,7 @@ data_path = 'E:/Data/MATLAB/figure_11_htrack_hmodel_interpolation/';
 
 %experiments_names = {'hmodel', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
 %experiments_names = {'p-hmodel', 'p-interpolation2', 'p-interpolation3', 'p-interpolation4', 'p-interpolation5', 'p-htrack'};
-experiments_names = {'r-hmodel', 'r-interpolation2', 'r-interpolation3', 'r-interpolation4', 'r-interpolation5', 'r-htrack'};
-legend_names = {'hmodel', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
+experiments_names = {'hmodel', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
 
 %% Data Hmodel
 errors1 = cell(length(experiments_names), 1);
@@ -30,7 +29,7 @@ for i = 1:length(experiments_names)
     
     errors1{i} = error(:, 1);
     
-    errors2{i} = 2 * error(:, 2);
+    errors2{i} = error(:, 2);
 
 
     errors1{i} = sliding_window_averaging(errors1{i}, half_window_size);
@@ -45,7 +44,7 @@ figure('units', 'normalized', 'outerposition', figure_size); hold on;
 for i = 1:length(experiments_names)
     plot(1:length(errors1{i}), errors1{i}(:, 1), 'lineWidth', 1);
 end
-legend(legend_names);
+legend(experiments_names);
 if display_title, title('average data-model distance'); end
 xlabel('frame number');
 ylabel('metric');
@@ -57,7 +56,7 @@ figure('units', 'normalized', 'outerposition', figure_size); hold on;
 for i = 1:length(experiments_names)
     plot(1:length(errors2{i}), errors2{i}(:, 1), 'lineWidth', 1);
 end
-legend(legend_names);
+legend(experiments_names);
 if display_title, title('average silhouettes distance'); end
 xlabel('frame number');
 ylabel('metric');
@@ -93,7 +92,7 @@ for t = 1:2
         plot(thresholds, statistics, 'lineWidth', line_width);
     end
     xlim([min_error, max_error]);
-    legend(legend_names, 'Location','southeast');
+    legend(experiments_names, 'Location','southeast');
     if display_title
         xlabel('error threshold');
         ylabel('% frames with error < threshold');

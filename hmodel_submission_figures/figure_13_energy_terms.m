@@ -17,19 +17,7 @@ else
     data_path = 'E:/Data/MATLAB/figure_13_energy_terms/htrack_easy/';
 end
 
-%experiments_names = {'no_silhouette', 'no_pca', 'no_limits', 'no_collision', 'no_temporal', 'all'};
-experiments_names = {'r-all-4', 'r-no-silhouette-2', 'r-no-pca-2', 'r-no-pca-4', 'r-no-limits-2', 'r-no-collision-2', 'r-no-temporal-2'};
-%experiments_names = {'p-no_silhouette', 'p-no_pca', 'p-no_limits', 'p-no_collision', 'p-no_temporal', 'p-all'};
-
-%experiments_names = {'all', '2D_0.5'};
-%legend_names = {'before', '2D = 0.5'};
-
-
-%experiments_names = {'no_silhouette', 'no_pca', 'no_limits', 'no_collision', 'no_temporal', 'all'};
-%experiments_names = {'p-no_silhouette', 'p-no_pca', 'p-no_limits', 'p-no_collision', 'p-no_temporal', 'p-all'};
-
-
-
+experiments_names = {'hmodel', 'no-silhouette', 'no-pca', 'no-limits', 'no-collision'};%, 'r-no-temporal', 'all', 'p-all'};
 
 %% Data Hmodel
 errors1 = cell(length(experiments_names), 1);
@@ -44,7 +32,7 @@ for i = 1:length(experiments_names)
     errors1{i} = error(:, 1);
     
     errors2{i} = error(:, 2);
-    
+   
     errors1{i} = sliding_window_averaging(errors1{i}, half_window_size);
     errors2{i} = sliding_window_averaging(errors2{i}, half_window_size);
     
@@ -96,8 +84,8 @@ for t = 1:2
     %% Silhoette error
     if t == 2
         if hmodel
-            min_error = 2 * 0.3;
-            max_error = 2 * 1.3;
+            min_error = 0.8;
+            max_error = 2.4;
         else
             min_error = 0.2;
             max_error = 0.45;%0.7;

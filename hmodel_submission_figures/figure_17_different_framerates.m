@@ -10,12 +10,21 @@ figure_borders = [0.05 0.08 0.93 0.90];
 
 display_title = false;
 
-data_path = 'E:/Data/MATLAB/figure_17_frame_rates/';
-experiments_names = {'all', 'r-60fps',  'r-30fps', 'r-15fps', 'r-7.5fps'};
-
-%data_path = 'E:/Data/MATLAB/figure_18_tests/';
-%experiments_names = {'tagliasacchi', 'sharp', 'taylor', 'tkach'};
-
+%% Framerates
+%{
+data_path = 'E:/Data/MATLAB/figure_17_framerates_and_occlusion/';
+experiments_names = {'hmodel',  '30fps', '15fps', '7.5fps'};
+%}
+%% MSR comparison
+%{
+data_path = 'E:/Data/MATLAB/figure_18_tests/';
+experiments_names = {'htrack', 'sharp', 'taylor', 'hmodel'};
+%}
+%% Occlusion
+%%{
+data_path = 'E:/Data/MATLAB/figure_17_framerates_and_occlusion/';
+experiments_names = {'r-occlusion'};
+%%}
 
 %% Data Hmodel
 errors1 = cell(length(experiments_names), 1);
@@ -64,7 +73,7 @@ xlabel('frame number');
 ylabel('metric');
 set(gca,'position', figure_borders, 'units','normalized');
 set(gca, 'fontsize', 12);
-%ylim([0, 12]);
+%xlim([0, 2629]);
 
 %% Plot silhouette metric
 figure('units', 'normalized', 'outerposition', figure_size); hold on;
@@ -76,7 +85,9 @@ if display_title, title('average silhouettes distance'); end
 xlabel('frame number');
 ylabel('metric');
 set(gca,'position', figure_borders, 'units','normalized');
-ylim([0, 5]);
+set(gca, 'fontsize', 12);
+%ylim([0.7, 5]);
+%xlim([0, 2629]);
 
 %% Statistics
 

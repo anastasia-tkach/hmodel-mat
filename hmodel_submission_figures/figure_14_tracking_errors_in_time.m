@@ -5,7 +5,7 @@ hmodel = true;
 data_root = 'E:/Data/';
 data_sequence = 'MATLAB/figure_13_energy_terms/';
 date_path = [data_root, data_sequence];
-half_window_size = 20;
+half_window_size = 15;
 start_offset = 20;
 end_offset = 80;
 
@@ -18,7 +18,7 @@ display_title = false;
 
 %% Data Hmodel
 if compare || hmodel
-    fileID = fopen([date_path, 'hmodel/p-all.txt'], 'r');
+    fileID = fopen([date_path, 'hmodel/hmodel.txt'], 'r');
     hmodel_error = fscanf(fileID, '%f');
     N = length(hmodel_error)/2;
     hmodel_error = reshape(hmodel_error, 2, N)';
@@ -26,14 +26,14 @@ if compare || hmodel
     
     hmodel_error(:, 1) = sliding_window_averaging(hmodel_error(:, 1), half_window_size);
     hmodel_error(:, 2) = sliding_window_averaging(hmodel_error(:, 2), half_window_size);
-    hmodel_error(:, 2) = 2 * hmodel_error(:, 2);    
+    %hmodel_error(:, 2) = 2 * hmodel_error(:, 2);    
     
     hmodel_error = hmodel_error(half_window_size + 1:end - half_window_size - 1, :);
 end
 
 %% Data Htrack
 if compare || ~hmodel
-    fileID = fopen([date_path, 'htrack/p-all.txt'], 'r');
+    fileID = fopen([date_path, 'htrack/htrack.txt'], 'r');
     htrack_error = fscanf(fileID, '%f');
     N = length(htrack_error)/2;
     htrack_error = reshape(htrack_error, 2, N)';
@@ -41,7 +41,7 @@ if compare || ~hmodel
     
     htrack_error(:, 1) = sliding_window_averaging(htrack_error(:, 1), half_window_size);
     htrack_error(:, 2) = sliding_window_averaging(htrack_error(:, 2), half_window_size);
-    htrack_error(:, 2) = 2 * htrack_error(:, 2);
+    %htrack_error(:, 2) = 2 * htrack_error(:, 2);
     
     htrack_error = htrack_error(half_window_size + 1:end - half_window_size - 1, :);
 end

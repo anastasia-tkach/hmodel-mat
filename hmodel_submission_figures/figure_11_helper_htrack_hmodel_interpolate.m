@@ -129,7 +129,7 @@ radii(35:38) = hmodel_radii(35:38);
 %% Intepolate
 interplated_radii = cell(length(centers), 1);
 interplated_centers = cell(length(centers), 1);
-num_frames = 5; i = 3; % i = 1 - hmodel, i = 5 - htrack
+num_frames = 5; i = 5; % i = 1 - hmodel, i = 5 - htrack
 
 for o = 1:length(centers)
     d1 = hmodel_centers{o};
