@@ -8,7 +8,7 @@ end_offset = 0;
 
 line_width = 1;
 
-figure_size = [0.3, 0.3, 0.3, 0.35];
+figure_size = [0.3, 0.3, 0.4, 0.4];
 %figure_borders = [0.05 0.08 0.93 0.90];
 figure_borders = [0.05 0.08 0.93 0.82];
 display_title = true;
@@ -25,7 +25,10 @@ plot_time_sequences = true;
 6-sharp3 - rotating fist
 %}
 
-sequences_names = {'teaser', '2-concerto1', '2-concerto2', '4-shidhar1', '4-shidhar2', '4-shidhar3', '4-shidhar4', '4-shidhar5', '5-qian1', '6-sharp1', '6-sharp2', '6-sharp3'};
+%sequences_names = {'teaser', '2-concerto1', '2-concerto2', '4-sridhar1', '4-sridhar2', '4-sridhar3', '4-sridhar4', '4-sridhar5', '5-qian1', '6-sharp1', '6-sharp2', '6-sharp3'};
+sequences_names = {'teaser', 'p-2-concerto1', 'p-2-concerto2', 'p-4-sridhar1', 'p-4-sridhar2', 'p-4-shidhar3', 'p-4-sridhar4', 'p-4-sridhar5', 'p-5-qian1', 'p-6-sharp1', 'p-6-sharp2', 'p-6-sharp3'};
+%sequences_names = {'teaser', 'r-2-concerto1', 'r-2-concerto2', 'r-4-sridhar1', 'r-4-sridhar2', 'r-4-shidhar3', 'r-4-sridhar4', 'r-4-sridhar5', 'r-5-qian1', 'r-6-sharp1', 'r-6-sharp2', 'r-6-sharp3'};
+
 start_offsets = [
     150,...%'teaser',
     70, ...%'2-concerto1',
@@ -172,5 +175,6 @@ text(6.75, -0.3,'shar2', 'fontsize', 9);
 text(7.75, -0.3,'shar3', 'fontsize', 9);
 
 set(gca,'XTick',[]);
+set(gca, 'fontsize', 12);
 
 

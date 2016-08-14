@@ -1,5 +1,5 @@
 
-clear; %close all; clc;
+clear; close all; clc;
 compare = true;
 hmodel = true;
 data_root = 'E:/Data/';
@@ -11,14 +11,14 @@ end_offset = 80;
 
 line_width = 1;
 
-figure_size = [0.3, 0.3, 0.3, 0.35];
+figure_size = [0.3, 0.3, 0.4, 0.4];
 figure_borders = [0.05 0.08 0.93 0.90];
 
 display_title = false;
 
 %% Data Hmodel
 if compare || hmodel
-    fileID = fopen([date_path, 'hmodel/hmodel_tracking_error.txt'], 'r');
+    fileID = fopen([date_path, 'hmodel/p-all.txt'], 'r');
     hmodel_error = fscanf(fileID, '%f');
     N = length(hmodel_error)/2;
     hmodel_error = reshape(hmodel_error, 2, N)';
@@ -33,7 +33,7 @@ end
 
 %% Data Htrack
 if compare || ~hmodel
-    fileID = fopen([date_path, 'htrack/htrack_tracking_error.txt'], 'r');
+    fileID = fopen([date_path, 'htrack/p-all.txt'], 'r');
     htrack_error = fscanf(fileID, '%f');
     N = length(htrack_error)/2;
     htrack_error = reshape(htrack_error, 2, N)';
@@ -64,6 +64,7 @@ if compare
         ylabel('metric');
     end
     set(gca,'position', figure_borders, 'units','normalized');
+    set(gca, 'fontsize', 12);
     
     %% Metric 2
     figure('units', 'normalized', 'outerposition', figure_size); hold on;
@@ -79,6 +80,7 @@ if compare
         ylabel('metric');
     end
     set(gca,'position', figure_borders, 'units','normalized');
+    set(gca, 'fontsize', 12);
 end
 
 if ~compare
@@ -98,6 +100,7 @@ if ~compare
     ylim([0, 1]);
     title('1 - normalized silhouettes overlap');
     set(gca,'position', figure_borders, 'units','normalized');
+    set(gca, 'fontsize', 12);
 end
 
 
