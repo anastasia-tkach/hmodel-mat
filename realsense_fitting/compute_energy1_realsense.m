@@ -31,7 +31,7 @@ if (display)
         display_result(centers, data_points, model_points, blocks, radii, false, 0.95, 'big');%mypoints(pose.points, 'm'); drawnow;
         mypoints(pose.points, [179, 81, 109]/255, 3);
         zoom(2); 
-        view([-180, -90]);   
+        view([-180, -90]);  
         xlim([ -190, 225]); ylim([-50, 150]); zlim([-100, 50]);
         camlight;
         drawnow;

@@ -26,7 +26,7 @@ if strcmp(user_name, 'andrii')
     real_phalanges_length{5} = scaling_factor * [40, 19, 14];
 end
 %}
-data_root = 'E:/Data/MATLAB/fitting_cpp_initialization/';
+data_root = 'E:/Data/hmodel-matlab-data/fitting_cpp_initialization/';
 save([data_root, '/stage.mat'],  'stage');
 save([data_root, '/user_name.mat'], 'user_name');
 save([data_root, '/scaling_factor.mat'], 'scaling_factor');

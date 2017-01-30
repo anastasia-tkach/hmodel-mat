@@ -11,7 +11,7 @@ figure_borders = [0.05 0.08 0.93 0.90];
 
 display_title = false;
 
-data_path = 'E:/Data/MATLAB/figure_11_htrack_hmodel_interpolation/';
+data_path = 'E:/Data/hmodel-matlab-data/figure_11_htrack_hmodel_interpolation/';
 
 %experiments_names = {'hmodel', 'interpolation2', 'interpolation3', 'interpolation4', 'interpolation5', 'htrack'};
 %experiments_names = {'p-hmodel', 'p-interpolation2', 'p-interpolation3', 'p-interpolation4', 'p-interpolation5', 'p-htrack'};

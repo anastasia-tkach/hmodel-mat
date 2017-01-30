@@ -2,7 +2,7 @@
 clear; close all; clc;
 compare = true;
 hmodel = true;
-half_window_size = 0;
+half_window_size = 20;
 start_offset = 150;
 end_offset = 80;
 line_width = 1;
@@ -11,13 +11,11 @@ figure_borders = [0.05 0.08 0.93 0.90];
 
 display_title = false;
 
-if hmodel
-    data_path = 'E:/Data/hmodel-matlab-data/figure_13_energy_terms/hmodel/';
-else
-    data_path = 'E:/Data/hmodel-matlab-data/figure_13_energy_terms/htrack_easy/';
-end
 
-experiments_names = {'hmodel', 'no-silhouette', 'no-pca', 'no-limits', 'no-collision'};%, 'r-no-temporal', 'all', 'p-all'};
+data_path = 'E:/Data/hmodel-matlab-data/quality_control/';
+
+
+experiments_names = {'teaser_original', 'teaser_scaled'};
 
 %% Data Hmodel
 errors1 = cell(length(experiments_names), 1);
@@ -66,7 +64,7 @@ set(gca,'position', figure_borders, 'units','normalized');
 %%}
 
 %% Statistics
-
+return
 num_bins = 100;
 for t = 1:2
     %% Data error

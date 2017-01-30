@@ -1,11 +1,11 @@
 %clc; clear; close all;
 RAND_MAX = 32767;
 camera_ray = [0; 0; 1];
-input_path = 'E:/Data/msr_comparison/';
+input_path = 'E:\Data\msr-comparison\';
 
 
 %% Continious correspondences
-frame = 2345;
+frame = 2647;
 %{
 [centers, radii, blocks, ~, ~, mean_centers] = read_cpp_model(input_path, frame);
 display_result(centers, [], [], blocks, radii, true, 0.7, 'big');
@@ -16,8 +16,8 @@ mean_centers = [0; 0; 0];
 
 
 %% Load data
-filename = [input_path, 'Depth/depth-', sprintf('%07d', frame), '.png']; D = imread(filename);
-filename = [input_path, 'Mask/mask-', sprintf('%07d', frame), '.png']; M = imread(filename);
+filename = [input_path, 'Depth\depth-', sprintf('%07d', frame), '.png']; D = imread(filename);
+filename = [input_path, 'Mask\mask-', sprintf('%07d', frame), '.png']; M = imread(filename);
 
 %% Load rastorized model
 %filename = [input_path, 'Tkach_2016/model-', sprintf('%07d', frame), '.png']; Q = imread(filename);

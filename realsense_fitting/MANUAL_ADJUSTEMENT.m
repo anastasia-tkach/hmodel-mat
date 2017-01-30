@@ -1,7 +1,7 @@
 %clc; clear; close all;
 user_name = 'andrii';
 
-input_path = 'C:/Developer/data/models/template/';
+input_path = 'E:/Data/models/template/';
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 [centers, radii, blocks, ~, ~, mean_centers] = read_cpp_model(input_path);

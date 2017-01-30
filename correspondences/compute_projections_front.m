@@ -14,7 +14,7 @@ tangent_points = blocks_tangent_points(centers, blocks, radii);
 for i = 1:num_points
     
     p = points{i};
-    mypoint(p, 'r');
+    %mypoint(p, 'r');
     
     all_projections = cell(length(blocks), 1);
     all_distances = -RAND_MAX * ones(length(blocks), 1);
@@ -27,7 +27,7 @@ for i = 1:num_points
     
     for j = 1:length(blocks)
         [index, q, s, is_inside] = projection(p, blocks{j}, radii, centers, tangent_points{j});
-        mypoint(q, 'b'); myline(p, q, [0.7; 0.7; 0.7]);
+        %mypoint(q, 'b'); myline(p, q, [0.7; 0.7; 0.7]);
         all_projections{j} = q;
         all_axis_projections{j} = s;
         all_distances(j) = norm(p - q);

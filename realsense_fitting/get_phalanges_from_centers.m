@@ -17,11 +17,10 @@ phalanges{16}.local(2, 4) = norm(centers{names_map('index_middle')} - centers{na
 phalanges{11}.local(1:3, 4) = centers{names_map('middle_base')} - centers{names_map('palm_back')};
 phalanges{12}.local(2, 4) = norm(centers{names_map('middle_bottom')} - centers{names_map('middle_base')});
 phalanges{13}.local(2, 4) = norm(centers{names_map('middle_middle')} - centers{names_map('middle_bottom')});
-phalanges{13}.local(1:3, 1:3) = eye(3, 3);
 
 % Ring
 phalanges{8}.local(1:3, 4) = centers{names_map('ring_base')} - centers{names_map('palm_back')};
-phalanges{9}.local(2, 4) = 0.9 * (norm(centers{names_map('ring_bottom')} - centers{names_map('ring_base')}));
+phalanges{9}.local(2, 4) =  norm(centers{names_map('ring_bottom')} - centers{names_map('ring_base')});
 phalanges{10}.local(2, 4) = norm(centers{names_map('ring_middle')} - centers{names_map('ring_bottom')});
 
 % Pinky

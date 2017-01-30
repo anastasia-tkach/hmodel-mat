@@ -81,7 +81,7 @@ else
     theta = zeros(29, 1);
 end
 
-%% Read theta
+%% Read phalanges
 if exist([path, 'I.txt'], 'file')
     fileID = fopen([path, 'I.txt'], 'r');
     I = fscanf(fileID, '%f');

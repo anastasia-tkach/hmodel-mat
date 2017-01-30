@@ -3,7 +3,7 @@ clc; clear; close all;
 semantics_path = '_my_hand/semantics/';
 load([semantics_path, 'fitting/names_map.mat']);
 
-input_path = 'C:\Developer\data\MATLAB\convolution_feel\model\';
+input_path = 'C:\Developer\hmodel-cpp\data\models\anastasia\';
 output_path = 'C:\Developer\data\MATLAB\convolution_feel\';
 
 [centers, radii, blocks, theta, mean_centers] = read_cpp_model(input_path);
@@ -51,7 +51,7 @@ for i = 1:num_frames - 1
     view([-180, -90]);
     xlim(xlimit); ylim(ylimit); zlim(zlimit);
     camlight; drawnow;
-    print([output_path, num2str(count)],'-dpng', '-r300');
+    %print([output_path, num2str(count)],'-dpng', '-r300');
 end
 
 alpha = linspace(0, 2 * pi, num_frames);
@@ -72,7 +72,7 @@ for i = 1:num_frames - 1
     view([-180, -90]);
     xlim(xlimit); ylim(ylimit); zlim(zlimit);
     camlight; drawnow;
-    print([output_path, num2str(count)],'-dpng', '-r300');
+    %print([output_path, num2str(count)],'-dpng', '-r300');
 end
 
 for i = 1:num_frames
@@ -84,5 +84,5 @@ for i = 1:num_frames
     view([-180, -90]);
     xlim(xlimit); ylim(ylimit); zlim(zlimit);
     camlight; drawnow;
-    print([output_path, num2str(count)],'-dpng', '-r300');
+    %print([output_path, num2str(count)],'-dpng', '-r300');
 end

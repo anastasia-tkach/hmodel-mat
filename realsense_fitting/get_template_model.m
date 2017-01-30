@@ -1,6 +1,6 @@
 %clc; clear; close all;
 
-input_path = 'C:/Developer/data/models/anastasia/';
+input_path = 'E:\Data\models\anastasia\';
 
 [centers, radii, blocks, theta, ~, mean_centers] = read_cpp_model(input_path);
 

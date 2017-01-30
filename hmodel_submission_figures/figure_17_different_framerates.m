@@ -22,7 +22,7 @@ experiments_names = {'htrack', 'sharp', 'taylor', 'hmodel'};
 %}
 %% Occlusion
 %%{
-data_path = 'E:/Data/MATLAB/figure_17_framerates_and_occlusion/';
+data_path = 'E:/Data/hmodel-matlab-data/figure_17_framerates_and_occlusion/';
 experiments_names = {'r-occlusion'};
 %%}
 

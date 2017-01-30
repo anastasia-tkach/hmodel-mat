@@ -1,30 +1,31 @@
-clc;
+clc; close all; clear;
+
 n = 3;
-while(true)
-    c1 = 0.5 * rand(n ,1);
-    c2 = 0.5 * rand(n ,1);
-    x1 = rand(1 ,1);
-    x2 = rand(1 ,1);
-    r1 = max(x1, x2);
-    r2 = min(x1, x2);
-    p = rand(n, 1);
-    if norm(c1 - c2) > r1
-        break;
+
+while (true)
+    
+    while(true)
+        c1 = 0.5 * rand(n ,1);
+        c2 = 0.5 * rand(n ,1);
+        x1 = rand(1 ,1);
+        x2 = rand(1 ,1);
+        r1 = max(x1, x2);
+        r2 = min(x1, x2);
+        p = rand(n, 1);
+        if norm(c1 - c2) > r1
+            break;
+        end
+        
     end
+    
+    % we want the point to project on the conic surface, not on the
+    % spherical one
+    [index, q, ~, ~] = projection_convsegment(p, c1, c2, r1, r2, 1, 2);
+    if length(index) == 2, break; end
 end
 
-%function [q, dq_dc1, dq_dc2, dq_dr1, dq_dr2] = jacobian_convsegment_new(p, c1, c2, r1, r2)
-% u = c2 - c1;
-% v = p - c1;
-% alpha = u' * v / (u' * u);
-% t = c1 + alpha * u;
-% omega = sqrt(u' * u - (r1 - r2)^2);
-% delta =  norm(p - t) * (r1 - r2) / omega;
-% w = u * delta/ norm(u);
-% s = t - w;
-% gamma = (r1 - r2) * norm(c2 - t + w)/ norm(u);
-% q = s + (p - s) / norm(p - s) * (gamma + r2);
-
+p = q;
+display_result({c1, c2}, {p}, {q}, {[1, 2]}, {r1, r2}, true, 0.7, 'small');
 
 D = 3;
 
@@ -59,6 +60,12 @@ for var = 1:length(variables)
     %% u =  c2 - c1; v =  p - c1;
     [u, du] = difference_handle(c2_, dc2, c1_, dc1, arguments);
     [v, dv] = difference_handle(p_, dp, c1_, dc1, arguments);
+    
+    O = u;
+    dO = du;
+    O = @(c1) O(c1, c2, r1, r2);
+    Jnumerical = [Jnumerical, my_gradient(O, c1)];
+    Janalytical = [Janalytical, dO(c1, c2, r1, r2)];
     
     %% t - closest point on the axis, t = c1 + alpha * u;
     [s, ds] = dot_handle(u, du, v, dv, arguments);
@@ -125,10 +132,9 @@ for var = 1:length(variables)
             Janalytical = [Janalytical, dO(c1, c2, r1, r2)];
     end
 end
-O(r2)
+%disp('F = '); disp(O(r2))
 Jnumerical
 Janalytical
-
 
 
 

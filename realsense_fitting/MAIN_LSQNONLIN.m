@@ -3,7 +3,7 @@ format shortg;
 clear; clc; close all;
 settings.mode = 'fitting';
 absolute_path = 'E:\OneDrive\EPFL\Code\';
-absolute_path = [absolute_path, 'HModel\'];
+absolute_path = [absolute_path, 'hmodel-mat\'];
 addpath(genpath(absolute_path));
 cd(absolute_path);
 settings_default;
@@ -33,7 +33,7 @@ settings.energy7 = false;
 settings.discard_threshold = 0.5;
 settings.block_safety_factor = 1.2;
 
-data_root = 'E:/Data/MATLAB/fitting_cpp_initialization/';
+data_root = 'E:/Data/hmodel-matlab-data/fitting_cpp_initialization/';
 load([data_root, '/stage.mat']);
 load([data_root, '/user_name.mat']);
 load([data_root, '/scaling_factor.mat']);
@@ -134,7 +134,7 @@ load poses;
 num_centers = settings.num_centers;
 num_poses = length(poses);
 for p = 1:num_poses
-    c = X(D * num_centers * (p - 1) + 1:D * num_centers * p);
+    c = X(D * num_centers * (p - 1) + 1:D * num_centers * p); 
     for o = 1:num_centers
         poses{p}.centers{o} = c(D * o - D + 1:D * o);
     end

@@ -1,7 +1,7 @@
 
 clear; close all; clc;
 
-data_path = 'E:/Data/MATLAB/figure_16_compare_sequences/';
+data_path = 'E:/Data/hmodel-matlab-data/figure_16_compare_sequences/';
 half_window_size = 0;
 start_offset = 1;
 end_offset = 0;

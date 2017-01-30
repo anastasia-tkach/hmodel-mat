@@ -1,6 +1,6 @@
 function mypoints(points, color, varargin)
 
-point_size = 8;
+point_size = 20;
 if ~isempty(varargin)
     point_size = varargin{1};
 end

@@ -1,4 +1,6 @@
-clear; close all; clc;
+clear; 
+%close all;
+clc;
 compare = true;
 half_window_size = 5;
 start_offset = 150;
@@ -10,7 +12,9 @@ figure_borders = [0.05 0.08 0.93 0.84];
 display_title = true;
 display_silhouette = false;
 
-data_path = 'E:/Data/MATLAB/performance_study/';
+data_path = 'E:/Data/hmodel-matlab-data/performance_study/';
+experiment_path = 'E:/Data/sensor-sequences/teaser_short/';
+
 
 %experiment_names = {'5_iter_no_silhouette', '6_iter_no_silhouette', '7_iter_no_silhouette', '8_iter_no_silhouette', '9_iter_no_silhouette', ...
 %    '10_iter_no_silhouette', '15_iter_no_silhouette', '20_iter_no_silhouette', '50_iter_no_silhouette'};
@@ -20,7 +24,7 @@ data_path = 'E:/Data/MATLAB/performance_study/';
 %experiment_names = {'20_iter_no_silhouette', '20_iter_with_silhouette'};
 
 %% Rigid reweight
-experiment_names = {'6_iter', '6_iter_diag', '6_iter_increase_delta', 'hmodel_tracking_error', '7_iter_no_silhouette',  '50_iter_no_silhouette'};
+experiment_names = {'online_continuous_metrics', 'beta', 'no-j-row', 'changed-weight-worse', 'current_best'};
 
 legend_names = cell(length(experiment_names), 1);
 for i = 1:length(experiment_names)
@@ -31,7 +35,11 @@ end
 errors1 = cell(length(experiment_names), 1);
 errors2 = cell(length(experiment_names), 1);
 for i = 1:length(experiment_names)
-    fileID = fopen([data_path, experiment_names{i}, '.txt'], 'r');
+    if (i == 1)
+        fileID = fopen([experiment_path, experiment_names{i}, '.txt'], 'r');
+    else
+        fileID = fopen([data_path, experiment_names{i}, '.txt'], 'r');
+    end
     error = fscanf(fileID, '%f');
     N = length(error)/2;
     error = reshape(error, 2, N)';
@@ -52,6 +60,7 @@ for i = 1:length(experiment_names)
     errors2{i} = errors2{i}(half_window_size + 1:end - half_window_size - 1, :);
 end
 
+%%{
 %% Plot data metric
 figure('units', 'normalized', 'outerposition', figure_size); hold on;
 for i = 1:length(experiment_names)
@@ -75,7 +84,7 @@ if (display_silhouette)
     ylabel('metric');
     set(gca,'position', figure_borders, 'units','normalized');
 end
-
+%%}
 
 %% Statistics
 

@@ -74,17 +74,18 @@ data_color = [0.65, 0.1, 0.5];
 model_color = [0, 0.7, 1];
 lines_color = [0.6, 0.6, 0.6];
 if (display_data)
-    mypoints(points, data_color);
+   
     if ~isempty(projections)
         back_projections = cell(size(projections));
         for i = 1:length(projections)
             if ~isempty(projections{i}), back_projections{i} = projections{i} - (points{i} - projections{i}); end
-        end
+        end        
+        mylines(points, projections, [0.8, 0.8, 0.8]);
         mypoints(projections, model_color);
-        mylines(points, projections, [0.1, 0.8, 0.8]);
         %mypoints(back_projections, lines_color);
         %mylines(back_projections, projections, lines_color);
     end
+    mypoints(points, data_color);
 end
 
 return
